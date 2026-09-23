@@ -1,0 +1,158 @@
+{
+  "title": "Eloquent JavaScript",
+  "titleAr": "جافاسكربت البليغة",
+  "subtitle": "النسخة العربية الكاملة",
+  "author": "Marijn Haverbeke",
+  "edition": "الطبعة الرابعة",
+  "sourceUrl": "https://eloquentjavascript.net/",
+  "licenseUrl": "https://creativecommons.org/licenses/by-nc/3.0/",
+  "intro": {
+    "file": "00_intro.html",
+    "slug": "introduction",
+    "title": "مقدمة",
+    "englishTitle": "Introduction"
+  },
+  "parts": [
+    {
+      "title": "الجزء الأول: اللغة",
+      "chapters": [
+        {
+          "file": "01_values.html",
+          "slug": "values_types_and_operators",
+          "title": "القيم والأنواع والمعاملات",
+          "englishTitle": "Values, Types, and Operators"
+        },
+        {
+          "file": "02_program_structure.html",
+          "slug": "program_structure",
+          "title": "بنية البرنامج",
+          "englishTitle": "Program Structure"
+        },
+        {
+          "file": "03_functions.html",
+          "slug": "functions",
+          "title": "الدوال",
+          "englishTitle": "Functions"
+        },
+        {
+          "file": "04_data.html",
+          "slug": "data_structures_objects_and_arrays",
+          "title": "بنى البيانات: الكائنات والمصفوفات",
+          "englishTitle": "Data Structures: Objects and Arrays"
+        },
+        {
+          "file": "05_higher_order.html",
+          "slug": "higher_order_functions",
+          "title": "الدوال ذات الرتبة الأعلى",
+          "englishTitle": "Higher-order Functions"
+        },
+        {
+          "file": "06_object.html",
+          "slug": "the_secret_life_of_objects",
+          "title": "الحياة السرية للكائنات",
+          "englishTitle": "The Secret Life of Objects"
+        },
+        {
+          "file": "07_robot.html",
+          "slug": "project_a_robot",
+          "title": "مشروع: روبوت",
+          "englishTitle": "Project: A Robot"
+        },
+        {
+          "file": "08_error.html",
+          "slug": "bugs_and_errors",
+          "title": "العلل والأخطاء",
+          "englishTitle": "Bugs and Errors"
+        },
+        {
+          "file": "09_regexp.html",
+          "slug": "regular_expressions",
+          "title": "التعابير النمطية",
+          "englishTitle": "Regular Expressions"
+        },
+        {
+          "file": "10_modules.html",
+          "slug": "modules",
+          "title": "الوحدات",
+          "englishTitle": "Modules"
+        },
+        {
+          "file": "11_async.html",
+          "slug": "asynchronous_programming",
+          "title": "البرمجة غير المتزامنة",
+          "englishTitle": "Asynchronous Programming"
+        },
+        {
+          "file": "12_language.html",
+          "slug": "project_a_programming_language",
+          "title": "مشروع: لغة برمجة",
+          "englishTitle": "Project: A Programming Language"
+        }
+      ]
+    },
+    {
+      "title": "الجزء الثاني: المتصفح",
+      "chapters": [
+        {
+          "file": "13_browser.html",
+          "slug": "javascript_and_the_browser",
+          "title": "JavaScript والمتصفح",
+          "englishTitle": "JavaScript and the Browser"
+        },
+        {
+          "file": "14_dom.html",
+          "slug": "the_document_object_model",
+          "title": "نموذج كائن المستند",
+          "englishTitle": "The Document Object Model"
+        },
+        {
+          "file": "15_event.html",
+          "slug": "handling_events",
+          "title": "معالجة الأحداث",
+          "englishTitle": "Handling Events"
+        },
+        {
+          "file": "16_game.html",
+          "slug": "project_a_platform_game",
+          "title": "مشروع: لعبة منصات",
+          "englishTitle": "Project: A Platform Game"
+        },
+        {
+          "file": "17_canvas.html",
+          "slug": "drawing_on_canvas",
+          "title": "الرسم على Canvas",
+          "englishTitle": "Drawing on Canvas"
+        },
+        {
+          "file": "18_http.html",
+          "slug": "http_and_forms",
+          "title": "HTTP والنماذج",
+          "englishTitle": "HTTP and Forms"
+        },
+        {
+          "file": "19_paint.html",
+          "slug": "project_a_pixel_art_editor",
+          "title": "مشروع: محرر فن البكسل",
+          "englishTitle": "Project: A Pixel Art Editor"
+        }
+      ]
+    },
+    {
+      "title": "الجزء الثالث: Node.js",
+      "chapters": [
+        {
+          "file": "20_node.html",
+          "slug": "node_js",
+          "title": "Node.js",
+          "englishTitle": "Node.js"
+        },
+        {
+          "file": "21_skillsharing.html",
+          "slug": "project_skill_sharing_website",
+          "title": "مشروع: موقع لتبادل المهارات",
+          "englishTitle": "Project: Skill-Sharing Website"
+        }
+      ]
+    }
+  ]
+}

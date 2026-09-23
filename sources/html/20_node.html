@@ -1,0 +1,507 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Node.js :: Eloquent JavaScript</title>
+  <link rel=stylesheet href="css/ejs.css"><script>
+      var page = {"type":"chapter","number":20}</script></head>
+
+<article>
+<nav><a href="19_paint.html" title="previous chapter" aria-label="previous chapter">◂</a> <a href="index.html" title="cover" aria-label="cover">●</a> <a href="21_skillsharing.html" title="next chapter" aria-label="next chapter">▸</a>&nbsp;<button class=help title="help" aria-label="help"><strong>?</strong></button>
+</nav>
+
+<h1>Node.js</h1>
+
+<blockquote>
+
+<p><a class="p_ident" id="p-+0XsOMiWpx" href="#p-+0XsOMiWpx" tabindex="-1" role="presentation"></a>A student asked, ‘The programmers of old used only simple machines and no programming languages, yet they made beautiful programs. Why do we use complicated machines and programming languages?’ Fu-Tzu replied, ‘The builders of old used only sticks and clay, yet they made beautiful huts.’</p>
+
+<footer>Master Yuan-Ma, <cite>The Book of Programming</cite></footer>
+
+</blockquote><figure class="chapter framed"><img src="img/chapter_picture_20.jpg" alt="Illustration showing a telephone pole with a tangle of wires going in all directions"></figure>
+
+<p><a class="p_ident" id="p-Pc2oOBWZBP" href="#p-Pc2oOBWZBP" tabindex="-1" role="presentation"></a>So far, we’ve used the JavaScript language in a single environment: the browser. This chapter and the <a href="21_skillsharing.html">next one</a> will briefly introduce Node.js, a program that allows you to apply your JavaScript skills outside of the browser. With it, you can build anything from small command line tools to HTTP servers that power dynamic websites.</p>
+
+<p><a class="p_ident" id="p-0DDXh+YCUB" href="#p-0DDXh+YCUB" tabindex="-1" role="presentation"></a>These chapters aim to teach you the main concepts that Node.js uses and to give you enough information to write useful programs for it. They do not try to be a complete, or even a thorough, treatment of the platform.</p>
+
+<p><a class="p_ident" id="p-NM5XbgzOCu" href="#p-NM5XbgzOCu" tabindex="-1" role="presentation"></a>Whereas you could run the code in previous chapters directly on these pages, because it was either raw JavaScript or written for the browser, the code samples in this chapter are written for Node and often won’t run in the browser.</p>
+
+<p><a class="p_ident" id="p-yDXmkj8agX" href="#p-yDXmkj8agX" tabindex="-1" role="presentation"></a>If you want to follow along and run the code in this chapter, you’ll need to install Node.js version 18 or higher. To do so, go to <a href="https://nodejs.org"><em>https://nodejs.org</em></a> and follow the installation instructions for your operating system. You can also find further documentation for Node.js there.</p>
+
+<h2><a class="h_ident" id="h-ZN1g/hoEn+" href="#h-ZN1g/hoEn+" tabindex="-1" role="presentation"></a>Background</h2>
+
+<p><a class="p_ident" id="p-fSdNrY4Yml" href="#p-fSdNrY4Yml" tabindex="-1" role="presentation"></a>When building systems that communicate over the network, the way you manage input and output—that is, the reading and writing of data to and from the network and hard drive—can make a big difference in how quickly a system responds to the user or to network requests.</p>
+
+<p><a class="p_ident" id="p-DokqnUuxtX" href="#p-DokqnUuxtX" tabindex="-1" role="presentation"></a>In such programs, asynchronous programming is often helpful. It allows the program to send and receive data from and to multiple devices at the same time without complicated thread management and synchronization.</p>
+
+<p><a class="p_ident" id="p-RCasOwXmol" href="#p-RCasOwXmol" tabindex="-1" role="presentation"></a>Node was initially conceived for the purpose of making asynchronous programming easy and convenient. JavaScript lends itself well to a system like Node. It is one of the few programming languages that does not have a built-in way to do input and output. Thus, JavaScript could be fit onto Node’s rather eccentric approach to network and filesystem programming without ending up with two inconsistent interfaces. In 2009, when Node was being designed, people were already doing callback-based programming in the browser, so the community around the language was used to an asynchronous programming style.</p>
+
+<h2><a class="h_ident" id="h-TUzbi7lU/0" href="#h-TUzbi7lU/0" tabindex="-1" role="presentation"></a>The node command</h2>
+
+<p><a class="p_ident" id="p-rE0vPeaAdk" href="#p-rE0vPeaAdk" tabindex="-1" role="presentation"></a>When Node.js is installed on a system, it provides a program called <code>node</code>, which is used to run JavaScript files. Say you have a file <code>hello.js</code>, containing this code:</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-Ys/5/PYPJK" href="#c-Ys/5/PYPJK" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">message</span> = <span class="tok-string">&quot;Hello world&quot;</span>;
+console.log(message);</pre>
+
+<p><a class="p_ident" id="p-AQLpVQwSlg" href="#p-AQLpVQwSlg" tabindex="-1" role="presentation"></a>You can then run <code>node</code> from the command line like this to execute the program:</p>
+
+<pre class="snippet" data-language="null" ><a class="c_ident" id="c-+NijqTTZNf" href="#c-+NijqTTZNf" tabindex="-1" role="presentation"></a>$ node hello.js
+Hello world</pre>
+
+<p><a class="p_ident" id="p-m31aN0FBwM" href="#p-m31aN0FBwM" tabindex="-1" role="presentation"></a>The <code>console.log</code> method in Node does something similar to what it does in the browser. It prints out a piece of text. But in Node, the text will go to the process’s standard output stream rather than to a browser’s JavaScript console. When running <code>node</code> from the command line, that means you see the logged values in your terminal.</p>
+
+<p><a class="p_ident" id="p-0xbG1KLur9" href="#p-0xbG1KLur9" tabindex="-1" role="presentation"></a>If you run <code>node</code> without giving it a file, it provides you with a prompt at which you can type JavaScript code and immediately see the result.</p>
+
+<pre class="snippet" data-language="null" ><a class="c_ident" id="c-d/9k6S5oD+" href="#c-d/9k6S5oD+" tabindex="-1" role="presentation"></a>$ node
+&gt; 1 + 1
+2
+&gt; [-1, -2, -3].map(Math.abs)
+[1, 2, 3]
+&gt; process.exit(0)
+$</pre>
+
+<p><a class="p_ident" id="p-gu0HNk/tPj" href="#p-gu0HNk/tPj" tabindex="-1" role="presentation"></a>The <code>process</code> binding, just like the <code>console</code> binding, is available globally in Node. It provides various ways to inspect and manipulate the current program. The <code>exit</code> method ends the process and can be given an exit status code, which tells the program that started <code>node</code> (in this case, the command line shell) whether the program completed successfully (code zero) or encountered an error (any other code).</p>
+
+<p><a class="p_ident" id="p-r76dNN6hR1" href="#p-r76dNN6hR1" tabindex="-1" role="presentation"></a>To find the command line arguments given to your script, you can read <code>process.argv</code>, which is an array of strings. Note that it also includes the name of the <code>node</code> command and your script name, so the actual arguments start at index 2. If <code>showargv.js</code> contains the statement <code>console.<wbr>log(process.<wbr>argv)</code>, you could run it like this:</p>
+
+<pre class="snippet" data-language="null" ><a class="c_ident" id="c-WCisDZr57g" href="#c-WCisDZr57g" tabindex="-1" role="presentation"></a>$ node showargv.js one --and two
+[&quot;node&quot;, &quot;/tmp/showargv.js&quot;, &quot;one&quot;, &quot;--and&quot;, &quot;two&quot;]</pre>
+
+<p><a class="p_ident" id="p-ols5jgMHp4" href="#p-ols5jgMHp4" tabindex="-1" role="presentation"></a>All the standard JavaScript global bindings, such as <code>Array</code>, <code>Math</code>, and <code>JSON</code>, are also present in Node’s environment. Browser-related functionality, such as <code>document</code> or <code>prompt</code>, is not.</p>
+
+<h2><a class="h_ident" id="h-BOlGLA/wK7" href="#h-BOlGLA/wK7" tabindex="-1" role="presentation"></a>Modules</h2>
+
+<p><a class="p_ident" id="p-7uiDKmOxBC" href="#p-7uiDKmOxBC" tabindex="-1" role="presentation"></a>Beyond the bindings I mentioned, such as <code>console</code> and <code>process</code>, Node puts few additional bindings in the global scope. If you want to access built-in functionality, you have to ask the module system for it.</p>
+
+<p><a class="p_ident" id="p-sGZ2maLmxa" href="#p-sGZ2maLmxa" tabindex="-1" role="presentation"></a>Node started out using the CommonJS module system, based on the <code>require</code> function, which we saw in <a href="10_modules.html#commonjs">Chapter 10</a>. It will still use this system by default when you load a <code>.js</code> file.</p>
+
+<p><a class="p_ident" id="p-uXGpOYn+73" href="#p-uXGpOYn+73" tabindex="-1" role="presentation"></a>But today, Node also supports the more modern ES module system. When a script’s filename ends in <code>.mjs</code>, it is considered to be such a module, and you can use <code>import</code> and <code>export</code> in it (but not <code>require</code>). We will use ES modules in this chapter.</p>
+
+<p><a class="p_ident" id="p-a8zlaHIaUU" href="#p-a8zlaHIaUU" tabindex="-1" role="presentation"></a>When importing a module—whether with <code>require</code> or <code>import</code>—Node has to resolve the given string to an actual file that it can load. Names that start with <code>/</code>, <code>./</code>, or <code>../</code> are resolved as files, relative to the current module’s path. Here, <code>.</code> stands for the current directory, <code>../</code> for one directory up, and <code>/</code> for the root of the filesystem. If you ask for <code>&quot;./<wbr>graph.<wbr>mjs&quot;</code> from the file <code>/<wbr>tmp/<wbr>robot/<wbr>robot.<wbr>mjs</code>, Node will try to load the file <code>/<wbr>tmp/<wbr>robot/<wbr>graph.<wbr>mjs</code>.</p>
+
+<p><a class="p_ident" id="p-Jbv0K2DaVF" href="#p-Jbv0K2DaVF" tabindex="-1" role="presentation"></a>When a string that does not look like a relative or absolute path is imported, it is assumed to refer to either a built-in module or a module installed in a <code>node_modules</code> directory. For example, importing from <code>&quot;node:fs&quot;</code> will give you Node’s built-in filesystem module. Importing <code>&quot;robot&quot;</code> might try to load the library found in <code>node_modules/<wbr>robot/<wbr></code>. It’s common to install such libraries using NPM, which we’ll return to in a moment.</p>
+
+<p><a class="p_ident" id="p-nVdHCtPw94" href="#p-nVdHCtPw94" tabindex="-1" role="presentation"></a>Let’s set up a small project consisting of two files. The first one, called <code>main.mjs</code>, defines a script that can be called from the command line to reverse a string.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-l0vKU6uh/+" href="#c-l0vKU6uh/+" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">reverse</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;./reverse.mjs&quot;</span>;
+
+<span class="tok-comment">// Index 2 holds the first actual command line argument</span>
+<span class="tok-keyword">let</span> <span class="tok-definition">argument</span> = process.argv[<span class="tok-number">2</span>];
+
+console.log(reverse(argument));</pre>
+
+<p><a class="p_ident" id="p-4ZPnC8Ok8r" href="#p-4ZPnC8Ok8r" tabindex="-1" role="presentation"></a>The file <code>reverse.mjs</code> defines a library for reversing strings, which can be used both by this command line tool and by other scripts that need direct access to a string-reversing function.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-p8FJa0H1D4" href="#c-p8FJa0H1D4" tabindex="-1" role="presentation"></a><span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-definition">reverse</span>(<span class="tok-definition">string</span>) {
+  <span class="tok-keyword">return</span> Array.from(string).reverse().join(<span class="tok-string">&quot;&quot;</span>);
+}</pre>
+
+<p><a class="p_ident" id="p-30cETgfqDq" href="#p-30cETgfqDq" tabindex="-1" role="presentation"></a>Remember that <code>export</code> is used to declare that a binding is part of the module’s interface. That allows <code>main.mjs</code> to import and use the function.</p>
+
+<p><a class="p_ident" id="p-S/nc4v84fJ" href="#p-S/nc4v84fJ" tabindex="-1" role="presentation"></a>We can now call our tool like this:</p>
+
+<pre class="snippet" data-language="null" ><a class="c_ident" id="c-LYQo5Arp8G" href="#c-LYQo5Arp8G" tabindex="-1" role="presentation"></a>$ node main.mjs JavaScript
+tpircSavaJ</pre>
+
+<h2><a class="h_ident" id="h-J6hW/SmL/a" href="#h-J6hW/SmL/a" tabindex="-1" role="presentation"></a>Installing with NPM</h2>
+
+<p><a class="p_ident" id="p-SCVVMZEk4o" href="#p-SCVVMZEk4o" tabindex="-1" role="presentation"></a>NPM, introduced in <a href="10_modules.html#modules_npm">Chapter 10</a>, is an online repository of JavaScript modules, many of which are specifically written for Node. When you install Node on your computer, you also get the <code>npm</code> command, which you can use to interact with this repository.</p>
+
+<p><a class="p_ident" id="p-S050oa0uFn" href="#p-S050oa0uFn" tabindex="-1" role="presentation"></a>NPM’s main use is downloading packages. We saw the <code>ini</code> package in <a href="10_modules.html#modules_ini">Chapter 10</a>. We can use NPM to fetch and install that package on our computer.</p>
+
+<pre class="snippet" data-language="null" ><a class="c_ident" id="c-K3dytBLqfv" href="#c-K3dytBLqfv" tabindex="-1" role="presentation"></a>$ npm install ini
+added 1 package in 723ms
+
+$ node
+&gt; const {parse} = require(&quot;ini&quot;);
+&gt; parse(&quot;x = 1\ny = 2&quot;);
+{ x: '1', y: '2' }</pre>
+
+<p><a class="p_ident" id="p-NBQHpDdZuw" href="#p-NBQHpDdZuw" tabindex="-1" role="presentation"></a>After running <code>npm install</code>, NPM will have created a directory called <code>node_modules</code>. Inside that directory will be an <code>ini</code> directory that contains the library. You can open it and look at the code. When we import <code>&quot;ini&quot;</code>, this library is loaded, and we can call its <code>parse</code> property to parse a configuration file.</p>
+
+<p><a class="p_ident" id="p-sKeXO3qL6G" href="#p-sKeXO3qL6G" tabindex="-1" role="presentation"></a>By default, NPM installs packages under the current directory rather than in a central place. If you are used to other package managers, this may seem unusual, but it has advantages—it puts each application in full control of the packages it installs and makes it easier to manage versions and clean up when removing an application.</p>
+
+<h3><a class="i_ident" id="i-IMZP7FN0pF" href="#i-IMZP7FN0pF" tabindex="-1" role="presentation"></a>Package files</h3>
+
+<p><a class="p_ident" id="p-5HO/QjCY7A" href="#p-5HO/QjCY7A" tabindex="-1" role="presentation"></a>After running <code>npm install</code> to install some package, you will find not only a <code>node_modules</code> directory but also a file called <code>package.json</code> in your current directory. It is recommended to have such a file for each project. You can create it manually or run <code>npm init</code>. This file contains information about the project, such as its name and version, and lists its dependencies.</p>
+
+<p><a class="p_ident" id="p-NT9giTr6Q2" href="#p-NT9giTr6Q2" tabindex="-1" role="presentation"></a>The robot simulation from <a href="07_robot.html">Chapter 7</a>, as modularized in the exercise in <a href="10_modules.html#modular_robot">Chapter 10</a>, might have a <code>package.json</code> file like this:</p>
+
+<pre class="snippet" data-language="json" ><a class="c_ident" id="c-uk0kgUiaJg" href="#c-uk0kgUiaJg" tabindex="-1" role="presentation"></a>{
+  <span class="tok-string">&quot;author&quot;</span>: <span class="tok-string">&quot;Marijn Haverbeke&quot;</span>,
+  <span class="tok-string">&quot;name&quot;</span>: <span class="tok-string">&quot;eloquent-javascript-robot&quot;</span>,
+  <span class="tok-string">&quot;description&quot;</span>: <span class="tok-string">&quot;Simulation of a package-delivery robot&quot;</span>,
+  <span class="tok-string">&quot;version&quot;</span>: <span class="tok-string">&quot;1.0.0&quot;</span>,
+  <span class="tok-string">&quot;main&quot;</span>: <span class="tok-string">&quot;run.mjs&quot;</span>,
+  <span class="tok-string">&quot;dependencies&quot;</span>: {
+    <span class="tok-string">&quot;dijkstrajs&quot;</span>: <span class="tok-string">&quot;^1.0.1&quot;</span>,
+    <span class="tok-string">&quot;random-item&quot;</span>: <span class="tok-string">&quot;^1.0.0&quot;</span>
+  },
+  <span class="tok-string">&quot;license&quot;</span>: <span class="tok-string">&quot;ISC&quot;</span>
+}</pre>
+
+<p><a class="p_ident" id="p-LA2QNdOUqm" href="#p-LA2QNdOUqm" tabindex="-1" role="presentation"></a>When you run <code>npm install</code> without naming a package to install, NPM will install the dependencies listed in <code>package.json</code>. When you install a specific package that is not already listed as a dependency, NPM will add it to <code>package.json</code>.</p>
+
+<h3><a class="i_ident" id="i-ojkQfvKPbv" href="#i-ojkQfvKPbv" tabindex="-1" role="presentation"></a>Versions</h3>
+
+<p><a class="p_ident" id="p-UrPIybyUA4" href="#p-UrPIybyUA4" tabindex="-1" role="presentation"></a>A <code>package.json</code> file lists both the program’s own version and versions for its dependencies. Versions are a way to deal with the fact that packages evolve separately, and code written to work with a package as it existed at one point may not work with a later, modified version of the package.</p>
+
+<p><a class="p_ident" id="p-CvfHe7sDbQ" href="#p-CvfHe7sDbQ" tabindex="-1" role="presentation"></a>NPM demands that its packages follow a schema called <em>semantic versioning</em>, which encodes some information about which versions are <em>compatible</em> (don’t break the old interface) in the version number. A semantic version consists of three numbers separated by periods, such as <code>2.3.0</code>. Every time new functionality is added, the middle number has to be incremented. Every time compatibility is broken, so that existing code that uses the package might not work with the new version, the first number has to be incremented.</p>
+
+<p><a class="p_ident" id="p-gTL1n2TLHm" href="#p-gTL1n2TLHm" tabindex="-1" role="presentation"></a>A caret character (<code>^</code>) in front of the version number for a dependency in <code>package.json</code> indicates that any version compatible with the given number may be installed. For example, <code>&quot;^2.<wbr>3.<wbr>0&quot;</code> would mean that any version greater than or equal to 2.3.0 and less than 3.0.0 is allowed.</p>
+
+<p><a class="p_ident" id="p-HcGcWqTR8/" href="#p-HcGcWqTR8/" tabindex="-1" role="presentation"></a>The <code>npm</code> command is also used to publish new packages or new versions of packages. If you run <code>npm publish</code> in a directory that has a <code>package.json</code> file, it will publish a package with the name and version listed in the JSON file to the registry. Anyone can publish packages to NPM—though only under a package name that isn’t in use yet, since it wouldn’t be good if random people could update existing packages.</p>
+
+<p><a class="p_ident" id="p-u9CNibuDC7" href="#p-u9CNibuDC7" tabindex="-1" role="presentation"></a>This book won’t delve further into the details of NPM usage. Refer to <a href="https://npmjs.com"><em>https://npmjs.com</em></a> for further documentation and a way to search for packages.</p>
+
+<h2><a class="h_ident" id="h-pLa3nMU14p" href="#h-pLa3nMU14p" tabindex="-1" role="presentation"></a>The filesystem module</h2>
+
+<p><a class="p_ident" id="p-HumHNRQKJx" href="#p-HumHNRQKJx" tabindex="-1" role="presentation"></a>One of the most commonly used built-in modules in Node is the <code>node:fs</code> module, which stands for <em>filesystem</em>. It exports functions for working with files and directories.</p>
+
+<p><a class="p_ident" id="p-75RFSIQwdU" href="#p-75RFSIQwdU" tabindex="-1" role="presentation"></a>For example, the function called <code>readFile</code> reads a file and then calls a callback with the file’s contents.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-vwpa9FujQK" href="#c-vwpa9FujQK" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">readFile</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:fs&quot;</span>;
+readFile(<span class="tok-string">&quot;file.txt&quot;</span>, <span class="tok-string">&quot;utf8&quot;</span>, (<span class="tok-definition">error</span>, <span class="tok-definition">text</span>) =&gt; {
+  <span class="tok-keyword">if</span> (error) <span class="tok-keyword">throw</span> error;
+  console.log(<span class="tok-string">&quot;The file contains:&quot;</span>, text);
+});</pre>
+
+<p><a class="p_ident" id="p-kiSsXyNElK" href="#p-kiSsXyNElK" tabindex="-1" role="presentation"></a>The second argument to <code>readFile</code> indicates the <em>character encoding</em> used to decode the file into a string. There are several ways in which text can be encoded to binary data, but most modern systems use UTF-8. Unless you have reasons to believe another encoding is used, pass <code>&quot;utf8&quot;</code> when reading a text file. If you do not pass an encoding, Node will assume you are interested in the binary data and will give you a <code>Buffer</code> object instead of a string. This is an array-like object that contains numbers representing the bytes (8-bit chunks of data) in the files.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-a0H6Ao5E+M" href="#c-a0H6Ao5E+M" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">readFile</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:fs&quot;</span>;
+readFile(<span class="tok-string">&quot;file.txt&quot;</span>, (<span class="tok-definition">error</span>, <span class="tok-definition">buffer</span>) =&gt; {
+  <span class="tok-keyword">if</span> (error) <span class="tok-keyword">throw</span> error;
+  console.log(<span class="tok-string">&quot;The file contained&quot;</span>, buffer.length, <span class="tok-string">&quot;bytes.&quot;</span>,
+              <span class="tok-string">&quot;The first byte is:&quot;</span>, buffer[<span class="tok-number">0</span>]);
+});</pre>
+
+<p><a class="p_ident" id="p-2eNWgxdLGx" href="#p-2eNWgxdLGx" tabindex="-1" role="presentation"></a>A similar function, <code>writeFile</code>, is used to write a file to disk.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-EBPVY7LdZ1" href="#c-EBPVY7LdZ1" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">writeFile</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:fs&quot;</span>;
+writeFile(<span class="tok-string">&quot;graffiti.txt&quot;</span>, <span class="tok-string">&quot;Node was here&quot;</span>, <span class="tok-definition">err</span> =&gt; {
+  <span class="tok-keyword">if</span> (err) console.log(<span class="tok-string2">`Failed to write file: </span>${err}<span class="tok-string2">`</span>);
+  <span class="tok-keyword">else</span> console.log(<span class="tok-string">&quot;File written.&quot;</span>);
+});</pre>
+
+<p><a class="p_ident" id="p-rDd4gjDwV6" href="#p-rDd4gjDwV6" tabindex="-1" role="presentation"></a>Here it was not necessary to specify the encoding—<code>writeFile</code> will assume that when it is given a string to write, rather than a <code>Buffer</code> object, it should write it out as text using its default character encoding, which is UTF-8.</p>
+
+<p><a class="p_ident" id="p-SJ/BKOfrhB" href="#p-SJ/BKOfrhB" tabindex="-1" role="presentation"></a>The <code>node:fs</code> module contains many other useful functions: <code>readdir</code> will give you the files in a directory as an array of strings, <code>stat</code> will retrieve information about a file, <code>rename</code> will rename a file, <code>unlink</code> will remove one, and so on. See the documentation at <a href="https://nodejs.org"><em>https://nodejs.org</em></a> for specifics.</p>
+
+<p><a class="p_ident" id="p-e3QJHgZtmU" href="#p-e3QJHgZtmU" tabindex="-1" role="presentation"></a>Most of these take a callback function as the last parameter, which they call either with an error (the first argument) or with a successful result (the second). As we saw in <a href="11_async.html">Chapter 11</a>, there are downsides to this style of programming—the biggest one being that error handling becomes verbose and error prone.</p>
+
+<p><a class="p_ident" id="p-8dYVVsE4xv" href="#p-8dYVVsE4xv" tabindex="-1" role="presentation"></a>The <code>node:fs/promises</code> module exports most of the same functions as the old <code>node:fs</code> module but uses promises rather than callback functions.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-UnYqgzBSbm" href="#c-UnYqgzBSbm" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">readFile</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:fs/promises&quot;</span>;
+readFile(<span class="tok-string">&quot;file.txt&quot;</span>, <span class="tok-string">&quot;utf8&quot;</span>)
+  .then(<span class="tok-definition">text</span> =&gt; console.log(<span class="tok-string">&quot;The file contains:&quot;</span>, text));</pre>
+
+<p><a class="p_ident" id="p-RKcdbQa/Ot" href="#p-RKcdbQa/Ot" tabindex="-1" role="presentation"></a>Sometimes you don’t need asynchronicity and it just gets in the way. Many of the functions in <code>node:fs</code> also have a synchronous variant, which has the same name with <code>Sync</code> added to the end. For example, the synchronous version of <code>readFile</code> is called <code>readFileSync</code>.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-Xb5Jjk4nDg" href="#c-Xb5Jjk4nDg" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">readFileSync</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:fs&quot;</span>;
+console.log(<span class="tok-string">&quot;The file contains:&quot;</span>,
+            readFileSync(<span class="tok-string">&quot;file.txt&quot;</span>, <span class="tok-string">&quot;utf8&quot;</span>));</pre>
+
+<p><a class="p_ident" id="p-Tcg+es/QMS" href="#p-Tcg+es/QMS" tabindex="-1" role="presentation"></a>Note that while such a synchronous operation is being performed, your program is stopped entirely. If it should be responding to the user or to other machines on the network, being stuck on a synchronous action might produce annoying delays.</p>
+
+<h2><a class="h_ident" id="h-3O5dGIJE9F" href="#h-3O5dGIJE9F" tabindex="-1" role="presentation"></a>The HTTP module</h2>
+
+<p><a class="p_ident" id="p-DmbHt+6pJm" href="#p-DmbHt+6pJm" tabindex="-1" role="presentation"></a>Another central module is called <code>node:http</code>. It provides functionality for running an HTTP server.</p>
+
+<p><a class="p_ident" id="p-5AqaLQsq5V" href="#p-5AqaLQsq5V" tabindex="-1" role="presentation"></a>This is all it takes to start an HTTP server:</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-iG/Ok1vO37" href="#c-iG/Ok1vO37" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">createServer</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:http&quot;</span>;
+<span class="tok-keyword">let</span> <span class="tok-definition">server</span> = createServer((<span class="tok-definition">request</span>, <span class="tok-definition">response</span>) =&gt; {
+  response.writeHead(<span class="tok-number">200</span>, {<span class="tok-string">&quot;Content-Type&quot;</span>: <span class="tok-string">&quot;text/html&quot;</span>});
+  response.write(<span class="tok-string2">`</span>
+<span class="tok-string2">    &lt;h1&gt;Hello!&lt;/h1&gt;</span>
+<span class="tok-string2">    &lt;p&gt;You asked for &lt;code&gt;</span>${request.url}<span class="tok-string2">&lt;/code&gt;&lt;/p&gt;`</span>);
+  response.end();
+});
+server.listen(<span class="tok-number">8000</span>);
+console.log(<span class="tok-string">&quot;Listening! (port 8000)&quot;</span>);</pre>
+
+<p><a class="p_ident" id="p-aWcDaGah2b" href="#p-aWcDaGah2b" tabindex="-1" role="presentation"></a>If you run this script on your own machine, you can point your web browser at <a href="http://localhost:8000/hello"><em>http://localhost:8000/hello</em></a> to make a request to your server. It will respond with a small HTML page.</p>
+
+<p><a class="p_ident" id="p-ZiHH2p8YG0" href="#p-ZiHH2p8YG0" tabindex="-1" role="presentation"></a>The function passed as the argument to <code>createServer</code> is called every time a client connects to the server. The <code>request</code> and <code>response</code> bindings are objects representing the incoming and outgoing data. The first contains information about the request, such as its <code>url</code> property, which tells us to what URL the request was made.</p>
+
+<p><a class="p_ident" id="p-sN2ypq9bpK" href="#p-sN2ypq9bpK" tabindex="-1" role="presentation"></a>When you open that page in your browser, it sends a request to your own computer. This causes the server function to run and send back a response, which you can then see in the browser.</p>
+
+<p><a class="p_ident" id="p-eHNvwd3lFU" href="#p-eHNvwd3lFU" tabindex="-1" role="presentation"></a>To send something to the client, you call methods on the <code>response</code> object. The first, <code>writeHead</code>, will write out the response headers (see <a href="18_http.html#headers">Chapter 18</a>). You give it the status code (200 for “OK” in this case) and an object that contains header values. The example sets the <code>Content-Type</code> header to inform the client that we’ll be sending back an HTML document.</p>
+
+<p><a class="p_ident" id="p-AVzTSVzXSM" href="#p-AVzTSVzXSM" tabindex="-1" role="presentation"></a>Next, the actual response body (the document itself) is sent with <code>response.write</code>. You’re allowed to call this method multiple times if you want to send the response piece by piece—for example, to stream data to the client as it becomes available. Finally, <code>response.end</code> signals the end of the response.</p>
+
+<p><a class="p_ident" id="p-evKrjFovQf" href="#p-evKrjFovQf" tabindex="-1" role="presentation"></a>The call to <code>server.listen</code> causes the server to start waiting for connections on port 8000. This is why you have to connect to <em>localhost:8000</em> to speak to this server, rather than just <em>localhost</em>, which would use the default port 80.</p>
+
+<p><a class="p_ident" id="p-/iHKISpOoj" href="#p-/iHKISpOoj" tabindex="-1" role="presentation"></a>When you run this script, the process just sits there and waits. When a script is listening for events—in this case, network connections—<code>node</code> will not automatically exit when it reaches the end of the script. To close it, press <span class="keyname">ctrl</span>-C.</p>
+
+<p><a class="p_ident" id="p-7qMlOUUlqm" href="#p-7qMlOUUlqm" tabindex="-1" role="presentation"></a>A real web server usually does more than the one in the example—it looks at the request’s method (the <code>method</code> property) to see what action the client is trying to perform and looks at the request’s URL to find out on which resource this action is being performed. We’ll see a more advanced server <a href="20_node.html#file_server">later in this chapter</a>.</p>
+
+<p><a class="p_ident" id="p-p3ahXsNmuS" href="#p-p3ahXsNmuS" tabindex="-1" role="presentation"></a>The <code>node:http</code> module also provides a <code>request</code> function that can be used to make HTTP requests. However, it is a lot more cumbersome to use than <code>fetch</code>, which we saw in <a href="18_http.html">Chapter 18</a>. Fortunately, <code>fetch</code> is also available in Node as a global binding. Unless you want to do something very specific, such as processing the response document piece by piece as the data comes in over the network, I recommend sticking to <code>fetch</code>.</p>
+
+<h2><a class="h_ident" id="h-dJhdomfGgD" href="#h-dJhdomfGgD" tabindex="-1" role="presentation"></a>Streams</h2>
+
+<p><a class="p_ident" id="p-Wekb742ncQ" href="#p-Wekb742ncQ" tabindex="-1" role="presentation"></a>The response object that the HTTP server could write to is an example of a <em>writable stream</em> object, which is a widely used concept in Node. Such objects have a <code>write</code> method that can be passed a string or a <code>Buffer</code> object to write something to the stream. Their <code>end</code> method closes the stream and optionally takes a value to write to the stream before closing. Both of these methods can also be given a callback as an additional argument, which they will call when the writing or closing has finished.</p>
+
+<p><a class="p_ident" id="p-L3YcfbxZV7" href="#p-L3YcfbxZV7" tabindex="-1" role="presentation"></a>It is possible to create a writable stream that points at a file with the <code>createWriteStream</code> function from the <code>node:fs</code> module. You can then use the <code>write</code> method on the resulting object to write the file one piece at a time rather than in one shot, as with <code>writeFile</code>.</p>
+
+<p><a class="p_ident" id="p-93VQIHGgFt" href="#p-93VQIHGgFt" tabindex="-1" role="presentation"></a><em>Readable streams</em> are a little more involved. The <code>request</code> argument to the HTTP server’s callback is a readable stream. Reading from a stream is done using event handlers rather than methods.</p>
+
+<p><a class="p_ident" id="p-CaPkx6i5f+" href="#p-CaPkx6i5f+" tabindex="-1" role="presentation"></a>Objects that emit events in Node have a method called <code>on</code> that is similar to the <code>addEventListener</code> method in the browser. You give it an event name and then a function, and it will register that function to be called whenever the given event occurs.</p>
+
+<p><a class="p_ident" id="p-3yAsJAs/Gl" href="#p-3yAsJAs/Gl" tabindex="-1" role="presentation"></a>Readable streams have <code>&quot;data&quot;</code> and <code>&quot;end&quot;</code> events. The first is fired every time data comes in, and the second is called whenever the stream is at its end. This model is most suited for <em>streaming</em> data that can be immediately processed, even when the whole document isn’t available yet. A file can be read as a readable stream by using the <code>createReadStream</code> function from <code>node:fs</code>.</p>
+
+<p><a class="p_ident" id="p-DQmM9KjDIA" href="#p-DQmM9KjDIA" tabindex="-1" role="presentation"></a>This code creates a server that reads request bodies and streams them back to the client as all-uppercase text:</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-WGmsdnB9wt" href="#c-WGmsdnB9wt" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">createServer</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:http&quot;</span>;
+createServer((<span class="tok-definition">request</span>, <span class="tok-definition">response</span>) =&gt; {
+  response.writeHead(<span class="tok-number">200</span>, {<span class="tok-string">&quot;Content-Type&quot;</span>: <span class="tok-string">&quot;text/plain&quot;</span>});
+  request.on(<span class="tok-string">&quot;data&quot;</span>, <span class="tok-definition">chunk</span> =&gt;
+    response.write(chunk.toString().toUpperCase()));
+  request.on(<span class="tok-string">&quot;end&quot;</span>, () =&gt; response.end());
+}).listen(<span class="tok-number">8000</span>);</pre>
+
+<p><a class="p_ident" id="p-cE/QJiL9Ih" href="#p-cE/QJiL9Ih" tabindex="-1" role="presentation"></a>The <code>chunk</code> value passed to the data handler will be a binary <code>Buffer</code>. We can convert this to a string by decoding it as UTF-8 encoded characters with its <code>toString</code> method.</p>
+
+<p><a class="p_ident" id="p-6S1XXBZo7w" href="#p-6S1XXBZo7w" tabindex="-1" role="presentation"></a>The following piece of code, when run with the uppercasing server active, will send a request to that server and write out the response it gets:</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-sOV/OX0P/s" href="#c-sOV/OX0P/s" tabindex="-1" role="presentation"></a>fetch(<span class="tok-string">&quot;http://localhost:8000/&quot;</span>, {
+  <span class="tok-definition">method</span>: <span class="tok-string">&quot;POST&quot;</span>,
+  <span class="tok-definition">body</span>: <span class="tok-string">&quot;Hello server&quot;</span>
+}).then(<span class="tok-definition">resp</span> =&gt; resp.text()).then(console.log);
+<span class="tok-comment">// → HELLO SERVER</span></pre>
+
+<h2 id="file_server"><a class="h_ident" id="h-yAdw1Y7bgN" href="#h-yAdw1Y7bgN" tabindex="-1" role="presentation"></a>A file server</h2>
+
+<p><a class="p_ident" id="p-m8AQqOO4Ya" href="#p-m8AQqOO4Ya" tabindex="-1" role="presentation"></a>Let’s combine our newfound knowledge about HTTP servers and working with the filesystem to create a bridge between the two: an HTTP server that allows remote access to a filesystem. Such a server has all kinds of uses—it allows web applications to store and share data, or it can give a group of people shared access to a bunch of files.</p>
+
+<p><a class="p_ident" id="p-Pu9mO8Vutb" href="#p-Pu9mO8Vutb" tabindex="-1" role="presentation"></a>When we treat files as HTTP resources, the HTTP methods <code>GET</code>, <code>PUT</code>, and <code>DELETE</code> can be used to read, write, and delete the files, respectively. We will interpret the path in the request as the path of the file that the request refers to.</p>
+
+<p><a class="p_ident" id="p-ISZx6yrjrK" href="#p-ISZx6yrjrK" tabindex="-1" role="presentation"></a>We probably don’t want to share our whole filesystem, so we’ll interpret these paths as starting in the server’s working directory, which is the directory in which it was started. If I ran the server from <code>/tmp/public/</code> (or <code>C:\tmp\public\</code> on Windows), then a request for <code>/file.txt</code> should refer to <code>/<wbr>tmp/<wbr>public/<wbr>file.<wbr>txt</code> (or <code>C:\tmp\public\file.<wbr>txt</code>).</p>
+
+<p><a class="p_ident" id="p-sVgrQ04Hby" href="#p-sVgrQ04Hby" tabindex="-1" role="presentation"></a>We’ll build the program piece by piece, using an object called <code>methods</code> to store the functions that handle the various HTTP methods. Method handlers are <code>async</code> functions that get the request object as their argument and return a promise that resolves to an object that describes the response.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-mWWezc7Wv0" href="#c-mWWezc7Wv0" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">createServer</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:http&quot;</span>;
+
+<span class="tok-keyword">const</span> <span class="tok-definition">methods</span> = Object.create(<span class="tok-keyword">null</span>);
+
+createServer((<span class="tok-definition">request</span>, <span class="tok-definition">response</span>) =&gt; {
+  <span class="tok-keyword">let</span> <span class="tok-definition">handler</span> = methods[request.method] || notAllowed;
+  handler(request).catch(<span class="tok-definition">error</span> =&gt; {
+    <span class="tok-keyword">if</span> (error.status != <span class="tok-keyword">null</span>) <span class="tok-keyword">return</span> error;
+    <span class="tok-keyword">return</span> {<span class="tok-definition">body</span>: String(error), <span class="tok-definition">status</span>: <span class="tok-number">500</span>};
+  }).then(({body, status = <span class="tok-number">200</span>, type = <span class="tok-string">&quot;text/plain&quot;</span>}) =&gt; {
+    response.writeHead(status, {<span class="tok-string">&quot;Content-Type&quot;</span>: type});
+    <span class="tok-keyword">if</span> (body?.pipe) body.pipe(response);
+    <span class="tok-keyword">else</span> response.end(body);
+  });
+}).listen(<span class="tok-number">8000</span>);
+
+<span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-definition">notAllowed</span>(<span class="tok-definition">request</span>) {
+  <span class="tok-keyword">return</span> {
+    <span class="tok-definition">status</span>: <span class="tok-number">405</span>,
+    <span class="tok-definition">body</span>: <span class="tok-string2">`Method </span>${request.method}<span class="tok-string2"> not allowed.`</span>
+  };
+}</pre>
+
+<p><a class="p_ident" id="p-XQyghTfOgS" href="#p-XQyghTfOgS" tabindex="-1" role="presentation"></a>This starts a server that just returns 405 error responses, which is the code used to indicate that the server refuses to handle a given method.</p>
+
+<p><a class="p_ident" id="p-JXw1kc0aXP" href="#p-JXw1kc0aXP" tabindex="-1" role="presentation"></a>When a request handler’s promise is rejected, the <code>catch</code> call translates the error into a response object, if it isn’t one already, so that the server can send back an error response to inform the client that it failed to handle the request.</p>
+
+<p><a class="p_ident" id="p-hqnRLFr4tm" href="#p-hqnRLFr4tm" tabindex="-1" role="presentation"></a>The <code>status</code> field of the response description may be omitted, in which case it defaults to 200 (OK). The content type, in the <code>type</code> property, can also be left off, in which case the response is assumed to be plain text.</p>
+
+<p><a class="p_ident" id="p-exZyYeIqg6" href="#p-exZyYeIqg6" tabindex="-1" role="presentation"></a>When the value of <code>body</code> is a readable stream, it will have a <code>pipe</code> method that we can use to forward all content from a readable stream to a writable stream. If not, it is assumed to be either <code>null</code> (no body), a string, or a buffer, and it is passed directly to the response’s <code>end</code> method.</p>
+
+<p><a class="p_ident" id="p-pL6vfBBk4E" href="#p-pL6vfBBk4E" tabindex="-1" role="presentation"></a>To figure out which file path corresponds to a request URL, the <code>urlPath</code> function uses the built-in <code>URL</code> class (which also exists in the browser) to parse the URL. This constructor expects a full URL, not just the part starting with the slash that we get from <code>request.url</code>, so we give it a dummy domain name to fill in. It extracts its pathname, which will be something like <code>&quot;/<wbr>file.<wbr>txt&quot;</code>, decodes that to get rid of the <code>%20</code>-style escape codes, and resolves it relative to the program’s working directory.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-K/wCTdn3jM" href="#c-K/wCTdn3jM" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">resolve</span>, <span class="tok-definition">sep</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:path&quot;</span>;
+
+<span class="tok-keyword">const</span> <span class="tok-definition">baseDirectory</span> = process.cwd();
+
+<span class="tok-keyword">function</span> <span class="tok-definition">urlPath</span>(<span class="tok-definition">url</span>) {
+  <span class="tok-keyword">let</span> {pathname} = <span class="tok-keyword">new</span> URL(url, <span class="tok-string">&quot;http://d&quot;</span>);
+  <span class="tok-keyword">let</span> <span class="tok-definition">path</span> = resolve(decodeURIComponent(pathname).slice(<span class="tok-number">1</span>));
+  <span class="tok-keyword">if</span> (path != baseDirectory &amp;&amp;
+      !path.startsWith(baseDirectory + sep)) {
+    <span class="tok-keyword">throw</span> {<span class="tok-definition">status</span>: <span class="tok-number">403</span>, <span class="tok-definition">body</span>: <span class="tok-string">&quot;Forbidden&quot;</span>};
+  }
+  <span class="tok-keyword">return</span> path;
+}</pre>
+
+<p><a class="p_ident" id="p-1NWx24yrl9" href="#p-1NWx24yrl9" tabindex="-1" role="presentation"></a>As soon as you set up a program to accept network requests, you have to start worrying about security. In this case, if we aren’t careful, it is likely that we’ll accidentally expose our whole filesystem to the network.</p>
+
+<p><a class="p_ident" id="p-m0GNABM8RH" href="#p-m0GNABM8RH" tabindex="-1" role="presentation"></a>File paths are strings in Node. To map such a string to an actual file, there’s a nontrivial amount of interpretation going on. Paths may, for example, include <code>../</code> to refer to a parent directory. One obvious source of problems would be requests for paths like <code>/../secret_file</code>.</p>
+
+<p><a class="p_ident" id="p-RqOQ15MdP0" href="#p-RqOQ15MdP0" tabindex="-1" role="presentation"></a>To avoid such problems, <code>urlPath</code> uses the <code>resolve</code> function from the <code>node:path</code> module, which resolves relative paths. It then verifies that the result is <em>below</em> the working directory. The <code>process.cwd</code> function (where <code>cwd</code> stands for <em>current working directory</em>) can be used to find this working directory. The <code>sep</code> binding from the <code>node:path</code> package is the system’s path separator—a backslash on Windows and a forward slash on most other systems. When the path doesn’t start with the base directory, the function throws an error response object, using the HTTP status code indicating that access to the resource is forbidden.</p>
+
+<p><a class="p_ident" id="p-Xq2qYv1Lff" href="#p-Xq2qYv1Lff" tabindex="-1" role="presentation"></a>We’ll set up the <code>GET</code> method to return a list of files when reading a directory and to return the file’s content when reading a regular file.</p>
+
+<p><a class="p_ident" id="p-zj6fKVP9SD" href="#p-zj6fKVP9SD" tabindex="-1" role="presentation"></a>One tricky question is what kind of <code>Content-Type</code> header we should set when returning a file’s content. Since these files could be anything, our server can’t simply return the same content type for all of them. NPM can help us again here. The <code>mime-types</code> package (content type indicators like <code>text/plain</code> are also called <em>MIME types</em>) knows the correct type for a large number of file extensions.</p>
+
+<p><a class="p_ident" id="p-ZZr+O24IMr" href="#p-ZZr+O24IMr" tabindex="-1" role="presentation"></a>The following <code>npm</code> command, in the directory where the server script lives, installs a specific version of <code>mime</code>:</p>
+
+<pre class="snippet" data-language="null" ><a class="c_ident" id="c-EObiWUZetK" href="#c-EObiWUZetK" tabindex="-1" role="presentation"></a>$ npm install mime-types@2.1.0</pre>
+
+<p><a class="p_ident" id="p-0oNrzailqn" href="#p-0oNrzailqn" tabindex="-1" role="presentation"></a>When a requested file does not exist, the correct HTTP status code to return is 404. We’ll use the <code>stat</code> function, which looks up information about a file, to find out both whether the file exists and whether it is a directory.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-nfmdPfwRar" href="#c-nfmdPfwRar" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">createReadStream</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:fs&quot;</span>;
+<span class="tok-keyword">import</span> {<span class="tok-definition">stat</span>, <span class="tok-definition">readdir</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:fs/promises&quot;</span>;
+<span class="tok-keyword">import</span> {<span class="tok-definition">lookup</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;mime-types&quot;</span>;
+
+methods.GET = <span class="tok-keyword">async</span> <span class="tok-keyword">function</span>(<span class="tok-definition">request</span>) {
+  <span class="tok-keyword">let</span> <span class="tok-definition">path</span> = urlPath(request.url);
+  <span class="tok-keyword">let</span> <span class="tok-definition">stats</span>;
+  <span class="tok-keyword">try</span> {
+    stats = <span class="tok-keyword">await</span> stat(path);
+  } <span class="tok-keyword">catch</span> (<span class="tok-definition">error</span>) {
+    <span class="tok-keyword">if</span> (error.code != <span class="tok-string">&quot;ENOENT&quot;</span>) <span class="tok-keyword">throw</span> error;
+    <span class="tok-keyword">else</span> <span class="tok-keyword">return</span> {<span class="tok-definition">status</span>: <span class="tok-number">404</span>, <span class="tok-definition">body</span>: <span class="tok-string">&quot;File not found&quot;</span>};
+  }
+  <span class="tok-keyword">if</span> (stats.isDirectory()) {
+    <span class="tok-keyword">return</span> {<span class="tok-definition">body</span>: (<span class="tok-keyword">await</span> readdir(path)).join(<span class="tok-string">&quot;</span><span class="tok-string2">\n</span><span class="tok-string">&quot;</span>)};
+  } <span class="tok-keyword">else</span> {
+    <span class="tok-keyword">return</span> {<span class="tok-definition">body</span>: createReadStream(path),
+            <span class="tok-definition">type</span>: lookup(path)};
+  }
+};</pre>
+
+<p><a class="p_ident" id="p-iYt4Ms5dC4" href="#p-iYt4Ms5dC4" tabindex="-1" role="presentation"></a>Because it has to touch the disk and thus might take a while, <code>stat</code> is asynchronous. Since we’re using promises rather than callback style, it has to be imported from <code>node:fs/promises</code> instead of directly from <code>node:fs</code>.</p>
+
+<p><a class="p_ident" id="p-tdTunaPFS/" href="#p-tdTunaPFS/" tabindex="-1" role="presentation"></a>When the file does not exist, <code>stat</code> will throw an error object with a <code>code</code> property of <code>&quot;ENOENT&quot;</code>. These somewhat obscure, Unix-inspired codes are how you recognize error types in Node.</p>
+
+<p><a class="p_ident" id="p-f1+vCwgX9M" href="#p-f1+vCwgX9M" tabindex="-1" role="presentation"></a>The <code>stats</code> object returned by <code>stat</code> tells us a number of things about a file, such as its size (<code>size</code> property) and its modification date (<code>mtime</code> property). Here we are interested in the question of whether it is a directory or a regular file, which the <code>isDirectory</code> method tells us.</p>
+
+<p><a class="p_ident" id="p-E8HtJSMMtj" href="#p-E8HtJSMMtj" tabindex="-1" role="presentation"></a>We use <code>readdir</code> to read the array of files in a directory and return it to the client. For normal files, we create a readable stream with <code>createReadStream</code> and return that as the body, along with the content type that the <code>mime</code> package gives us for the file’s name.</p>
+
+<p><a class="p_ident" id="p-3SF21U54yR" href="#p-3SF21U54yR" tabindex="-1" role="presentation"></a>The code to handle <code>DELETE</code> requests is slightly simpler.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-JlCZDm9eg3" href="#c-JlCZDm9eg3" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">rmdir</span>, <span class="tok-definition">unlink</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:fs/promises&quot;</span>;
+
+methods.DELETE = <span class="tok-keyword">async</span> <span class="tok-keyword">function</span>(<span class="tok-definition">request</span>) {
+  <span class="tok-keyword">let</span> <span class="tok-definition">path</span> = urlPath(request.url);
+  <span class="tok-keyword">let</span> <span class="tok-definition">stats</span>;
+  <span class="tok-keyword">try</span> {
+    stats = <span class="tok-keyword">await</span> stat(path);
+  } <span class="tok-keyword">catch</span> (<span class="tok-definition">error</span>) {
+    <span class="tok-keyword">if</span> (error.code != <span class="tok-string">&quot;ENOENT&quot;</span>) <span class="tok-keyword">throw</span> error;
+    <span class="tok-keyword">else</span> <span class="tok-keyword">return</span> {<span class="tok-definition">status</span>: <span class="tok-number">204</span>};
+  }
+  <span class="tok-keyword">if</span> (stats.isDirectory()) <span class="tok-keyword">await</span> rmdir(path);
+  <span class="tok-keyword">else</span> <span class="tok-keyword">await</span> unlink(path);
+  <span class="tok-keyword">return</span> {<span class="tok-definition">status</span>: <span class="tok-number">204</span>};
+};</pre>
+
+<p><a class="p_ident" id="p-LTgtgu0j3m" href="#p-LTgtgu0j3m" tabindex="-1" role="presentation"></a>When an HTTP response does not contain any data, the status code 204 (“no content”) can be used to indicate this. Since the response to deletion doesn’t need to transmit any information beyond whether the operation succeeded, that is a sensible thing to return here.</p>
+
+<p><a class="p_ident" id="p-1CFycX4t/q" href="#p-1CFycX4t/q" tabindex="-1" role="presentation"></a>You may be wondering why trying to delete a nonexistent file returns a success status code rather than an error. When the file being deleted is not there, you could say that the request’s objective is already fulfilled. The HTTP standard encourages us to make requests <em>idempotent</em>, which means that making the same request multiple times produces the same result as making it once. In a way, if you try to delete something that’s already gone, the effect you were trying to create has been achieved—the thing is no longer there.</p>
+
+<p><a class="p_ident" id="p-q7xnjGCxyr" href="#p-q7xnjGCxyr" tabindex="-1" role="presentation"></a>This is the handler for <code>PUT</code> requests:</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-ChtmXskNos" href="#c-ChtmXskNos" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">createWriteStream</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;node:fs&quot;</span>;
+
+<span class="tok-keyword">function</span> <span class="tok-definition">pipeStream</span>(<span class="tok-definition">from</span>, <span class="tok-definition">to</span>) {
+  <span class="tok-keyword">return</span> <span class="tok-keyword">new</span> Promise((<span class="tok-definition">resolve</span>, <span class="tok-definition">reject</span>) =&gt; {
+    from.on(<span class="tok-string">&quot;error&quot;</span>, reject);
+    to.on(<span class="tok-string">&quot;error&quot;</span>, reject);
+    to.on(<span class="tok-string">&quot;finish&quot;</span>, resolve);
+    from.pipe(to);
+  });
+}
+
+methods.PUT = <span class="tok-keyword">async</span> <span class="tok-keyword">function</span>(<span class="tok-definition">request</span>) {
+  <span class="tok-keyword">let</span> <span class="tok-definition">path</span> = urlPath(request.url);
+  <span class="tok-keyword">await</span> pipeStream(request, createWriteStream(path));
+  <span class="tok-keyword">return</span> {<span class="tok-definition">status</span>: <span class="tok-number">204</span>};
+};</pre>
+
+<p><a class="p_ident" id="p-VID3l4baJ4" href="#p-VID3l4baJ4" tabindex="-1" role="presentation"></a>We don’t need to check whether the file exists this time—if it does, we’ll just overwrite it. We again use <code>pipe</code> to move data from a readable stream to a writable one, in this case from the request to the file. But since <code>pipe</code> isn’t written to return a promise, we have to write a wrapper, <code>pipeStream</code>, that creates a promise around the outcome of calling <code>pipe</code>.</p>
+
+<p><a class="p_ident" id="p-DGGAMEixPQ" href="#p-DGGAMEixPQ" tabindex="-1" role="presentation"></a>When something goes wrong when opening the file, <code>createWriteStream</code> will still return a stream, but that stream will fire an <code>&quot;error&quot;</code> event. The stream from the request may also fail—for example, if the network goes down. So we wire up both streams’ <code>&quot;error&quot;</code> events to reject the promise. When <code>pipe</code> is done, it will close the output stream, which causes it to fire a <code>&quot;finish&quot;</code> event. That’s the point at which we can successfully resolve the promise (returning nothing).</p>
+
+<p><a class="p_ident" id="p-ig7HitKqRz" href="#p-ig7HitKqRz" tabindex="-1" role="presentation"></a>The full script for the server is available at <a href="https://eloquentjavascript.net/code/file_server.mjs"><em>https://eloquentjavascript.net/code/file_server.mjs</em></a>. You can download that and, after installing its dependencies, run it with Node to start your own file server. And, of course, you can modify and extend it to solve this chapter’s exercises or to experiment.</p>
+
+<p><a class="p_ident" id="p-fBFWTJncql" href="#p-fBFWTJncql" tabindex="-1" role="presentation"></a>The command line tool <code>curl</code>, widely available on Unix-like systems (such as macOS and Linux), can be used to make HTTP requests. The following session briefly tests our server. The <code>-X</code> option is used to set the request’s method, and <code>-d</code> is used to include a request body.</p>
+
+<pre class="snippet" data-language="null" ><a class="c_ident" id="c-qgxdz4oRrt" href="#c-qgxdz4oRrt" tabindex="-1" role="presentation"></a>$ curl http://localhost:8000/file.txt
+File not found
+$ curl -X PUT -d CONTENT http://localhost:8000/file.txt
+$ curl http://localhost:8000/file.txt
+CONTENT
+$ curl -X DELETE http://localhost:8000/file.txt
+$ curl http://localhost:8000/file.txt
+File not found</pre>
+
+<p><a class="p_ident" id="p-AmMFBJGSkb" href="#p-AmMFBJGSkb" tabindex="-1" role="presentation"></a>The first request for <code>file.txt</code> fails since the file does not exist yet. The <code>PUT</code> request creates the file, and behold, the next request successfully retrieves it. After deleting it with a <code>DELETE</code> request, the file is again missing.</p>
+
+<h2><a class="h_ident" id="h-ErccPg/l98" href="#h-ErccPg/l98" tabindex="-1" role="presentation"></a>Summary</h2>
+
+<p><a class="p_ident" id="p-Nxxzvzbc8h" href="#p-Nxxzvzbc8h" tabindex="-1" role="presentation"></a>Node is a nice, small system that lets us run JavaScript in a nonbrowser context. It was originally designed for network tasks to play the role of a node in a network, but it lends itself to all kinds of scripting tasks. If writing JavaScript is something you enjoy, automating tasks with Node may work well for you.</p>
+
+<p><a class="p_ident" id="p-MwBwTRGbNG" href="#p-MwBwTRGbNG" tabindex="-1" role="presentation"></a>NPM provides packages for everything you can think of (and quite a few things you’d probably never think of), and it allows you to fetch and install those packages with the <code>npm</code> program. Node comes with a number of built-in modules, including the <code>node:fs</code> module for working with the filesystem and the <code>node:http</code> module for running HTTP servers.</p>
+
+<p><a class="p_ident" id="p-Zd4ZSEC9Mh" href="#p-Zd4ZSEC9Mh" tabindex="-1" role="presentation"></a>All input and output in Node is done asynchronously, unless you explicitly use a synchronous variant of a function, such as <code>readFileSync</code>. Node originally used callbacks for asynchronous functionality, but the <code>node:fs/promises</code> package provides a promise-based interface to the filesystem.</p>
+
+<h2><a class="h_ident" id="h-TcUD2vzyMe" href="#h-TcUD2vzyMe" tabindex="-1" role="presentation"></a>Exercises</h2>
+
+<h3><a class="i_ident" id="i-9+y+iovU0J" href="#i-9+y+iovU0J" tabindex="-1" role="presentation"></a>Search tool</h3>
+
+<p><a class="p_ident" id="p-ca6ZBtGx1B" href="#p-ca6ZBtGx1B" tabindex="-1" role="presentation"></a>On Unix systems, there is a command line tool called <code>grep</code> that can be used to quickly search files for a regular expression.</p>
+
+<p><a class="p_ident" id="p-SPdJt6R1Qc" href="#p-SPdJt6R1Qc" tabindex="-1" role="presentation"></a>Write a Node script that can be run from the command line and acts somewhat like <code>grep</code>. It treats its first command line argument as a regular expression and treats any further arguments as files to search. It outputs the names of any file whose content matches the regular expression.</p>
+
+<p><a class="p_ident" id="p-W1JsnLA2+S" href="#p-W1JsnLA2+S" tabindex="-1" role="presentation"></a>When that works, extend it so that when one of the arguments is a directory, it searches through all files in that directory and its subdirectories.</p>
+
+<p><a class="p_ident" id="p-y4ht4tsxKI" href="#p-y4ht4tsxKI" tabindex="-1" role="presentation"></a>Use asynchronous or synchronous filesystem functions as you see fit. Setting things up so that multiple asynchronous actions are requested at the same time might speed things up a little, but not a huge amount, since most filesystems can read only one thing at a time.</p>
+
+<details class="solution"><summary>Display hints...</summary><div class="solution-text">
+
+<p><a class="p_ident" id="p-iPJi2aEAkj" href="#p-iPJi2aEAkj" tabindex="-1" role="presentation"></a>Your first command line argument, the regular expression, can be found in <code>process.argv[2]</code>. The input files come after that. You can use the <code>RegExp</code> constructor to go from a string to a regular expression object.</p>
+
+<p><a class="p_ident" id="p-24MnW7A2/l" href="#p-24MnW7A2/l" tabindex="-1" role="presentation"></a>Doing this synchronously, with <code>readFileSync</code>, is more straightforward, but if you use <code>node:fs/promises</code> to get promise-returning functions and write an <code>async</code> function, the code looks similar.</p>
+
+<p><a class="p_ident" id="p-r0XgnA8VK0" href="#p-r0XgnA8VK0" tabindex="-1" role="presentation"></a>To figure out whether something is a directory, you can again use <code>stat</code> (or <code>statSync</code>) and the stats object’s <code>isDirectory</code> method.</p>
+
+<p><a class="p_ident" id="p-KiWSClPPul" href="#p-KiWSClPPul" tabindex="-1" role="presentation"></a>Exploring a directory is a branching process. You can do it either by using a recursive function or by keeping an array of work (files that still need to be explored). To find the files in a directory, you can call <code>readdir</code> or <code>readdirSync</code>. Note the strange capitalization—Node’s filesystem function naming is loosely based on standard Unix functions, such as <code>readdir</code>, that are all lowercase, but then it adds <code>Sync</code> with a capital letter.</p>
+
+<p><a class="p_ident" id="p-Aq7fsBfKsj" href="#p-Aq7fsBfKsj" tabindex="-1" role="presentation"></a>To go from a filename read with <code>readdir</code> to a full path name, you have to combine it with the name of the directory, either putting <code>sep</code> from <code>node:path</code> between them or using the <code>join</code> function from that same package.</p>
+
+</div></details>
+
+<h3><a class="i_ident" id="i-h8iNiA8ezX" href="#i-h8iNiA8ezX" tabindex="-1" role="presentation"></a>Directory creation</h3>
+
+<p><a class="p_ident" id="p-eKscmrM/cp" href="#p-eKscmrM/cp" tabindex="-1" role="presentation"></a>Though the <code>DELETE</code> method in our file server is able to delete directories (using <code>rmdir</code>), the server currently does not provide any way to <em>create</em> a directory.</p>
+
+<p><a class="p_ident" id="p-GpjSLUJk84" href="#p-GpjSLUJk84" tabindex="-1" role="presentation"></a>Add support for the <code>MKCOL</code> method (“make collection”), which should create a directory by calling <code>mkdir</code> from the <code>node:fs</code> module. <code>MKCOL</code> is not a widely used HTTP method, but it does exist for this same purpose in the <em>WebDAV</em> standard, which specifies a set of conventions on top of HTTP that make it suitable for creating documents.</p>
+
+<details class="solution"><summary>Display hints...</summary><div class="solution-text">
+
+<p><a class="p_ident" id="p-Ptyerm4lHs" href="#p-Ptyerm4lHs" tabindex="-1" role="presentation"></a>You can use the function that implements the <code>DELETE</code> method as a blueprint for the <code>MKCOL</code> method. When no file is found, try to create a directory with <code>mkdir</code>. When a directory exists at that path, you can return a 204 response so that directory creation requests are idempotent. If a nondirectory file exists here, return an error code. Code 400 (“bad request”) would be appropriate.</p>
+
+</div></details>
+
+<h3><a class="i_ident" id="i-TLRTlwK6ZU" href="#i-TLRTlwK6ZU" tabindex="-1" role="presentation"></a>A public space on the web</h3>
+
+<p><a class="p_ident" id="p-vTdeqF/5aL" href="#p-vTdeqF/5aL" tabindex="-1" role="presentation"></a>Since the file server serves up any kind of file and even includes the right <code>Content-Type</code> header, you can use it to serve a website. Given that this server allows everybody to delete and replace files, this would make for an interesting kind of website: one that can be modified, improved, and vandalized by everybody who takes the time to make the right HTTP request.</p>
+
+<p><a class="p_ident" id="p-S5RQ8T3sNn" href="#p-S5RQ8T3sNn" tabindex="-1" role="presentation"></a>Write a basic HTML page that includes a simple JavaScript file. Put the files in a directory served by the file server and open them in your browser.</p>
+
+<p><a class="p_ident" id="p-UerJ/YohV1" href="#p-UerJ/YohV1" tabindex="-1" role="presentation"></a>Next, as an advanced exercise or even a weekend project, combine all the knowledge you gained from this book to build a more user-friendly interface for modifying the website—from <em>inside</em> the website.</p>
+
+<p><a class="p_ident" id="p-PMJCxe07g5" href="#p-PMJCxe07g5" tabindex="-1" role="presentation"></a>Use an HTML form to edit the content of the files that make up the website, allowing the user to update them on the server by using HTTP requests, as described in <a href="18_http.html">Chapter 18</a>.</p>
+
+<p><a class="p_ident" id="p-hWSA1+odAv" href="#p-hWSA1+odAv" tabindex="-1" role="presentation"></a>Start by making only a single file editable. Then make it so that the user can select which file to edit. Use the fact that our file server returns lists of files when reading a directory.</p>
+
+<p><a class="p_ident" id="p-5JDgu6tuAT" href="#p-5JDgu6tuAT" tabindex="-1" role="presentation"></a>Don’t work directly in the code exposed by the file server, since if you make a mistake, you are likely to damage the files there. Instead, keep your work outside of the publicly accessible directory and copy it there when testing.</p>
+
+<details class="solution"><summary>Display hints...</summary><div class="solution-text">
+
+<p><a class="p_ident" id="p-v9JKMD5WJI" href="#p-v9JKMD5WJI" tabindex="-1" role="presentation"></a>You can create a <code>&lt;textarea&gt;</code> element to hold the content of the file that is being edited. A <code>GET</code> request, using <code>fetch</code>, can retrieve the current content of the file. You can use relative URLs like <em>index.html</em>, instead of <a href="http://localhost:8000/index.html"><em>http://localhost:8000/index.html</em></a>, to refer to files on the same server as the running script.</p>
+
+<p><a class="p_ident" id="p-AddxfNwTA3" href="#p-AddxfNwTA3" tabindex="-1" role="presentation"></a>Then, when the user clicks a button (you can use a <code>&lt;form&gt;</code> element and <code>&quot;submit&quot;</code> event), make a <code>PUT</code> request to the same URL, with the content of the <code>&lt;textarea&gt;</code> as the request body, to save the file.</p>
+
+<p><a class="p_ident" id="p-LI3MHsPkwQ" href="#p-LI3MHsPkwQ" tabindex="-1" role="presentation"></a>You can then add a <code>&lt;select&gt;</code> element that contains all the files in the server’s top directory by adding <code>&lt;option&gt;</code> elements containing the lines returned by a <code>GET</code> request to the URL <code>/</code>. When the user selects another file (a <code>&quot;change&quot;</code> event on the field), the script must fetch and display that file. When saving a file, use the currently selected filename.</p>
+
+</div></details><nav><a href="19_paint.html" title="previous chapter" aria-label="previous chapter">◂</a> <a href="index.html" title="cover" aria-label="cover">●</a> <a href="21_skillsharing.html" title="next chapter" aria-label="next chapter">▸</a>&nbsp;<button class=help title="help" aria-label="help"><strong>?</strong></button>
+</nav>
+</article>
+
+<script src="ejs.js"></script>

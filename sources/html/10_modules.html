@@ -1,0 +1,354 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modules :: Eloquent JavaScript</title>
+  <link rel=stylesheet href="css/ejs.css"><script>
+      var page = {"type":"chapter","number":10,"load_files":["code/packages_chapter_10.js","code/chapter/07_robot.js"]}</script></head>
+
+<article>
+<nav><a href="09_regexp.html" title="previous chapter" aria-label="previous chapter">◂</a> <a href="index.html" title="cover" aria-label="cover">●</a> <a href="11_async.html" title="next chapter" aria-label="next chapter">▸</a>&nbsp;<button class=help title="help" aria-label="help"><strong>?</strong></button>
+</nav>
+
+<h1>Modules</h1>
+
+<blockquote>
+
+<p><a class="p_ident" id="p-OwlHMaRbBt" href="#p-OwlHMaRbBt" tabindex="-1" role="presentation"></a>Write code that is easy to delete, not easy to extend.</p>
+
+<footer>Tef, <cite>programming is terrible</cite></footer>
+
+</blockquote><figure class="chapter framed"><img src="img/chapter_picture_10.jpg" alt="Illustration of a complicated building built from modular pieces"></figure>
+
+<p><a class="p_ident" id="p-eJ85ThKM0E" href="#p-eJ85ThKM0E" tabindex="-1" role="presentation"></a>Ideally, a program has a clear, straightforward structure. The way it works is easy to explain, and each part plays a well-defined role.</p>
+
+<p><a class="p_ident" id="p-7GiMFmlznT" href="#p-7GiMFmlznT" tabindex="-1" role="presentation"></a>In practice, programs grow organically. Pieces of functionality are added as the programmer identifies new needs. Keeping such a program well structured requires constant attention and work. This is work that will pay off only in the future, the <em>next</em> time someone works on the program, so it’s tempting to neglect it and allow the various parts of the program to become deeply entangled.</p>
+
+<p><a class="p_ident" id="p-PhgZ29SZIs" href="#p-PhgZ29SZIs" tabindex="-1" role="presentation"></a>This causes two practical issues. First, understanding an entangled system is hard. If everything can touch everything else, it is difficult to look at any given piece in isolation. You are forced to build up a holistic understanding of the entire thing. Second, if you want to use any of the functionality from such a program in another situation, rewriting it may be easier than trying to disentangle it from its context.</p>
+
+<p><a class="p_ident" id="p-CsLPd2jqMS" href="#p-CsLPd2jqMS" tabindex="-1" role="presentation"></a>The phrase “big ball of mud” is often used for such large, structureless programs. Everything sticks together, and when you try to pick out a piece, the whole thing comes apart, and you succeed only in making a mess.</p>
+
+<h2><a class="h_ident" id="h-hu5082lMHg" href="#h-hu5082lMHg" tabindex="-1" role="presentation"></a>Modular programs</h2>
+
+<p><a class="p_ident" id="p-LoWZBZ2Vpv" href="#p-LoWZBZ2Vpv" tabindex="-1" role="presentation"></a><em>Modules</em> are an attempt to avoid these problems. A module is a piece of program that specifies which other pieces it relies on and which functionality it provides for other modules to use (its <em>interface</em>).</p>
+
+<p><a class="p_ident" id="p-KiUFTXHbS0" href="#p-KiUFTXHbS0" tabindex="-1" role="presentation"></a>Module interfaces have a lot in common with object interfaces, as we saw them in <a href="06_object.html#interface">Chapter 6</a>. They make part of the module available to the outside world and keep the rest private.</p>
+
+<p><a class="p_ident" id="p-AYKUG7ZJhD" href="#p-AYKUG7ZJhD" tabindex="-1" role="presentation"></a>But the interface that a module provides for others to use is only half the story. A good module system also requires modules to specify which code <em>they</em> use from other modules. These relations are called <em>dependencies</em>. If module A uses functionality from module B, it is said to <em>depend</em> on that module. When these are clearly specified in the module itself, they can be used to figure out which other modules need to be present to be able to use a given module and to automatically load dependencies.</p>
+
+<p><a class="p_ident" id="p-4jJO44NdKH" href="#p-4jJO44NdKH" tabindex="-1" role="presentation"></a>When the ways in which modules interact with each other are explicit, a system becomes more like LEGO, where pieces interact through well-defined connectors, and less like mud, where everything mixes with everything else.</p>
+
+<h2 id="es"><a class="h_ident" id="h-5QhuRo3nod" href="#h-5QhuRo3nod" tabindex="-1" role="presentation"></a>ES modules</h2>
+
+<p><a class="p_ident" id="p-jSEHpQV1WL" href="#p-jSEHpQV1WL" tabindex="-1" role="presentation"></a>The original JavaScript language did not have any concept of a module. All scripts ran in the same scope, and accessing a function defined in another script was done by referencing the global bindings created by that script. This actively encouraged accidental, hard-to-see entanglement of code and invited problems like unrelated scripts trying to use the same binding name.</p>
+
+<p><a class="p_ident" id="p-CsA0uHlD44" href="#p-CsA0uHlD44" tabindex="-1" role="presentation"></a>Since ECMAScript 2015, JavaScript supports two different types of programs. <em>Scripts</em> behave in the old way: their bindings are defined in the global scope, and they have no way to directly reference other scripts. <em>Modules</em> get their own separate scope and support the <code>import</code> and <code>export</code> keywords, which aren’t available in scripts, to declare their dependencies and interface. This module system is usually called <em>ES modules</em> (where <em>ES</em> stands for ECMAScript).</p>
+
+<p><a class="p_ident" id="p-tzC5Mbbz1R" href="#p-tzC5Mbbz1R" tabindex="-1" role="presentation"></a>A modular program is composed of a number of such modules, wired together via their imports and exports.</p>
+
+<p><a class="p_ident" id="p-YO5CD3Cb8I" href="#p-YO5CD3Cb8I" tabindex="-1" role="presentation"></a>The following example module converts between day names and numbers (as returned by <code>Date</code>’s <code>getDay</code> method). It defines a constant that is not part of its interface, and two functions that are. It has no dependencies.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-0Er93uC2EW" href="#c-0Er93uC2EW" tabindex="-1" role="presentation"></a><span class="tok-keyword">const</span> <span class="tok-definition">names</span> = [<span class="tok-string">&quot;Sunday&quot;</span>, <span class="tok-string">&quot;Monday&quot;</span>, <span class="tok-string">&quot;Tuesday&quot;</span>, <span class="tok-string">&quot;Wednesday&quot;</span>,
+               <span class="tok-string">&quot;Thursday&quot;</span>, <span class="tok-string">&quot;Friday&quot;</span>, <span class="tok-string">&quot;Saturday&quot;</span>];
+
+<span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-definition">dayName</span>(<span class="tok-definition">number</span>) {
+  <span class="tok-keyword">return</span> names[number];
+}
+<span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-definition">dayNumber</span>(<span class="tok-definition">name</span>) {
+  <span class="tok-keyword">return</span> names.indexOf(name);
+}</pre>
+
+<p><a class="p_ident" id="p-0xJEStYLkj" href="#p-0xJEStYLkj" tabindex="-1" role="presentation"></a>The <code>export</code> keyword can be put in front of a function, class, or binding definition to indicate that that binding is part of the module’s interface. This makes it possible for other modules to use that binding by importing it.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-2oqdYiDrM5" href="#c-2oqdYiDrM5" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">dayName</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;./dayname.js&quot;</span>;
+<span class="tok-keyword">let</span> <span class="tok-definition">now</span> = <span class="tok-keyword">new</span> Date();
+console.log(<span class="tok-string2">`Today is </span>${dayName(now.getDay())}<span class="tok-string2">`</span>);
+<span class="tok-comment">// → Today is Monday</span></pre>
+
+<p><a class="p_ident" id="p-hjldO4njBb" href="#p-hjldO4njBb" tabindex="-1" role="presentation"></a>The <code>import</code> keyword, followed by a list of binding names in braces, makes bindings from another module available in the current module. Modules are identified by quoted strings.</p>
+
+<p><a class="p_ident" id="p-do5wE0mFRq" href="#p-do5wE0mFRq" tabindex="-1" role="presentation"></a>How such a module name is resolved to an actual program differs by platform. The browser treats them as web addresses, whereas Node.js resolves them to files. When you run a module, all the other modules it depends on—and the modules <em>those</em> depend on—are loaded, and the exported bindings are made available to the modules that import them.</p>
+
+<p><a class="p_ident" id="p-LBXRIpj2E0" href="#p-LBXRIpj2E0" tabindex="-1" role="presentation"></a>Import and export declarations cannot appear inside of functions, loops, or other blocks. They are immediately resolved when the module is loaded, regardless of how the code in the module executes. To reflect this, they must appear only in the outer module body.</p>
+
+<p><a class="p_ident" id="p-cHA6cqBM9z" href="#p-cHA6cqBM9z" tabindex="-1" role="presentation"></a>A module’s interface thus consists of a collection of named bindings, which other modules that depend on the module can access. Imported bindings can be renamed to give them a new local name using <code>as</code> after their name.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-1rWa8n4g2w" href="#c-1rWa8n4g2w" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {dayName <span class="tok-keyword">as</span> <span class="tok-definition">nomDeJour</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;./dayname.js&quot;</span>;
+console.log(nomDeJour(<span class="tok-number">3</span>));
+<span class="tok-comment">// → Wednesday</span></pre>
+
+<p><a class="p_ident" id="p-CuscOXpT/r" href="#p-CuscOXpT/r" tabindex="-1" role="presentation"></a>A module may also have a special export named <code>default</code>, which is often used for modules that only export a single binding. To define a default export, you write <code>export default</code> before an expression, a function declaration, or a class declaration.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-Y6Wnu9X+/W" href="#c-Y6Wnu9X+/W" tabindex="-1" role="presentation"></a><span class="tok-keyword">export</span> <span class="tok-keyword">default</span> [<span class="tok-string">&quot;Winter&quot;</span>, <span class="tok-string">&quot;Spring&quot;</span>, <span class="tok-string">&quot;Summer&quot;</span>, <span class="tok-string">&quot;Autumn&quot;</span>];</pre>
+
+<p><a class="p_ident" id="p-xA/MW6oxes" href="#p-xA/MW6oxes" tabindex="-1" role="presentation"></a>Such a binding is imported by omitting the braces around the name of the import.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-kGA5r04JCR" href="#c-kGA5r04JCR" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> <span class="tok-definition">seasonNames</span> <span class="tok-keyword">from</span> <span class="tok-string">&quot;./seasonname.js&quot;</span>;</pre>
+
+<p><a class="p_ident" id="p-ZJHZ8bukVr" href="#p-ZJHZ8bukVr" tabindex="-1" role="presentation"></a>To import all bindings from a module at the same time, you can use <code>import *</code>. You provide a name, and that name will be bound to an object holding all the module’s exports. This can be useful when you are using a lot of different exports.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-Q3bkhNzQwX" href="#c-Q3bkhNzQwX" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> <span class="tok-keyword">*</span> <span class="tok-keyword">as</span> <span class="tok-definition">dayName</span> <span class="tok-keyword">from</span> <span class="tok-string">&quot;./dayname.js&quot;</span>;
+console.log(dayName.dayName(<span class="tok-number">3</span>));
+<span class="tok-comment">// → Wednesday</span></pre>
+
+<h2><a class="h_ident" id="h-CpmQEv+4ez" href="#h-CpmQEv+4ez" tabindex="-1" role="presentation"></a>Packages</h2>
+
+<p><a class="p_ident" id="p-g7o14y8ONd" href="#p-g7o14y8ONd" tabindex="-1" role="presentation"></a>One of the advantages of building a program out of separate pieces and being able to run some of those pieces on their own is that you might be able to use the same piece in different programs.</p>
+
+<p><a class="p_ident" id="p-HS7MnVNKZK" href="#p-HS7MnVNKZK" tabindex="-1" role="presentation"></a>But how do you set this up? Say I want to use the <code>parseINI</code> function from <a href="09_regexp.html#ini">Chapter 9</a> in another program. If it is clear what the function depends on (in this case, nothing), I can just copy that module into my new project and use it. But then, if I find a mistake in the code, I’ll probably fix it in whichever program  I’m working with at the time and forget to also fix it in the other program.</p>
+
+<p><a class="p_ident" id="p-aZWvjgooOw" href="#p-aZWvjgooOw" tabindex="-1" role="presentation"></a>Once you start duplicating code, you’ll quickly find yourself wasting time and energy moving copies around and keeping them up to date. That’s where <em>packages</em> come in. A package is a chunk of code that can be distributed (copied and installed). It may contain one or more modules and has information about which other packages it depends on. A package also usually comes with documentation explaining what it does so that people who didn’t write it might still be able to use it.</p>
+
+<p><a class="p_ident" id="p-VPdW27vgpM" href="#p-VPdW27vgpM" tabindex="-1" role="presentation"></a>When a problem is found in a package or a new feature is added, the package is updated. Now the programs that depend on it (which may also be packages) can copy the new version to get the improvements that were made to the code.</p>
+
+<p id="modules_npm"><a class="p_ident" id="p-Jxv8W15wN+" href="#p-Jxv8W15wN+" tabindex="-1" role="presentation"></a>Working in this way requires infrastructure. We need a place to store and find packages and a convenient way to install and upgrade them. In the JavaScript world, this infrastructure is provided by NPM (<a href="https://npmjs.com"><em>https://npmjs.com</em></a>).</p>
+
+<p><a class="p_ident" id="p-WUPNc5b7D2" href="#p-WUPNc5b7D2" tabindex="-1" role="presentation"></a>NPM is two things: an online service where you can download (and upload) packages, and a program (bundled with Node.js) that helps you install and manage them.</p>
+
+<p><a class="p_ident" id="p-I47qD+z+f/" href="#p-I47qD+z+f/" tabindex="-1" role="presentation"></a>At the time of writing, there are more than three million different packages available on NPM. A large portion of those are rubbish, to be fair. But almost every useful, publicly available JavaScript package can be found on NPM. For example, an INI file parser, similar to the one we built in <a href="09_regexp.html">Chapter 9</a>, is available under the package name <code>ini</code>.</p>
+
+<p><a class="p_ident" id="p-irXmhzBaaT" href="#p-irXmhzBaaT" tabindex="-1" role="presentation"></a><a href="20_node.html">Chapter 20</a> will show how to install such packages locally using the <code>npm</code> command line program.</p>
+
+<p><a class="p_ident" id="p-D/2FJ7Crwg" href="#p-D/2FJ7Crwg" tabindex="-1" role="presentation"></a>Having quality packages available for download is extremely valuable. It means that we can often avoid reinventing a program that 100 people have written before and get a solid, well-tested implementation at the press of a few keys.</p>
+
+<p><a class="p_ident" id="p-MXIvtdCvsp" href="#p-MXIvtdCvsp" tabindex="-1" role="presentation"></a>Software is cheap to copy, so once someone has written it, distributing it to other people is an efficient process. Writing it in the first place <em>is</em> work, though, and responding to people who have found problems in the code or who want to propose new features is even more work.</p>
+
+<p><a class="p_ident" id="p-K/LevaOaUV" href="#p-K/LevaOaUV" tabindex="-1" role="presentation"></a>By default, you own the copyright to the code you write, and other people may use it only with your permission. But because some people are just nice and because publishing good software can help make you a little bit famous among programmers, many packages are published under a license that explicitly allows other people to use it.</p>
+
+<p><a class="p_ident" id="p-PLnH8LhwqC" href="#p-PLnH8LhwqC" tabindex="-1" role="presentation"></a>Most code on NPM is licensed this way. Some licenses require you to also publish code that you build on top of the package under the same license. Others are less demanding, requiring only that you keep the license with the code as you distribute it. The JavaScript community mostly uses the latter type of license. When using other people’s packages, make sure you are aware of their licenses.</p>
+
+<p id="modules_ini"><a class="p_ident" id="p-iWZpEnVUgg" href="#p-iWZpEnVUgg" tabindex="-1" role="presentation"></a>Now, instead of writing our own INI file parser, we can use one from NPM.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-zTHcTC2U1Z" href="#c-zTHcTC2U1Z" tabindex="-1" role="presentation"></a><span class="tok-keyword">import</span> {<span class="tok-definition">parse</span>} <span class="tok-keyword">from</span> <span class="tok-string">&quot;ini&quot;</span>;
+
+console.log(parse(<span class="tok-string">&quot;x = 10</span><span class="tok-string2">\n</span><span class="tok-string">y = 20&quot;</span>));
+<span class="tok-comment">// → {x: &quot;10&quot;, y: &quot;20&quot;}</span></pre>
+
+<h2 id="commonjs"><a class="h_ident" id="h-6oeH1bEsmu" href="#h-6oeH1bEsmu" tabindex="-1" role="presentation"></a>CommonJS modules</h2>
+
+<p><a class="p_ident" id="p-SWGjBNIgtd" href="#p-SWGjBNIgtd" tabindex="-1" role="presentation"></a>Before 2015, when the JavaScript language had no built-in module system, people were already building large systems in JavaScript. To make that workable, they <em>needed</em> modules.</p>
+
+<p><a class="p_ident" id="p-TAQWCwa461" href="#p-TAQWCwa461" tabindex="-1" role="presentation"></a>The community designed its own improvised module systems on top of the language. These use functions to create a local scope for the modules and regular objects to represent module interfaces.</p>
+
+<p><a class="p_ident" id="p-Nvl0FAzSr8" href="#p-Nvl0FAzSr8" tabindex="-1" role="presentation"></a>Initially, people just manually wrapped their entire module in an “immediately invoked function
+expression” to create the module’s scope and assigned their interface objects to a single global variable.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-m+yRMF5NXw" href="#c-m+yRMF5NXw" tabindex="-1" role="presentation"></a><span class="tok-keyword">const</span> <span class="tok-definition">weekDay</span> = <span class="tok-keyword">function</span>() {
+  <span class="tok-keyword">const</span> <span class="tok-definition">names</span> = [<span class="tok-string">&quot;Sunday&quot;</span>, <span class="tok-string">&quot;Monday&quot;</span>, <span class="tok-string">&quot;Tuesday&quot;</span>, <span class="tok-string">&quot;Wednesday&quot;</span>,
+                 <span class="tok-string">&quot;Thursday&quot;</span>, <span class="tok-string">&quot;Friday&quot;</span>, <span class="tok-string">&quot;Saturday&quot;</span>];
+  <span class="tok-keyword">return</span> {
+    <span class="tok-definition">name</span>(<span class="tok-definition">number</span>) { <span class="tok-keyword">return</span> names[number]; },
+    <span class="tok-definition">number</span>(<span class="tok-definition">name</span>) { <span class="tok-keyword">return</span> names.indexOf(name); }
+  };
+}();
+
+console.log(weekDay.name(weekDay.number(<span class="tok-string">&quot;Sunday&quot;</span>)));
+<span class="tok-comment">// → Sunday</span></pre>
+
+<p><a class="p_ident" id="p-gikwn4tonM" href="#p-gikwn4tonM" tabindex="-1" role="presentation"></a>This style of modules provides isolation, to a certain degree, but it does not declare dependencies. Instead, it just puts its interface into the global scope and expects its dependencies, if any, to do the same. This is not ideal.</p>
+
+<p><a class="p_ident" id="p-0p3BQtuh5W" href="#p-0p3BQtuh5W" tabindex="-1" role="presentation"></a>If we implement our own module loader, we can do better. The most widely used approach to bolted-on JavaScript modules is called <em>CommonJS modules</em>. Node.js used this module system from the start (though it now also knows how to load ES modules), and it is the module system used by many packages on NPM.</p>
+
+<p><a class="p_ident" id="p-WjlUe2D0sb" href="#p-WjlUe2D0sb" tabindex="-1" role="presentation"></a>A CommonJS module looks like a regular script, but it has access to two bindings that it uses to interact with other modules. The first is a function called <code>require</code>. When you call this with the module name of your dependency, it makes sure the module is loaded and returns its interface. The second is an object named <code>exports</code>, which is the interface object for the module. It starts out empty and you add properties to it to define exported values.</p>
+
+<p><a class="p_ident" id="p-ueslU3cQeD" href="#p-ueslU3cQeD" tabindex="-1" role="presentation"></a>This CommonJS example module provides a date-formatting function. It uses two packages from NPM—<code>ordinal</code> to convert numbers to strings like <code>&quot;1st&quot;</code> and <code>&quot;2nd&quot;</code>, and <code>date-names</code> to get the English names for weekdays and months. It exports a single function, <code>formatDate</code>, which takes a <code>Date</code> object and a template string.</p>
+
+<p><a class="p_ident" id="p-H1fksf0izJ" href="#p-H1fksf0izJ" tabindex="-1" role="presentation"></a>The template string may contain codes that direct the format, such as <code>YYYY</code> for the full year and <code>Do</code> for the ordinal day of the month. You could give it a string like <code>&quot;MMMM Do YYYY&quot;</code> to get output like <code>November 22nd 2017</code>.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-hEFnba6fud" href="#c-hEFnba6fud" tabindex="-1" role="presentation"></a><span class="tok-keyword">const</span> <span class="tok-definition">ordinal</span> = require(<span class="tok-string">&quot;ordinal&quot;</span>);
+<span class="tok-keyword">const</span> {days, months} = require(<span class="tok-string">&quot;date-names&quot;</span>);
+
+exports.formatDate = <span class="tok-keyword">function</span>(<span class="tok-definition">date</span>, <span class="tok-definition">format</span>) {
+  <span class="tok-keyword">return</span> format.replace(<span class="tok-string2">/YYYY|M(MMM)?|Do?|dddd/g</span>, <span class="tok-definition">tag</span> =&gt; {
+    <span class="tok-keyword">if</span> (tag == <span class="tok-string">&quot;YYYY&quot;</span>) <span class="tok-keyword">return</span> date.getFullYear();
+    <span class="tok-keyword">if</span> (tag == <span class="tok-string">&quot;M&quot;</span>) <span class="tok-keyword">return</span> date.getMonth();
+    <span class="tok-keyword">if</span> (tag == <span class="tok-string">&quot;MMMM&quot;</span>) <span class="tok-keyword">return</span> months[date.getMonth()];
+    <span class="tok-keyword">if</span> (tag == <span class="tok-string">&quot;D&quot;</span>) <span class="tok-keyword">return</span> date.getDate();
+    <span class="tok-keyword">if</span> (tag == <span class="tok-string">&quot;Do&quot;</span>) <span class="tok-keyword">return</span> ordinal(date.getDate());
+    <span class="tok-keyword">if</span> (tag == <span class="tok-string">&quot;dddd&quot;</span>) <span class="tok-keyword">return</span> days[date.getDay()];
+  });
+};</pre>
+
+<p><a class="p_ident" id="p-jvrgfRxGB4" href="#p-jvrgfRxGB4" tabindex="-1" role="presentation"></a>The interface of <code>ordinal</code> is a single function, whereas <code>date-names</code> exports an object containing multiple things—<code>days</code> and <code>months</code> are arrays of names. Destructuring is very convenient when creating bindings for imported interfaces.</p>
+
+<p><a class="p_ident" id="p-cHv4rZkvfj" href="#p-cHv4rZkvfj" tabindex="-1" role="presentation"></a>The module adds its interface function to <code>exports</code> so that modules that depend on it get access to it. We could use the module like this:</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-O5poqM7SoC" href="#c-O5poqM7SoC" tabindex="-1" role="presentation"></a><span class="tok-keyword">const</span> {formatDate} = require(<span class="tok-string">&quot;./format-date.js&quot;</span>);
+
+console.log(formatDate(<span class="tok-keyword">new</span> Date(<span class="tok-number">2017</span>, <span class="tok-number">9</span>, <span class="tok-number">13</span>),
+                       <span class="tok-string">&quot;dddd the Do&quot;</span>));
+<span class="tok-comment">// → Friday the 13th</span></pre>
+
+<p><a class="p_ident" id="p-yNTIAPHtV/" href="#p-yNTIAPHtV/" tabindex="-1" role="presentation"></a>CommonJS is implemented with a module loader that, when loading a module, wraps its code in a function (giving it its own local scope) and passes the <code>require</code> and <code>exports</code> bindings to that function as arguments.</p>
+
+<p id="require"><a class="p_ident" id="p-GF4ZcyudM2" href="#p-GF4ZcyudM2" tabindex="-1" role="presentation"></a>If we assume we have access to a <code>readFile</code> function that reads a file by name and gives us its content, we can define a simplified form of <code>require</code> like this:</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript"  data-sandbox="require"><a class="c_ident" id="c-t+bc73kgqw" href="#c-t+bc73kgqw" tabindex="-1" role="presentation"></a><span class="tok-keyword">function</span> <span class="tok-definition">require</span>(<span class="tok-definition">name</span>) {
+  <span class="tok-keyword">if</span> (!(name <span class="tok-keyword">in</span> require.cache)) {
+    <span class="tok-keyword">let</span> <span class="tok-definition">code</span> = readFile(name);
+    <span class="tok-keyword">let</span> <span class="tok-definition">exports</span> = require.cache[name] = {};
+    <span class="tok-keyword">let</span> <span class="tok-definition">wrapper</span> = Function(<span class="tok-string">&quot;require, exports&quot;</span>, code);
+    wrapper(require, exports);
+  }
+  <span class="tok-keyword">return</span> require.cache[name];
+}
+require.cache = Object.create(<span class="tok-keyword">null</span>);</pre>
+
+<p id="eval"><a class="p_ident" id="p-UHReR+n6Qx" href="#p-UHReR+n6Qx" tabindex="-1" role="presentation"></a><code>Function</code> is a built-in JavaScript function that takes a list of arguments (as a comma-separated string) and a string containing the function body and returns a function value with those arguments and that body. This is an interesting concept—it allows a program to create new pieces of program from string data—but also a dangerous one, since if someone can trick your program into putting a string they provide into <code>Function</code>, they can make the program do anything they want.</p>
+
+<p><a class="p_ident" id="p-jGgvuENUE1" href="#p-jGgvuENUE1" tabindex="-1" role="presentation"></a>Standard JavaScript provides no such function as <code>readFile</code>, but different JavaScript environments, such as the browser and Node.js, provide their own ways of accessing files. The example just pretends that <code>readFile</code> exists.</p>
+
+<p><a class="p_ident" id="p-uyStaKEiIT" href="#p-uyStaKEiIT" tabindex="-1" role="presentation"></a>To avoid loading the same module multiple times, <code>require</code> keeps a store (cache) of already loaded modules. When called, it first checks whether the requested module has been loaded and, if not, loads it. This involves reading the module’s code, wrapping it in a function, and calling it.</p>
+
+<p><a class="p_ident" id="p-1en0vUqbeI" href="#p-1en0vUqbeI" tabindex="-1" role="presentation"></a>By defining <code>require</code> and <code>exports</code> as parameters for the generated wrapper function (and passing the appropriate values when calling it), the loader makes sure that these bindings are available in the module’s scope.</p>
+
+<p><a class="p_ident" id="p-1ZJk+403z3" href="#p-1ZJk+403z3" tabindex="-1" role="presentation"></a>An important difference between this system and ES modules is that ES module imports happen before a module’s script starts running, whereas <code>require</code> is a normal function, invoked when the module is already running. Unlike <code>import</code> declarations, <code>require</code> calls <em>can</em> appear inside functions, and the name of the dependency can be any expression that evaluates to a string, whereas <code>import</code> allows only plain quoted strings.</p>
+
+<p><a class="p_ident" id="p-kJgsFUTJR2" href="#p-kJgsFUTJR2" tabindex="-1" role="presentation"></a>The transition of the JavaScript community from CommonJS style to ES modules has been a slow and somewhat rough one. Fortunately we are now at a point where most of the popular packages on NPM provide their code as ES modules, and Node.js allows ES modules to import from CommonJS modules. While CommonJS code is still something you will run across, there is no real reason to write new programs in this style anymore.</p>
+
+<h2><a class="h_ident" id="h-zWTXAU93DC" href="#h-zWTXAU93DC" tabindex="-1" role="presentation"></a>Building and bundling</h2>
+
+<p><a class="p_ident" id="p-cn57weVd0T" href="#p-cn57weVd0T" tabindex="-1" role="presentation"></a>Many JavaScript packages aren’t technically written in JavaScript. Language extensions such as TypeScript, the type checking dialect mentioned in <a href="08_error.html#typing">Chapter 8</a>, are widely used. People also often start using planned new language features long before they have been added to the platforms that actually run JavaScript. To make this possible, they <em>compile</em> their code, translating it from their chosen JavaScript dialect to plain old JavaScript—or even to a past version of JavaScript—so that browsers can run it.</p>
+
+<p><a class="p_ident" id="p-ESEmIVUZNc" href="#p-ESEmIVUZNc" tabindex="-1" role="presentation"></a>Including a modular program that consists of 200 different files in a web page produces its own problems. If fetching a single file over the network takes 50 milliseconds, loading the whole program takes 10 seconds, or maybe half that if you can load several files simultaneously. That’s a lot of wasted time. Because fetching a single big file tends to be faster than fetching a lot of tiny ones, web programmers have started using tools that combine their programs (which they painstakingly split into modules) into a single big file before they publish it to the web. Such tools are called <em>bundlers</em>.</p>
+
+<p><a class="p_ident" id="p-F5bhvXPahh" href="#p-F5bhvXPahh" tabindex="-1" role="presentation"></a>And we can go further. Apart from the number of files, the <em>size</em> of the files also determines how fast they can be transferred over the network. Thus, the JavaScript community has invented <em>minifiers</em>. These are tools that take a JavaScript program and make it smaller by automatically removing comments and whitespace, renaming bindings, and replacing pieces of code with equivalent code that take up less space.</p>
+
+<p><a class="p_ident" id="p-6WBPcci+zB" href="#p-6WBPcci+zB" tabindex="-1" role="presentation"></a>It is not uncommon for the code that you find in an NPM package or that runs on a web page to have gone through <em>multiple</em> stages of transformation—converting from modern JavaScript to historic JavaScript, combining the modules into a single file, and minifying the code. We won’t go into the details of these tools in this book, since there are many of them, and which one is popular changes regularly. Just be aware that such things exist, and look them up when you need them.</p>
+
+<h2><a class="h_ident" id="h-P8pyzbI9vO" href="#h-P8pyzbI9vO" tabindex="-1" role="presentation"></a>Module design</h2>
+
+<p><a class="p_ident" id="p-8K2T8s7itK" href="#p-8K2T8s7itK" tabindex="-1" role="presentation"></a>Structuring programs is one of the subtler aspects of programming. Any nontrivial piece of functionality can be organized in various ways.</p>
+
+<p><a class="p_ident" id="p-98c2qP5s8p" href="#p-98c2qP5s8p" tabindex="-1" role="presentation"></a>Good program design is subjective—there are trade-offs involved, and matters of taste. The best way to learn the value of well-structured design is to read or work on a lot of programs and notice what works and what doesn’t. Don’t assume that a painful mess is “just the way it is”. You can improve the structure of almost everything by putting more thought into it.</p>
+
+<p><a class="p_ident" id="p-uhKTy5PIwF" href="#p-uhKTy5PIwF" tabindex="-1" role="presentation"></a>One aspect of module design is ease of use. If you are designing something that is intended to be used by multiple people—or even by yourself, in three months when you no longer remember the specifics of what you did—it is helpful if your interface is simple and predictable.</p>
+
+<p><a class="p_ident" id="p-hHDSnM2Orb" href="#p-hHDSnM2Orb" tabindex="-1" role="presentation"></a>That may mean following existing conventions. A good example is the <code>ini</code> package. This module imitates the standard <code>JSON</code> object by providing <code>parse</code> and <code>stringify</code> (to write an INI file) functions, and, like <code>JSON</code>, converts between strings and plain objects. The interface is small and familiar, and after you’ve worked with it once, you’re likely to remember how to use it.</p>
+
+<p><a class="p_ident" id="p-zMQYs/H6je" href="#p-zMQYs/H6je" tabindex="-1" role="presentation"></a>Even if there’s no standard function or widely used package to imitate, you can keep your modules predictable by using simple data structures and doing a single, focused thing. Many of the INI-file parsing modules on NPM provide a function that directly reads such a file from the hard disk and parses it, for example. This makes it impossible to use such modules in the browser, where we don’t have direct filesystem access, and adds complexity that would have been better addressed by <em>composing</em> the module with some file-reading function.</p>
+
+<p><a class="p_ident" id="p-JYcq/PgjlO" href="#p-JYcq/PgjlO" tabindex="-1" role="presentation"></a>This points to another helpful aspect of module design—the ease with which something can be composed with other code. Focused modules that compute values are applicable in a wider range of programs than bigger modules that perform complicated actions with side effects. An INI file reader that insists on reading the file from disk is useless in a scenario where the file’s content comes from some other source.</p>
+
+<p><a class="p_ident" id="p-6cqySeVoki" href="#p-6cqySeVoki" tabindex="-1" role="presentation"></a>Relatedly, stateful objects are sometimes useful or even necessary, but if something can be done with a function, use a function. Several of the INI file readers on NPM provide an interface style that requires you to first create an object, then load the file into your object, and finally use specialized methods to get at the results. This type of thing is common in the object-oriented tradition, and it’s terrible. Instead of making a single function call and moving on, you have to perform the ritual of moving your object through its various states. And because the data is now wrapped in a specialized object type, all code that interacts with it has to know about that type, creating unnecessary interdependencies.</p>
+
+<p><a class="p_ident" id="p-uR7iWbgBIy" href="#p-uR7iWbgBIy" tabindex="-1" role="presentation"></a>Often, defining new data structures can’t be avoided—only a few  basic ones are provided by the language standard, and many types of data have to be more complex than an array or a map. But when an array suffices, use an array.</p>
+
+<p><a class="p_ident" id="p-B+RLCa+Zi+" href="#p-B+RLCa+Zi+" tabindex="-1" role="presentation"></a>An example of a slightly more complex data structure is the graph from <a href="07_robot.html">Chapter 7</a>. There is no single obvious way to represent a graph in JavaScript. In that chapter, we used an object whose properties hold arrays of strings—the other nodes reachable from that node.</p>
+
+<p><a class="p_ident" id="p-17Fkotj+nV" href="#p-17Fkotj+nV" tabindex="-1" role="presentation"></a>There are several different pathfinding packages on NPM, but none of them uses this graph format. They usually allow the graph’s edges to have a weight, which is the cost or distance associated with it. That isn’t possible in our representation.</p>
+
+<p><a class="p_ident" id="p-d3wpFXYEjN" href="#p-d3wpFXYEjN" tabindex="-1" role="presentation"></a>For example, there’s the <code>dijkstrajs</code> package. A well-known approach to pathfinding, quite similar to our <code>findRoute</code> function, is called <em>Dijkstra’s algorithm</em>, after Edsger Dijkstra, who first wrote it down. The <code>js</code> suffix is often added to package names to indicate the fact that they are written in JavaScript. This <code>dijkstrajs</code> package uses a graph format similar to ours, but instead of arrays, it uses objects whose property values are numbers—the weights of the edges.</p>
+
+<p><a class="p_ident" id="p-aGExoIsVaQ" href="#p-aGExoIsVaQ" tabindex="-1" role="presentation"></a>If we wanted to use that package, we’d have to make sure that our graph was stored in the format it expects. All edges get the same weight, since our simplified model treats each road as having the same cost (one turn).</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-NyRXVpwPYN" href="#c-NyRXVpwPYN" tabindex="-1" role="presentation"></a><span class="tok-keyword">const</span> {find_path} = require(<span class="tok-string">&quot;dijkstrajs&quot;</span>);
+
+<span class="tok-keyword">let</span> <span class="tok-definition">graph</span> = {};
+<span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> <span class="tok-definition">node</span> <span class="tok-keyword">of</span> Object.keys(roadGraph)) {
+  <span class="tok-keyword">let</span> <span class="tok-definition">edges</span> = graph[node] = {};
+  <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> <span class="tok-definition">dest</span> <span class="tok-keyword">of</span> roadGraph[node]) {
+    edges[dest] = <span class="tok-number">1</span>;
+  }
+}
+
+console.log(find_path(graph, <span class="tok-string">&quot;Post Office&quot;</span>, <span class="tok-string">&quot;Cabin&quot;</span>));
+<span class="tok-comment">// → [&quot;Post Office&quot;, &quot;Alice's House&quot;, &quot;Cabin&quot;]</span></pre>
+
+<p><a class="p_ident" id="p-X8Ulb726ZC" href="#p-X8Ulb726ZC" tabindex="-1" role="presentation"></a>This can be a barrier to composition—when various packages are using different data structures to describe similar things, combining them is difficult. Therefore, if you want to design for composability, find out what data structures other people are using and, when possible, follow their example.</p>
+
+<p><a class="p_ident" id="p-otAicxL3rq" href="#p-otAicxL3rq" tabindex="-1" role="presentation"></a>Designing a fitting module structure for a program can be difficult. In the phase where you are still exploring the problem, trying  different things to see what works, you might want to not worry about it too much, since keeping everything organized can be a big distraction. Once you have something that feels solid, that’s a good time to take a step back and organize it.</p>
+
+<h2><a class="h_ident" id="h-ErccPg/l98" href="#h-ErccPg/l98" tabindex="-1" role="presentation"></a>Summary</h2>
+
+<p><a class="p_ident" id="p-OX2jY0nGFw" href="#p-OX2jY0nGFw" tabindex="-1" role="presentation"></a>Modules provide structure to bigger programs by separating the code into pieces with clear interfaces and dependencies. The interface is the part of the module that’s visible to other modules, and the dependencies are the other modules it makes use of.</p>
+
+<p><a class="p_ident" id="p-QRNMabkLEU" href="#p-QRNMabkLEU" tabindex="-1" role="presentation"></a>Because JavaScript historically did not provide a module system, the CommonJS system was built on top of it. Then at some point it <em>did</em> get a built-in system, which now coexists uneasily with the CommonJS system.</p>
+
+<p><a class="p_ident" id="p-wDM2Q8HBcB" href="#p-wDM2Q8HBcB" tabindex="-1" role="presentation"></a>A package is a chunk of code that can be distributed on its own. NPM is a repository of JavaScript packages. You can download all kinds of useful (and useless) packages from it.</p>
+
+<h2><a class="h_ident" id="h-TcUD2vzyMe" href="#h-TcUD2vzyMe" tabindex="-1" role="presentation"></a>Exercises</h2>
+
+<h3><a class="i_ident" id="i-CJKk6NIC0T" href="#i-CJKk6NIC0T" tabindex="-1" role="presentation"></a>A modular robot</h3>
+
+<p id="modular_robot"><a class="p_ident" id="p-nPAEnO4pep" href="#p-nPAEnO4pep" tabindex="-1" role="presentation"></a>These are the bindings that the project from <a href="07_robot.html">Chapter 7</a> creates:</p>
+
+<pre class="snippet" data-language="null" ><a class="c_ident" id="c-/nxTd1W0Sy" href="#c-/nxTd1W0Sy" tabindex="-1" role="presentation"></a>roads
+buildGraph
+roadGraph
+VillageState
+runRobot
+randomPick
+randomRobot
+mailRoute
+routeRobot
+findRoute
+goalOrientedRobot</pre>
+
+<p><a class="p_ident" id="p-0LdymcLoV8" href="#p-0LdymcLoV8" tabindex="-1" role="presentation"></a>If you were to write that project as a modular program, what modules would you create? Which module would depend on which other module, and what would their interfaces look like?</p>
+
+<p><a class="p_ident" id="p-hU/u/IPER+" href="#p-hU/u/IPER+" tabindex="-1" role="presentation"></a>Which pieces are likely to be available prewritten on NPM? Would you prefer to use an NPM package or write them yourself?</p>
+
+<details class="solution"><summary>Display hints...</summary><div class="solution-text">
+
+<p><a class="p_ident" id="p-o3MT4wM7DB" href="#p-o3MT4wM7DB" tabindex="-1" role="presentation"></a>Here’s what I would have done (but again, there is no single <em>right</em> way to design a given module):</p>
+
+<p><a class="p_ident" id="p-vUAq68NJ8i" href="#p-vUAq68NJ8i" tabindex="-1" role="presentation"></a>The code used to build the road graph lives in the <code>graph.js</code> module. Because I’d rather use <code>dijkstrajs</code> from NPM than our own pathfinding code, we’ll make this build the kind of graph data that <code>dijkstrajs</code> expects. This module exports a single function, <code>buildGraph</code>. I’d have <code>buildGraph</code> accept an array of two-element arrays, rather than strings containing hyphens, to make the module less dependent on the input format.</p>
+
+<p><a class="p_ident" id="p-6iLUlYHKWk" href="#p-6iLUlYHKWk" tabindex="-1" role="presentation"></a>The <code>roads.js</code> module contains the raw road data (the <code>roads</code> array) and the <code>roadGraph</code> binding. This module depends on <code>./graph.js</code> and exports the road graph.</p>
+
+<p><a class="p_ident" id="p-JLwefzFde0" href="#p-JLwefzFde0" tabindex="-1" role="presentation"></a>The <code>VillageState</code> class lives in the <code>state.js</code> module. It depends on the <code>./roads.js</code> module because it needs to be able to verify that a given road exists. It also needs <code>randomPick</code>. Since that is a three-line function, we could just put it into the <code>state.js</code> module as an internal helper function. But <code>randomRobot</code> needs it too. So we’d have to either duplicate it or put it into its own module. Since this function happens to exist on NPM in the <code>random-item</code> package, a reasonable solution is to just make both modules depend on that. We can add the <code>runRobot</code> function to this module as well, since it’s small and closely related to state management. The module exports both the <code>VillageState</code> class and the <code>runRobot</code> function.</p>
+
+<p><a class="p_ident" id="p-aTXmbvQIkt" href="#p-aTXmbvQIkt" tabindex="-1" role="presentation"></a>Finally, the robots, along with the values they depend on, such as <code>mailRoute</code>, could go into an <code>example-robots.<wbr>js</code> module, which depends on <code>./roads.js</code> and exports the robot functions. To make it possible for <code>goalOrientedRobot</code> to do route-finding, this module also depends on <code>dijkstrajs</code>.</p>
+
+<p><a class="p_ident" id="p-jU189+mtkS" href="#p-jU189+mtkS" tabindex="-1" role="presentation"></a>By offloading some work to NPM modules, the code became a little smaller. Each individual module does something rather simple and can be read on its own. Dividing code into modules also often suggests further improvements to the program’s design. In this case, it seems a little odd that the <code>VillageState</code> and the robots depend on a specific road graph. It might be a better idea to make the graph an argument to the state’s constructor and make the robots read it from the state object—this reduces dependencies (which is always good) and makes it possible to run simulations on different maps (which is even better).</p>
+
+<p><a class="p_ident" id="p-rfGj5/gdUx" href="#p-rfGj5/gdUx" tabindex="-1" role="presentation"></a>Is it a good idea to use NPM modules for things that we could have written ourselves? In principle, yes—for nontrivial things like the pathfinding function you are likely to make mistakes and waste time writing them yourself. For tiny functions like <code>random-item</code>, writing them yourself is easy enough. But adding them wherever you need them does tend to clutter your modules.</p>
+
+<p><a class="p_ident" id="p-shhnxYPdPj" href="#p-shhnxYPdPj" tabindex="-1" role="presentation"></a>However, you should also not underestimate the work involved in <em>finding</em> an appropriate NPM package. And even if you find one, it might not work well or may be missing some feature you need. On top of that, depending on NPM packages means you have to make sure they are installed, you have to distribute them with your program, and you might have to periodically upgrade them.</p>
+
+<p><a class="p_ident" id="p-B1mDzf2p8t" href="#p-B1mDzf2p8t" tabindex="-1" role="presentation"></a>So again, this is a trade-off, and you can decide either way depending on how much a given package actually helps you.</p>
+
+</div></details>
+
+<h3><a class="i_ident" id="i-+pU//gQmZ8" href="#i-+pU//gQmZ8" tabindex="-1" role="presentation"></a>Roads module</h3>
+
+<p><a class="p_ident" id="p-bfMZIuPnuG" href="#p-bfMZIuPnuG" tabindex="-1" role="presentation"></a>Write an ES module based on the example from <a href="07_robot.html">Chapter 7</a> that contains the array of roads and exports the graph data structure representing them as <code>roadGraph</code>. It depends on a module <code>./graph.js</code> that exports a function <code>buildGraph</code>, used to build the graph. This function expects an array of two-element arrays (the start and end points of the roads).</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-FPEwj7xDOs" href="#c-FPEwj7xDOs" tabindex="-1" role="presentation"></a><span class="tok-comment">// Add dependencies and exports</span>
+
+<span class="tok-keyword">const</span> <span class="tok-definition">roads</span> = [
+  <span class="tok-string">&quot;Alice's House-Bob's House&quot;</span>,   <span class="tok-string">&quot;Alice's House-Cabin&quot;</span>,
+  <span class="tok-string">&quot;Alice's House-Post Office&quot;</span>,   <span class="tok-string">&quot;Bob's House-Town Hall&quot;</span>,
+  <span class="tok-string">&quot;Daria's House-Ernie's House&quot;</span>, <span class="tok-string">&quot;Daria's House-Town Hall&quot;</span>,
+  <span class="tok-string">&quot;Ernie's House-Grete's House&quot;</span>, <span class="tok-string">&quot;Grete's House-Farm&quot;</span>,
+  <span class="tok-string">&quot;Grete's House-Shop&quot;</span>,          <span class="tok-string">&quot;Marketplace-Farm&quot;</span>,
+  <span class="tok-string">&quot;Marketplace-Post Office&quot;</span>,     <span class="tok-string">&quot;Marketplace-Shop&quot;</span>,
+  <span class="tok-string">&quot;Marketplace-Town Hall&quot;</span>,       <span class="tok-string">&quot;Shop-Town Hall&quot;</span>
+];</pre>
+
+<details class="solution"><summary>Display hints...</summary><div class="solution-text">
+
+<p><a class="p_ident" id="p-KWk09Gyhem" href="#p-KWk09Gyhem" tabindex="-1" role="presentation"></a>Since this is an ES module, you have to use <code>import</code> to access the graph module. That was described as exporting a <code>buildGraph</code> function, which you can pick out of its interface object with a destructuring <code>const</code> declaration.</p>
+
+<p><a class="p_ident" id="p-49X3DlQnvo" href="#p-49X3DlQnvo" tabindex="-1" role="presentation"></a>To export <code>roadGraph</code>, you put the keyword <code>export</code> before its definition. Because <code>buildGraph</code> takes a data structure that doesn’t precisely match <code>roads</code>, the splitting of the road strings must happen in your module.</p>
+
+</div></details>
+
+<h3><a class="i_ident" id="i-E/zWqBFdy8" href="#i-E/zWqBFdy8" tabindex="-1" role="presentation"></a>Circular dependencies</h3>
+
+<p><a class="p_ident" id="p-fl2MZMonQV" href="#p-fl2MZMonQV" tabindex="-1" role="presentation"></a>A circular dependency is a situation where module A depends on B, and B also, directly or indirectly, depends on A. Many module systems simply forbid this because whichever order you choose for loading such modules, you cannot make sure that each module’s dependencies have been loaded before it runs.</p>
+
+<p><a class="p_ident" id="p-b5sTJIUt38" href="#p-b5sTJIUt38" tabindex="-1" role="presentation"></a>CommonJS modules allow a limited form of cyclic dependencies. As long as the modules don’t access each other’s interface until after they finish loading, cyclic dependencies are okay.</p>
+
+<p><a class="p_ident" id="p-ZjAGpje4gs" href="#p-ZjAGpje4gs" tabindex="-1" role="presentation"></a>The <code>require</code> function given <a href="10_modules.html#require">earlier in this chapter</a> supports this type of dependency cycle. Can you see how it handles cycles?</p>
+
+<details class="solution"><summary>Display hints...</summary><div class="solution-text">
+
+<p><a class="p_ident" id="p-nf2U1lY9dq" href="#p-nf2U1lY9dq" tabindex="-1" role="presentation"></a>The trick is that <code>require</code> adds the interface object for a module to its cache <em>before</em> it starts loading the module. That way, if any <code>require</code> call made while it is running tries to load it, it is already known, and the current interface will be returned, rather than starting to load the module once more (which would eventually overflow the stack).</p>
+
+</div></details><nav><a href="09_regexp.html" title="previous chapter" aria-label="previous chapter">◂</a> <a href="index.html" title="cover" aria-label="cover">●</a> <a href="11_async.html" title="next chapter" aria-label="next chapter">▸</a>&nbsp;<button class=help title="help" aria-label="help"><strong>?</strong></button>
+</nav>
+</article>
+
+<script src="ejs.js"></script>

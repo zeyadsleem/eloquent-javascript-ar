@@ -1,0 +1,667 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Secret Life of Objects :: Eloquent JavaScript</title>
+  <link rel=stylesheet href="css/ejs.css"><script>
+      var page = {"type":"chapter","number":6,"load_files":["code/chapter/06_object.js"]}</script></head>
+
+<article>
+<nav><a href="05_higher_order.html" title="previous chapter" aria-label="previous chapter">◂</a> <a href="index.html" title="cover" aria-label="cover">●</a> <a href="07_robot.html" title="next chapter" aria-label="next chapter">▸</a>&nbsp;<button class=help title="help" aria-label="help"><strong>?</strong></button>
+</nav>
+
+<h1>The Secret Life of Objects</h1>
+
+<blockquote>
+
+<p><a class="p_ident" id="p-YG3CSlP9V6" href="#p-YG3CSlP9V6" tabindex="-1" role="presentation"></a>An abstract data type is realized by writing a special kind of program […] which defines the type in terms of the operations which can be performed on it.</p>
+
+<footer>Barbara Liskov, <cite>Programming with Abstract Data Types</cite></footer>
+
+</blockquote><figure class="chapter framed"><img src="img/chapter_picture_6.jpg" alt="Illustration of a rabbit next to its prototype, a schematic representation of a rabbit"></figure>
+
+<p><a class="p_ident" id="p-Fhc38BpV1K" href="#p-Fhc38BpV1K" tabindex="-1" role="presentation"></a><a href="04_data.html">Chapter 4</a> introduced JavaScript’s objects as containers that hold other data. In programming culture, <em>object-oriented programming</em> is a set of techniques that use objects as the central principle of program organization. Though no one really agrees on its precise definition, object-oriented programming has shaped the design of many programming languages, including JavaScript. This chapter describes the way these ideas can be applied in JavaScript.</p>
+
+<h2><a class="h_ident" id="h-3RxBerAxmw" href="#h-3RxBerAxmw" tabindex="-1" role="presentation"></a>Abstract Data Types</h2>
+
+<p><a class="p_ident" id="p-eNejU48PIs" href="#p-eNejU48PIs" tabindex="-1" role="presentation"></a>The main idea in object-oriented programming is to use objects, or rather <em>types</em> of objects, as the unit of program organization. Setting up a program as a number of strictly separated object types provides a way to think about its structure and thus to enforce some kind of discipline, preventing everything from becoming entangled.</p>
+
+<p><a class="p_ident" id="p-yhX9plqp8k" href="#p-yhX9plqp8k" tabindex="-1" role="presentation"></a>The way to do this is to think of objects somewhat like you’d think of an electric mixer or other consumer appliance. The people who design and assemble a mixer have to do specialized work requiring material science and understanding of electricity. They cover all that up in a smooth plastic shell so that the people who only want to mix pancake batter don’t have to worry about all that—they have to understand only the few knobs that the mixer can be operated with.</p>
+
+<p><a class="p_ident" id="p-DCKe4JumwB" href="#p-DCKe4JumwB" tabindex="-1" role="presentation"></a>Similarly, an <em>abstract data type</em>, or <em>object class</em>, is a subprogram that may contain arbitrarily complicated code but exposes a limited set of methods and properties that people working with it are supposed to use. This allows large programs to be built up out of a number of appliance types, limiting the degree to which these different parts are entangled by requiring them to only interact with each other in specific ways.</p>
+
+<p><a class="p_ident" id="p-mYO5GEpl2m" href="#p-mYO5GEpl2m" tabindex="-1" role="presentation"></a>If a problem is found in one such object class, it can often be repaired or even completely rewritten without impacting the rest of the program. Even better, it may be possible to use object classes in multiple different programs, avoiding the need to recreate their functionality from scratch. You can think of JavaScript’s built-in data structures, such as arrays and strings, as such reusable abstract data types.</p>
+
+<p id="interface"><a class="p_ident" id="p-tyK5Q1Zja4" href="#p-tyK5Q1Zja4" tabindex="-1" role="presentation"></a>Each abstract data type has an <em>interface</em>, the collection of operations that external code can perform on it. Any details beyond that interface are <em>encapsulated</em>, treated as internal to the type and of no concern to the rest of the program.</p>
+
+<p><a class="p_ident" id="p-JdDMZDr/nS" href="#p-JdDMZDr/nS" tabindex="-1" role="presentation"></a>Even basic things like numbers can be thought of as an abstract data type whose interface allows us to add them, multiply them, compare them, and so on. In fact, the fixation on single <em>objects</em> as the main unit of organization in classical object-oriented programming is somewhat unfortunate since useful pieces of functionality often involve a group of different object classes working closely together.</p>
+
+<h2 id="obj_methods"><a class="h_ident" id="h-fkrGgDyRWc" href="#h-fkrGgDyRWc" tabindex="-1" role="presentation"></a>Methods</h2>
+
+<p><a class="p_ident" id="p-Pu7Fh3a5uT" href="#p-Pu7Fh3a5uT" tabindex="-1" role="presentation"></a>In JavaScript, methods are nothing more than properties that hold function values. This is a simple method:</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-gpJkdAdyIu" href="#c-gpJkdAdyIu" tabindex="-1" role="presentation"></a><span class="tok-keyword">function</span> <span class="tok-definition">speak</span>(<span class="tok-definition">line</span>) {
+  console.log(<span class="tok-string2">`The </span>${<span class="tok-keyword">this</span>.type}<span class="tok-string2"> rabbit says '</span>${line}<span class="tok-string2">'`</span>);
+}
+<span class="tok-keyword">let</span> <span class="tok-definition">whiteRabbit</span> = {<span class="tok-definition">type</span>: <span class="tok-string">&quot;white&quot;</span>, <span class="tok-definition">speak</span>};
+<span class="tok-keyword">let</span> <span class="tok-definition">hungryRabbit</span> = {<span class="tok-definition">type</span>: <span class="tok-string">&quot;hungry&quot;</span>, <span class="tok-definition">speak</span>};
+
+whiteRabbit.speak(<span class="tok-string">&quot;Oh my fur and whiskers&quot;</span>);
+<span class="tok-comment">// → The white rabbit says 'Oh my fur and whiskers'</span>
+hungryRabbit.speak(<span class="tok-string">&quot;Got any carrots?&quot;</span>);
+<span class="tok-comment">// → The hungry rabbit says 'Got any carrots?'</span></pre>
+
+<p><a class="p_ident" id="p-mV9fNbDP5i" href="#p-mV9fNbDP5i" tabindex="-1" role="presentation"></a>Typically a method needs to do something with the object on which it was called. When a function is called as a method—looked up as a property and immediately called, as in <code>object.method()</code>—the binding called <code>this</code> in its body automatically points at the object on which it was called.</p>
+
+<p id="call_method"><a class="p_ident" id="p-llBwR5t6LB" href="#p-llBwR5t6LB" tabindex="-1" role="presentation"></a>You can think of <code>this</code> as an extra parameter that is passed to the function in a different way than regular parameters. If you want to provide it explicitly, you can use a function’s <code>call</code> method, which takes the <code>this</code> value as its first argument and treats further arguments as normal parameters.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-TCnkkQJ0hO" href="#c-TCnkkQJ0hO" tabindex="-1" role="presentation"></a>speak.call(whiteRabbit, <span class="tok-string">&quot;Hurry&quot;</span>);
+<span class="tok-comment">// → The white rabbit says 'Hurry'</span></pre>
+
+<p><a class="p_ident" id="p-8ZeOAlGKXe" href="#p-8ZeOAlGKXe" tabindex="-1" role="presentation"></a>Since each function has its own <code>this</code> binding whose value depends on the way it is called, you cannot refer to the <code>this</code> of the wrapping scope in a regular function defined with the <code>function</code> keyword.</p>
+
+<p><a class="p_ident" id="p-EHZMeuTOUD" href="#p-EHZMeuTOUD" tabindex="-1" role="presentation"></a>Arrow functions are different—they do not bind their own <code>this</code> but can see the <code>this</code> binding of the scope around them. Thus, you can do something like the following code, which references <code>this</code> from inside a local function:</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-pPGE9nUDA9" href="#c-pPGE9nUDA9" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">finder</span> = {
+  <span class="tok-definition">find</span>(<span class="tok-definition">array</span>) {
+    <span class="tok-keyword">return</span> array.some(<span class="tok-definition">v</span> =&gt; v == <span class="tok-keyword">this</span>.value);
+  },
+  <span class="tok-definition">value</span>: <span class="tok-number">5</span>
+};
+console.log(finder.find([<span class="tok-number">4</span>, <span class="tok-number">5</span>]));
+<span class="tok-comment">// → true</span></pre>
+
+<p><a class="p_ident" id="p-eBm7AuQUBb" href="#p-eBm7AuQUBb" tabindex="-1" role="presentation"></a>A property like <code>find(array)</code> in an object expression is a shorthand way of defining a method. It creates a property called <code>find</code> and gives it a function as its value.</p>
+
+<p><a class="p_ident" id="p-YkWiHcMuVP" href="#p-YkWiHcMuVP" tabindex="-1" role="presentation"></a>If I had written the argument to <code>some</code> using the <code>function</code> keyword, this code wouldn’t work.</p>
+
+<h2 id="prototypes"><a class="h_ident" id="h-SumMlRB7yn" href="#h-SumMlRB7yn" tabindex="-1" role="presentation"></a>Prototypes</h2>
+
+<p><a class="p_ident" id="p-Xey+sIju1M" href="#p-Xey+sIju1M" tabindex="-1" role="presentation"></a>One way to create a rabbit object type with a <code>speak</code> method would be to create a helper function that has a rabbit type as its parameter and returns an object holding that as its <code>type</code> property and our speak function in its <code>speak</code> property.</p>
+
+<p><a class="p_ident" id="p-1rvfUl6glP" href="#p-1rvfUl6glP" tabindex="-1" role="presentation"></a>All rabbits share that same method. Especially for types with many methods, it would be nice if there were a way to keep a type’s methods in a single place, rather than adding them to each object individually.</p>
+
+<p><a class="p_ident" id="p-Gr4D0QWq9y" href="#p-Gr4D0QWq9y" tabindex="-1" role="presentation"></a>In JavaScript, <em>prototypes</em> are the way to do that. Objects can be linked to other objects, to magically get all the properties that other object has. Plain old objects created with <code>{}</code> notation are linked to an object called <code>Object.prototype</code>.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-P0GVdA5c8J" href="#c-P0GVdA5c8J" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">empty</span> = {};
+console.log(empty.toString);
+<span class="tok-comment">// → function toString(){…}</span>
+console.log(empty.toString());
+<span class="tok-comment">// → [object Object]</span></pre>
+
+<p><a class="p_ident" id="p-brQdKaRo2W" href="#p-brQdKaRo2W" tabindex="-1" role="presentation"></a>It looks like we just pulled a property out of an empty object. But in fact, <code>toString</code> is a method stored in <code>Object.prototype</code>, meaning it is available in most objects.</p>
+
+<p><a class="p_ident" id="p-Bf6y/uAWB+" href="#p-Bf6y/uAWB+" tabindex="-1" role="presentation"></a>When an object gets a request for a property that it doesn’t have, its prototype will be searched for the property. If that doesn’t have it, the <em>prototype’s</em> prototype is searched, and so on until an object without prototype is reached (<code>Object.prototype</code> is such an object).</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-OQZG/UHNHD" href="#c-OQZG/UHNHD" tabindex="-1" role="presentation"></a>console.log(Object.getPrototypeOf({}) == Object.prototype);
+<span class="tok-comment">// → true</span>
+console.log(Object.getPrototypeOf(Object.prototype));
+<span class="tok-comment">// → null</span></pre>
+
+<p><a class="p_ident" id="p-72z+PtqY66" href="#p-72z+PtqY66" tabindex="-1" role="presentation"></a>As you’d guess, <code>Object.<wbr>getPrototypeOf</code> returns the prototype of an object.</p>
+
+<p><a class="p_ident" id="p-I5k2LdMhlJ" href="#p-I5k2LdMhlJ" tabindex="-1" role="presentation"></a>Many objects don’t directly have <code>Object.prototype</code> as their prototype but instead have another object that provides a different set of default properties. Functions derive from <code>Function.<wbr>prototype</code> and arrays derive from <code>Array.prototype</code>.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-u0Ich5CNwz" href="#c-u0Ich5CNwz" tabindex="-1" role="presentation"></a>console.log(Object.getPrototypeOf(Math.max) ==
+            Function.prototype);
+<span class="tok-comment">// → true</span>
+console.log(Object.getPrototypeOf([]) == Array.prototype);
+<span class="tok-comment">// → true</span></pre>
+
+<p><a class="p_ident" id="p-1fIXMD62Nu" href="#p-1fIXMD62Nu" tabindex="-1" role="presentation"></a>Such a prototype object will itself have a prototype, often <code>Object.prototype</code>, so that it still indirectly provides methods like <code>toString</code>.</p>
+
+<p><a class="p_ident" id="p-3gbFvusn2U" href="#p-3gbFvusn2U" tabindex="-1" role="presentation"></a>You can use <code>Object.create</code> to create an object with a specific prototype.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-VtvGZpf42G" href="#c-VtvGZpf42G" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">protoRabbit</span> = {
+  <span class="tok-definition">speak</span>(<span class="tok-definition">line</span>) {
+    console.log(<span class="tok-string2">`The </span>${<span class="tok-keyword">this</span>.type}<span class="tok-string2"> rabbit says '</span>${line}<span class="tok-string2">'`</span>);
+  }
+};
+<span class="tok-keyword">let</span> <span class="tok-definition">blackRabbit</span> = Object.create(protoRabbit);
+blackRabbit.type = <span class="tok-string">&quot;black&quot;</span>;
+blackRabbit.speak(<span class="tok-string">&quot;I am fear and darkness&quot;</span>);
+<span class="tok-comment">// → The black rabbit says 'I am fear and darkness'</span></pre>
+
+<p><a class="p_ident" id="p-y8kzFoQw1W" href="#p-y8kzFoQw1W" tabindex="-1" role="presentation"></a>The “proto” rabbit acts as a container for the properties shared by all rabbits. An individual rabbit object, like the black rabbit, contains properties that apply only to itself—in this case its type—and derives shared properties from its prototype.</p>
+
+<h2 id="classes"><a class="h_ident" id="h-7RhGr+474h" href="#h-7RhGr+474h" tabindex="-1" role="presentation"></a>Classes</h2>
+
+<p><a class="p_ident" id="p-UUexyXQvqM" href="#p-UUexyXQvqM" tabindex="-1" role="presentation"></a>JavaScript’s prototype system can be interpreted as a somewhat free-form take on abstract data types or classes. A <em>class</em> defines the shape of a type of object—what methods and properties it has. Such an object is called an <em>instance</em> of the class.</p>
+
+<p><a class="p_ident" id="p-GhnffIpINq" href="#p-GhnffIpINq" tabindex="-1" role="presentation"></a>Prototypes are useful for defining properties for which all instances of a class share the same value. Properties that differ per instance, such as our rabbits’ <code>type</code> property, need to be stored directly in the objects themselves.</p>
+
+<p id="constructors"><a class="p_ident" id="p-CblAFY2NtT" href="#p-CblAFY2NtT" tabindex="-1" role="presentation"></a>To create an instance of a given class, you have to make an object that derives from the proper prototype, but you <em>also</em> have to make sure it itself has the properties that instances of this class are supposed to have. This is what a <em>constructor</em> function does.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-oOKUeIzSVa" href="#c-oOKUeIzSVa" tabindex="-1" role="presentation"></a><span class="tok-keyword">function</span> <span class="tok-definition">makeRabbit</span>(<span class="tok-definition">type</span>) {
+  <span class="tok-keyword">let</span> <span class="tok-definition">rabbit</span> = Object.create(protoRabbit);
+  rabbit.type = type;
+  <span class="tok-keyword">return</span> rabbit;
+}</pre>
+
+<p><a class="p_ident" id="p-l0nhds/qNG" href="#p-l0nhds/qNG" tabindex="-1" role="presentation"></a>JavaScript’s class notation makes it easier to define this type of function, along with a prototype object.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-kK/n/pIZ0u" href="#c-kK/n/pIZ0u" tabindex="-1" role="presentation"></a><span class="tok-keyword">class</span> Rabbit {
+  <span class="tok-definition">constructor</span>(<span class="tok-definition">type</span>) {
+    <span class="tok-keyword">this</span>.type = type;
+  }
+  <span class="tok-definition">speak</span>(<span class="tok-definition">line</span>) {
+    console.log(<span class="tok-string2">`The </span>${<span class="tok-keyword">this</span>.type}<span class="tok-string2"> rabbit says '</span>${line}<span class="tok-string2">'`</span>);
+  }
+}</pre>
+
+<p><a class="p_ident" id="p-36Q8vg+cYn" href="#p-36Q8vg+cYn" tabindex="-1" role="presentation"></a>The <code>class</code> keyword starts a class declaration, which allows us to define a constructor and a set of methods together. Any number of methods may be written inside the declaration’s braces. This code has the effect of defining a binding called <code>Rabbit</code>, which holds a function that runs the code in <code>constructor</code> and has a <code>prototype</code> property that holds the <code>speak</code> method.</p>
+
+<p><a class="p_ident" id="p-aj+QKGR28Z" href="#p-aj+QKGR28Z" tabindex="-1" role="presentation"></a>This function cannot be called like a normal function. Constructors, in JavaScript, are called by putting the keyword <code>new</code> in front of them. Doing so creates a fresh instance object whose prototype is the object from the function’s <code>prototype</code> property, then runs the function with <code>this</code> bound to the new object, and finally returns the object.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-1bL3TMgYRb" href="#c-1bL3TMgYRb" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">killerRabbit</span> = <span class="tok-keyword">new</span> Rabbit(<span class="tok-string">&quot;killer&quot;</span>);</pre>
+
+<p><a class="p_ident" id="p-uM0RM9gow9" href="#p-uM0RM9gow9" tabindex="-1" role="presentation"></a>In fact, <code>class</code> was only introduced in the 2015 edition of JavaScript. Any function can be used as a constructor, and before 2015, the way to define a class was to write a regular function and then manipulate its <code>prototype</code> property.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-IPS9bWussR" href="#c-IPS9bWussR" tabindex="-1" role="presentation"></a><span class="tok-keyword">function</span> <span class="tok-definition">ArchaicRabbit</span>(<span class="tok-definition">type</span>) {
+  <span class="tok-keyword">this</span>.type = type;
+}
+ArchaicRabbit.prototype.speak = <span class="tok-keyword">function</span>(<span class="tok-definition">line</span>) {
+  console.log(<span class="tok-string2">`The </span>${<span class="tok-keyword">this</span>.type}<span class="tok-string2"> rabbit says '</span>${line}<span class="tok-string2">'`</span>);
+};
+<span class="tok-keyword">let</span> <span class="tok-definition">oldSchoolRabbit</span> = <span class="tok-keyword">new</span> ArchaicRabbit(<span class="tok-string">&quot;old school&quot;</span>);</pre>
+
+<p><a class="p_ident" id="p-CuN6BIS6u9" href="#p-CuN6BIS6u9" tabindex="-1" role="presentation"></a>For this reason, all non-arrow functions start with a <code>prototype</code> property holding an empty object.</p>
+
+<p><a class="p_ident" id="p-DJG7BO1oTU" href="#p-DJG7BO1oTU" tabindex="-1" role="presentation"></a>By convention, the names of constructors are capitalized so that they can easily be distinguished from other functions.</p>
+
+<p><a class="p_ident" id="p-XAOLARTe5Y" href="#p-XAOLARTe5Y" tabindex="-1" role="presentation"></a>It is important to understand the distinction between the way a prototype is associated with a constructor (through its <code>prototype</code> property) and the way objects <em>have</em> a prototype (which can be found with <code>Object.<wbr>getPrototypeOf</code>). The actual prototype of a constructor is <code>Function.<wbr>prototype</code> since constructors are functions. The constructor function’s <code>prototype</code> <em>property</em> holds the prototype used for instances created through it.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-Q/QbNN+9Zh" href="#c-Q/QbNN+9Zh" tabindex="-1" role="presentation"></a>console.log(Object.getPrototypeOf(Rabbit) ==
+            Function.prototype);
+<span class="tok-comment">// → true</span>
+console.log(Object.getPrototypeOf(killerRabbit) ==
+            Rabbit.prototype);
+<span class="tok-comment">// → true</span></pre>
+
+<p><a class="p_ident" id="p-oW8JeJp9jN" href="#p-oW8JeJp9jN" tabindex="-1" role="presentation"></a>Constructors will typically add some per-instance properties to <code>this</code>. It is also possible to declare properties directly in the class declaration. Unlike methods, such properties are added to instance objects and not the prototype.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-KBHDrbFbxX" href="#c-KBHDrbFbxX" tabindex="-1" role="presentation"></a><span class="tok-keyword">class</span> Particle {
+  <span class="tok-definition">speed</span> = <span class="tok-number">0</span>;
+  <span class="tok-definition">constructor</span>(<span class="tok-definition">position</span>) {
+    <span class="tok-keyword">this</span>.position = position;
+  }
+}</pre>
+
+<p><a class="p_ident" id="p-pp17mMu8If" href="#p-pp17mMu8If" tabindex="-1" role="presentation"></a>Like <code>function</code>, <code>class</code> can be used both in statements and in expressions. When used as an expression, it doesn’t define a binding but just produces the constructor as a value. You are allowed to omit the class name in a class expression.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-79re+GWcTJ" href="#c-79re+GWcTJ" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">object</span> = <span class="tok-keyword">new</span> <span class="tok-keyword">class</span> { <span class="tok-definition">getWord</span>() { <span class="tok-keyword">return</span> <span class="tok-string">&quot;hello&quot;</span>; } };
+console.log(object.getWord());
+<span class="tok-comment">// → hello</span></pre>
+
+<h2><a class="h_ident" id="h-u5kICdau5v" href="#h-u5kICdau5v" tabindex="-1" role="presentation"></a>Private Properties</h2>
+
+<p><a class="p_ident" id="p-0kMziy4cl6" href="#p-0kMziy4cl6" tabindex="-1" role="presentation"></a>It is common for classes to define some properties and methods for internal use that are not part of their interface. These are called <em>private</em> properties, as opposed to <em>public</em> ones, which are part of the object’s external interface.</p>
+
+<p><a class="p_ident" id="p-E/yzjVpbO7" href="#p-E/yzjVpbO7" tabindex="-1" role="presentation"></a>To declare a private method, put a <code>#</code> sign in front of its name. Such methods can be called only from inside the <code>class</code> declaration that defines them.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-U0DV3Ggb4o" href="#c-U0DV3Ggb4o" tabindex="-1" role="presentation"></a><span class="tok-keyword">class</span> SecretiveObject {
+  <span class="tok-definition">#getSecret</span>() {
+    <span class="tok-keyword">return</span> <span class="tok-string">&quot;I ate all the plums&quot;</span>;
+  }
+  <span class="tok-definition">interrogate</span>() {
+    <span class="tok-keyword">let</span> <span class="tok-definition">shallISayIt</span> = <span class="tok-keyword">this</span>.#getSecret();
+    <span class="tok-keyword">return</span> <span class="tok-string">&quot;never&quot;</span>;
+  }
+}</pre>
+
+<p><a class="p_ident" id="p-d2Q4Im6O0z" href="#p-d2Q4Im6O0z" tabindex="-1" role="presentation"></a>When a class does not declare a constructor, it will automatically get an empty one.</p>
+
+<p><a class="p_ident" id="p-tXQlrwa/XV" href="#p-tXQlrwa/XV" tabindex="-1" role="presentation"></a>If you try to call <code>#getSecret</code> from outside the class, you get an error. Its existence is entirely hidden inside the class declaration.</p>
+
+<p><a class="p_ident" id="p-hJqUlSNXnj" href="#p-hJqUlSNXnj" tabindex="-1" role="presentation"></a>To use private instance properties, you must declare them. Regular properties can be created by just assigning to them, but private properties <em>must</em> be declared in the class declaration to be available at all.</p>
+
+<p><a class="p_ident" id="p-ff1k57/G7r" href="#p-ff1k57/G7r" tabindex="-1" role="presentation"></a>This class implements an appliance for getting a random whole number below a given maximum number. It has only one public property: <code>getNumber</code>.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-2bWeku8FvK" href="#c-2bWeku8FvK" tabindex="-1" role="presentation"></a><span class="tok-keyword">class</span> RandomSource {
+  <span class="tok-definition">#max</span>;
+  <span class="tok-definition">constructor</span>(<span class="tok-definition">max</span>) {
+    <span class="tok-keyword">this</span>.#max = max;
+  }
+  <span class="tok-definition">getNumber</span>() {
+    <span class="tok-keyword">return</span> Math.floor(Math.random() * <span class="tok-keyword">this</span>.#max);
+  }
+}</pre>
+
+<h2><a class="h_ident" id="h-oUlUep3Os8" href="#h-oUlUep3Os8" tabindex="-1" role="presentation"></a>Overriding derived properties</h2>
+
+<p><a class="p_ident" id="p-Xbxf2Ooo0z" href="#p-Xbxf2Ooo0z" tabindex="-1" role="presentation"></a>When you add a property to an object, whether it is present in the prototype or not, the property is added to the object <em>itself</em>. If there was already a property with the same name in the prototype, this property will no longer affect the object, as it is now hidden behind the object’s own property.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-iJAj/t1TcS" href="#c-iJAj/t1TcS" tabindex="-1" role="presentation"></a>Rabbit.prototype.teeth = <span class="tok-string">&quot;small&quot;</span>;
+console.log(killerRabbit.teeth);
+<span class="tok-comment">// → small</span>
+killerRabbit.teeth = <span class="tok-string">&quot;long, sharp, and bloody&quot;</span>;
+console.log(killerRabbit.teeth);
+<span class="tok-comment">// → long, sharp, and bloody</span>
+console.log((<span class="tok-keyword">new</span> Rabbit(<span class="tok-string">&quot;basic&quot;</span>)).teeth);
+<span class="tok-comment">// → small</span>
+console.log(Rabbit.prototype.teeth);
+<span class="tok-comment">// → small</span></pre>
+
+<p><a class="p_ident" id="p-HM5YtS3KgJ" href="#p-HM5YtS3KgJ" tabindex="-1" role="presentation"></a>The following diagram sketches the situation after this code has run. The <code>Rabbit</code> and <code>Object</code> prototypes lie behind <code>killerRabbit</code> as a kind of backdrop, where properties that are not found in the object itself can be looked up.</p><figure><img src="img/rabbits.svg" alt="A diagram showing the object structure of rabbits and their prototypes. There is a box for the 'killerRabbit' instance (holding instance properties like 'type'), with its two prototypes, 'Rabbit.prototype' (holding the 'speak' method) and 'Object.prototype' (holding methods like 'toString') stacked behind it."></figure>
+
+<p><a class="p_ident" id="p-or3/lz1DV8" href="#p-or3/lz1DV8" tabindex="-1" role="presentation"></a>Overriding properties that exist in a prototype can be a useful thing to do. As the rabbit teeth example shows, overriding can be used to express exceptional properties in instances of a more generic class of objects while letting the nonexceptional objects take a standard value from their prototype.</p>
+
+<p><a class="p_ident" id="p-GIhnbh3MdO" href="#p-GIhnbh3MdO" tabindex="-1" role="presentation"></a>Overriding is also used to give the standard function and array prototypes a different <code>toString</code> method than the basic object prototype.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-DrIRvUgeOD" href="#c-DrIRvUgeOD" tabindex="-1" role="presentation"></a>console.log(Array.prototype.toString ==
+            Object.prototype.toString);
+<span class="tok-comment">// → false</span>
+console.log([<span class="tok-number">1</span>, <span class="tok-number">2</span>].toString());
+<span class="tok-comment">// → 1,2</span></pre>
+
+<p><a class="p_ident" id="p-tEz1fkdb8y" href="#p-tEz1fkdb8y" tabindex="-1" role="presentation"></a>Calling <code>toString</code> on an array gives a result similar to calling <code>.<wbr>join(&quot;,&quot;)</code> on it—it puts commas between the values in the array. Directly calling <code>Object.<wbr>prototype.<wbr>toString</code> with an array produces a different string. That function doesn’t know about arrays, so it simply puts the word <em>object</em> and the name of the type between square brackets.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-XpqFUrDFJE" href="#c-XpqFUrDFJE" tabindex="-1" role="presentation"></a>console.log(Object.prototype.toString.call([<span class="tok-number">1</span>, <span class="tok-number">2</span>]));
+<span class="tok-comment">// → [object Array]</span></pre>
+
+<h2><a class="h_ident" id="h-gAcc11EHzV" href="#h-gAcc11EHzV" tabindex="-1" role="presentation"></a>Maps</h2>
+
+<p><a class="p_ident" id="p-5v6QzULS7C" href="#p-5v6QzULS7C" tabindex="-1" role="presentation"></a>We saw the word <em>map</em> used in the <a href="05_higher_order.html#map">previous chapter</a> for an operation that transforms a data structure by applying a function to its elements. Confusing as it is, in programming the same word is used for a related but rather different thing.</p>
+
+<p><a class="p_ident" id="p-++bw9zDmtH" href="#p-++bw9zDmtH" tabindex="-1" role="presentation"></a>A <em>map</em> (noun) is a data structure that associates values (the keys) with other values. For example, you might want to map names to ages. It is possible to use objects for this.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-Wu6a8ObZI0" href="#c-Wu6a8ObZI0" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">ages</span> = {
+  <span class="tok-definition">Boris</span>: <span class="tok-number">39</span>,
+  <span class="tok-definition">Liang</span>: <span class="tok-number">22</span>,
+  <span class="tok-definition">Júlia</span>: <span class="tok-number">62</span>
+};
+
+console.log(<span class="tok-string2">`Júlia is </span>${ages[<span class="tok-string">&quot;Júlia&quot;</span>]}<span class="tok-string2">`</span>);
+<span class="tok-comment">// → Júlia is 62</span>
+console.log(<span class="tok-string">&quot;Is Jack's age known?&quot;</span>, <span class="tok-string">&quot;Jack&quot;</span> <span class="tok-keyword">in</span> ages);
+<span class="tok-comment">// → Is Jack's age known? false</span>
+console.log(<span class="tok-string">&quot;Is toString's age known?&quot;</span>, <span class="tok-string">&quot;toString&quot;</span> <span class="tok-keyword">in</span> ages);
+<span class="tok-comment">// → Is toString's age known? true</span></pre>
+
+<p><a class="p_ident" id="p-EQqc7pcOKT" href="#p-EQqc7pcOKT" tabindex="-1" role="presentation"></a>Here, the object’s property names are the people’s names and the property values are their ages. But we certainly didn’t list anybody named toString in our map. Yet because plain objects derive from <code>Object.prototype</code>, it looks like the property is there.</p>
+
+<p><a class="p_ident" id="p-yMkxwxMZzl" href="#p-yMkxwxMZzl" tabindex="-1" role="presentation"></a>For this reason, using plain objects as maps is dangerous. There are several possible ways to avoid this problem. First, you can create objects with <em>no</em> prototype. If you pass <code>null</code> to <code>Object.create</code>, the resulting object will not derive from <code>Object.prototype</code> and can be safely used as a map.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-AkRQLQc4AG" href="#c-AkRQLQc4AG" tabindex="-1" role="presentation"></a>console.log(<span class="tok-string">&quot;toString&quot;</span> <span class="tok-keyword">in</span> Object.create(<span class="tok-keyword">null</span>));
+<span class="tok-comment">// → false</span></pre>
+
+<p><a class="p_ident" id="p-jGC2iO9E1x" href="#p-jGC2iO9E1x" tabindex="-1" role="presentation"></a>Object property names must be strings. If you need a map whose keys can’t easily be converted to strings—such as objects—you cannot use an object as your map.</p>
+
+<p><a class="p_ident" id="p-7YowpbSrOa" href="#p-7YowpbSrOa" tabindex="-1" role="presentation"></a>Fortunately, JavaScript comes with a class called <code>Map</code> that is written for this exact purpose. It stores a mapping and allows any type of keys.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-dd6KsGgAGP" href="#c-dd6KsGgAGP" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">ages</span> = <span class="tok-keyword">new</span> Map();
+ages.set(<span class="tok-string">&quot;Boris&quot;</span>, <span class="tok-number">39</span>);
+ages.set(<span class="tok-string">&quot;Liang&quot;</span>, <span class="tok-number">22</span>);
+ages.set(<span class="tok-string">&quot;Júlia&quot;</span>, <span class="tok-number">62</span>);
+
+console.log(<span class="tok-string2">`Júlia is </span>${ages.get(<span class="tok-string">&quot;Júlia&quot;</span>)}<span class="tok-string2">`</span>);
+<span class="tok-comment">// → Júlia is 62</span>
+console.log(<span class="tok-string">&quot;Is Jack's age known?&quot;</span>, ages.has(<span class="tok-string">&quot;Jack&quot;</span>));
+<span class="tok-comment">// → Is Jack's age known? false</span>
+console.log(ages.has(<span class="tok-string">&quot;toString&quot;</span>));
+<span class="tok-comment">// → false</span></pre>
+
+<p><a class="p_ident" id="p-iIdp+mGl3Y" href="#p-iIdp+mGl3Y" tabindex="-1" role="presentation"></a>The methods <code>set</code>, <code>get</code>, and <code>has</code> are part of the interface of the <code>Map</code> object. Writing a data structure that can quickly update and search a large set of values isn’t easy, but we don’t have to worry about that. Someone else did it for us, and we can go through this simple interface to use their work.</p>
+
+<p><a class="p_ident" id="p-tx3xnowcEp" href="#p-tx3xnowcEp" tabindex="-1" role="presentation"></a>If you do have a plain object that you need to treat as a map for some reason, it is useful to know that <code>Object.keys</code> returns only an object’s <em>own</em> keys, not those in the prototype. As an alternative to the <code>in</code> operator, you can use the <code>Object.hasOwn</code> function, which ignores the object’s prototype.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-KF6ERT9sZf" href="#c-KF6ERT9sZf" tabindex="-1" role="presentation"></a>console.log(Object.hasOwn({<span class="tok-definition">x</span>: <span class="tok-number">1</span>}, <span class="tok-string">&quot;x&quot;</span>));
+<span class="tok-comment">// → true</span>
+console.log(Object.hasOwn({<span class="tok-definition">x</span>: <span class="tok-number">1</span>}, <span class="tok-string">&quot;toString&quot;</span>));
+<span class="tok-comment">// → false</span></pre>
+
+<h2><a class="h_ident" id="h-mJ/JHQRHg9" href="#h-mJ/JHQRHg9" tabindex="-1" role="presentation"></a>Polymorphism</h2>
+
+<p><a class="p_ident" id="p-ozkqUookhO" href="#p-ozkqUookhO" tabindex="-1" role="presentation"></a>When you call the <code>String</code> function (which converts a value to a string) on an object, it will call the <code>toString</code> method on that object to try to create a meaningful string from it. I mentioned that some of the standard prototypes define their own version of <code>toString</code> so they can create a string that contains more useful information than <code>&quot;[object Object]&quot;</code>. You can also do that yourself.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-DFhau0z7K/" href="#c-DFhau0z7K/" tabindex="-1" role="presentation"></a>Rabbit.prototype.toString = <span class="tok-keyword">function</span>() {
+  <span class="tok-keyword">return</span> <span class="tok-string2">`a </span>${<span class="tok-keyword">this</span>.type}<span class="tok-string2"> rabbit`</span>;
+};
+
+console.log(String(killerRabbit));
+<span class="tok-comment">// → a killer rabbit</span></pre>
+
+<p><a class="p_ident" id="p-2VOQNtgVXK" href="#p-2VOQNtgVXK" tabindex="-1" role="presentation"></a>This is a simple instance of a powerful idea. When a piece of code is written to work with objects that have a certain interface—in this case, a <code>toString</code> method—any kind of object that happens to support this interface can be plugged into the code and will be able to work with it.</p>
+
+<p><a class="p_ident" id="p-phZ92zNL98" href="#p-phZ92zNL98" tabindex="-1" role="presentation"></a>This technique is called <em>polymorphism</em>. Polymorphic code can work with values of different shapes, as long as they support the interface it expects.</p>
+
+<p><a class="p_ident" id="p-kGs0fDpreh" href="#p-kGs0fDpreh" tabindex="-1" role="presentation"></a>An example of a widely used interface is that of array-like objects that have a <code>length</code> property holding a number and numbered properties for each of their elements. Both arrays and strings support this interface, as do various other objects, some of which we’ll see later in the chapters about the browser. You can call most array methods—such as <code>Array.<wbr>prototype.<wbr>forEach</code>—on anything that provides this interface.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-8an+KU+XJV" href="#c-8an+KU+XJV" tabindex="-1" role="presentation"></a>Array.prototype.forEach.call({
+  <span class="tok-definition">length</span>: <span class="tok-number">2</span>,
+  <span class="tok-number">0</span>: <span class="tok-string">&quot;A&quot;</span>,
+  <span class="tok-number">1</span>: <span class="tok-string">&quot;B&quot;</span>
+}, <span class="tok-definition">elt</span> =&gt; console.log(elt));
+<span class="tok-comment">// → A</span>
+<span class="tok-comment">// → B</span></pre>
+
+<h2><a class="h_ident" id="h-3vwredi8nD" href="#h-3vwredi8nD" tabindex="-1" role="presentation"></a>Getters, setters, and statics</h2>
+
+<p><a class="p_ident" id="p-0aNGN4nEbh" href="#p-0aNGN4nEbh" tabindex="-1" role="presentation"></a>Interfaces often contain plain properties, not just methods. For example, <code>Map</code> objects have a <code>size</code> property that tells you how many keys are stored in them.</p>
+
+<p><a class="p_ident" id="p-SdyGtj5JbS" href="#p-SdyGtj5JbS" tabindex="-1" role="presentation"></a>It is not necessary for such an object to compute and store such a property directly in the instance. Even properties that are accessed directly may hide a method call. Such methods are called <em>getters</em> and are defined by writing <code>get</code> in front of the method name in an object expression or class declaration.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-Np05mJ4GVO" href="#c-Np05mJ4GVO" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">varyingSize</span> = {
+  <span class="tok-keyword">get</span> <span class="tok-definition">size</span>() {
+    <span class="tok-keyword">return</span> Math.floor(Math.random() * <span class="tok-number">100</span>);
+  }
+};
+
+console.log(varyingSize.size);
+<span class="tok-comment">// → 73</span>
+console.log(varyingSize.size);
+<span class="tok-comment">// → 49</span></pre>
+
+<p><a class="p_ident" id="p-QwpqNIZOsS" href="#p-QwpqNIZOsS" tabindex="-1" role="presentation"></a>Whenever someone reads from this object’s <code>size</code> property, the associated method is called. You can do a similar thing when a property is written to, using a <em>setter</em>.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-7LQG88c1BA" href="#c-7LQG88c1BA" tabindex="-1" role="presentation"></a><span class="tok-keyword">class</span> Temperature {
+  <span class="tok-definition">constructor</span>(<span class="tok-definition">celsius</span>) {
+    <span class="tok-keyword">this</span>.celsius = celsius;
+  }
+  <span class="tok-keyword">get</span> <span class="tok-definition">fahrenheit</span>() {
+    <span class="tok-keyword">return</span> <span class="tok-keyword">this</span>.celsius * <span class="tok-number">1.8</span> + <span class="tok-number">32</span>;
+  }
+  <span class="tok-keyword">set</span> <span class="tok-definition">fahrenheit</span>(<span class="tok-definition">value</span>) {
+    <span class="tok-keyword">this</span>.celsius = (value - <span class="tok-number">32</span>) / <span class="tok-number">1.8</span>;
+  }
+
+  <span class="tok-keyword">static</span> <span class="tok-definition">fromFahrenheit</span>(<span class="tok-definition">value</span>) {
+    <span class="tok-keyword">return</span> <span class="tok-keyword">new</span> Temperature((value - <span class="tok-number">32</span>) / <span class="tok-number">1.8</span>);
+  }
+}
+
+<span class="tok-keyword">let</span> <span class="tok-definition">temp</span> = <span class="tok-keyword">new</span> Temperature(<span class="tok-number">22</span>);
+console.log(temp.fahrenheit);
+<span class="tok-comment">// → 71.6</span>
+temp.fahrenheit = <span class="tok-number">86</span>;
+console.log(temp.celsius);
+<span class="tok-comment">// → 30</span></pre>
+
+<p><a class="p_ident" id="p-Hf3p+suFR+" href="#p-Hf3p+suFR+" tabindex="-1" role="presentation"></a>The <code>Temperature</code> class allows you to read and write the temperature in either degrees Celsius or degrees Fahrenheit, but internally it stores only Celsius and automatically converts to and from Celsius in the <code>fahrenheit</code> getter and setter.</p>
+
+<p><a class="p_ident" id="p-MwIs1kR0mD" href="#p-MwIs1kR0mD" tabindex="-1" role="presentation"></a>Sometimes you want to attach some properties directly to your constructor function rather than to the prototype. Such methods won’t have access to a class instance but can, for example, be used to provide additional ways to create instances.</p>
+
+<p><a class="p_ident" id="p-zLJ2u9mlXs" href="#p-zLJ2u9mlXs" tabindex="-1" role="presentation"></a>Inside a class declaration, methods or properties that have <code>static</code> written before their name are stored on the constructor. For example, the <code>Temperature</code> class allows you to write <code>Temperature.<wbr>fromFahrenheit(100)</code> to create a temperature using degrees Fahrenheit.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-hoPF4gIATO" href="#c-hoPF4gIATO" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">boil</span> = Temperature.fromFahrenheit(<span class="tok-number">212</span>);
+console.log(boil.celsius);
+<span class="tok-comment">// → 100</span></pre>
+
+<h2><a class="h_ident" id="h-Iq1mTp65i3" href="#h-Iq1mTp65i3" tabindex="-1" role="presentation"></a>Symbols</h2>
+
+<p><a class="p_ident" id="p-Ydrs4O9rtA" href="#p-Ydrs4O9rtA" tabindex="-1" role="presentation"></a>I mentioned in <a href="04_data.html#for_of_loop">Chapter 4</a> that a <code>for</code>/<code>of</code> loop can loop over several kinds of data structures. This is another case of polymorphism—such loops expect the data structure to expose a specific interface, which arrays and strings do. And we can also add this interface to our own objects! But before we can do that, we need to briefly take a look at the symbol type.</p>
+
+<p><a class="p_ident" id="p-1ABqhLFM+9" href="#p-1ABqhLFM+9" tabindex="-1" role="presentation"></a>It is possible for multiple interfaces to use the same property name for different things. For example, on array-like objects, <code>length</code> refers to the number of elements in the collection. But an object interface describing a hiking route could use <code>length</code> to provide the length of the route in meters. It would not be possible for an object to conform to both these interfaces.</p>
+
+<p><a class="p_ident" id="p-0YTuRI/cjH" href="#p-0YTuRI/cjH" tabindex="-1" role="presentation"></a>An object trying to be a route and array-like (maybe to enumerate its waypoints) is somewhat far-fetched, and this kind of problem isn’t that common in practice. For things like the iteration protocol, though, the language designers needed a type of property that <em>really</em> doesn’t conflict with any others. So in 2015, <em>symbols</em> were added to the language.</p>
+
+<p><a class="p_ident" id="p-7u3zfC6CYV" href="#p-7u3zfC6CYV" tabindex="-1" role="presentation"></a>Most properties, including all those we have seen so far, are named with strings. But it is also possible to use symbols as property names. Symbols are values created with the <code>Symbol</code> function. Unlike strings, newly created symbols are unique—you cannot create the same symbol twice.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-z1x4NrbIJu" href="#c-z1x4NrbIJu" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">sym</span> = Symbol(<span class="tok-string">&quot;name&quot;</span>);
+console.log(sym == Symbol(<span class="tok-string">&quot;name&quot;</span>));
+<span class="tok-comment">// → false</span>
+Rabbit.prototype[sym] = <span class="tok-number">55</span>;
+console.log(killerRabbit[sym]);
+<span class="tok-comment">// → 55</span></pre>
+
+<p><a class="p_ident" id="p-PBxnKMHKqV" href="#p-PBxnKMHKqV" tabindex="-1" role="presentation"></a>The string you pass to <code>Symbol</code> is included when you convert it to a string and can make it easier to recognize a symbol when, for example, showing it in the console. But it has no meaning beyond that—multiple symbols may have the same name.</p>
+
+<p><a class="p_ident" id="p-n90pM44NAN" href="#p-n90pM44NAN" tabindex="-1" role="presentation"></a>Being both unique and usable as property names makes symbols suitable for defining interfaces that can peacefully live alongside other properties, no matter what their names are.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-647+NgW7T5" href="#c-647+NgW7T5" tabindex="-1" role="presentation"></a><span class="tok-keyword">const</span> <span class="tok-definition">length</span> = Symbol(<span class="tok-string">&quot;length&quot;</span>);
+Array.prototype[length] = <span class="tok-number">0</span>;
+
+console.log([<span class="tok-number">1</span>, <span class="tok-number">2</span>].length);
+<span class="tok-comment">// → 2</span>
+console.log([<span class="tok-number">1</span>, <span class="tok-number">2</span>][length]);
+<span class="tok-comment">// → 0</span></pre>
+
+<p><a class="p_ident" id="p-BaMC3Q+KCx" href="#p-BaMC3Q+KCx" tabindex="-1" role="presentation"></a>It is possible to include symbol properties in object expressions and classes by using square brackets around the property name. That causes the expression between the brackets to be evaluated to produce the property name, analogous to the square bracket property access notation.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-Ajzpyt+E+3" href="#c-Ajzpyt+E+3" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">myTrip</span> = {
+  <span class="tok-definition">length</span>: <span class="tok-number">2</span>,
+  <span class="tok-number">0</span>: <span class="tok-string">&quot;Lankwitz&quot;</span>,
+  <span class="tok-number">1</span>: <span class="tok-string">&quot;Babelsberg&quot;</span>,
+  [length]: <span class="tok-number">21500</span>
+};
+console.log(myTrip[length], myTrip.length);
+<span class="tok-comment">// → 21500 2</span></pre>
+
+<h2><a class="h_ident" id="h-z2tOOXM8qO" href="#h-z2tOOXM8qO" tabindex="-1" role="presentation"></a>The iterator interface</h2>
+
+<p><a class="p_ident" id="p-MuKK1lR2TY" href="#p-MuKK1lR2TY" tabindex="-1" role="presentation"></a>The object given to a <code>for</code>/<code>of</code> loop is expected to be <em>iterable</em>. This means it has a method named with the <code>Symbol.iterator</code> symbol (a symbol value defined by the language, stored as a property of the <code>Symbol</code> function).</p>
+
+<p><a class="p_ident" id="p-gs0GMX9PA7" href="#p-gs0GMX9PA7" tabindex="-1" role="presentation"></a>When called, that method should return an object that provides a second interface, <em>iterator</em>. This is the actual thing that iterates. It has a <code>next</code> method that returns the next result. That result should be an object with a <code>value</code> property that provides the next value, if there is one, and a <code>done</code> property, which should be true when there are no more results and false otherwise.</p>
+
+<p><a class="p_ident" id="p-a9jQxjOo3t" href="#p-a9jQxjOo3t" tabindex="-1" role="presentation"></a>Note that the <code>next</code>, <code>value</code>, and <code>done</code> property names are plain strings, not symbols. Only <code>Symbol.iterator</code>, which is likely to be added to a <em>lot</em> of different objects, is an actual symbol.</p>
+
+<p><a class="p_ident" id="p-wSWGcm7dId" href="#p-wSWGcm7dId" tabindex="-1" role="presentation"></a>We can directly use this interface ourselves.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-CKTaBW3WjJ" href="#c-CKTaBW3WjJ" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">okIterator</span> = <span class="tok-string">&quot;OK&quot;</span>[Symbol.iterator]();
+console.log(okIterator.next());
+<span class="tok-comment">// → {value: &quot;O&quot;, done: false}</span>
+console.log(okIterator.next());
+<span class="tok-comment">// → {value: &quot;K&quot;, done: false}</span>
+console.log(okIterator.next());
+<span class="tok-comment">// → {value: undefined, done: true}</span></pre>
+
+<p><a class="p_ident" id="p-W3uMNuwlXY" href="#p-W3uMNuwlXY" tabindex="-1" role="presentation"></a>Let’s implement an iterable data structure similar to the linked list from the exercise in <a href="04_data.html">Chapter 4</a>. We’ll write the list as a class this time.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-gbtYx+2BOB" href="#c-gbtYx+2BOB" tabindex="-1" role="presentation"></a><span class="tok-keyword">class</span> List {
+  <span class="tok-definition">constructor</span>(<span class="tok-definition">value</span>, <span class="tok-definition">rest</span>) {
+    <span class="tok-keyword">this</span>.value = value;
+    <span class="tok-keyword">this</span>.rest = rest;
+  }
+
+  <span class="tok-keyword">get</span> <span class="tok-definition">length</span>() {
+    <span class="tok-keyword">return</span> <span class="tok-number">1</span> + (<span class="tok-keyword">this</span>.rest ? <span class="tok-keyword">this</span>.rest.length : <span class="tok-number">0</span>);
+  }
+
+  <span class="tok-keyword">static</span> <span class="tok-definition">fromArray</span>(<span class="tok-definition">array</span>) {
+    <span class="tok-keyword">let</span> <span class="tok-definition">result</span> = <span class="tok-keyword">null</span>;
+    <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> <span class="tok-definition">i</span> = array.length - <span class="tok-number">1</span>; i &gt;= <span class="tok-number">0</span>; i--) {
+      result = <span class="tok-keyword">new</span> <span class="tok-keyword">this</span>(array[i], result);
+    }
+    <span class="tok-keyword">return</span> result;
+  }
+}</pre>
+
+<p><a class="p_ident" id="p-BUyEDXn/QN" href="#p-BUyEDXn/QN" tabindex="-1" role="presentation"></a>Note that <code>this</code>, in a static method, points at the constructor of the class, not an instance—there is no instance around when a static method is called.</p>
+
+<p><a class="p_ident" id="p-mVl963he9a" href="#p-mVl963he9a" tabindex="-1" role="presentation"></a>Iterating over a list should return all the list’s elements from start to end. We’ll write a separate class for the iterator.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-DdCDPJPgdV" href="#c-DdCDPJPgdV" tabindex="-1" role="presentation"></a><span class="tok-keyword">class</span> ListIterator {
+  <span class="tok-definition">constructor</span>(<span class="tok-definition">list</span>) {
+    <span class="tok-keyword">this</span>.list = list;
+  }
+
+  <span class="tok-definition">next</span>() {
+    <span class="tok-keyword">if</span> (<span class="tok-keyword">this</span>.list == <span class="tok-keyword">null</span>) {
+      <span class="tok-keyword">return</span> {<span class="tok-definition">done</span>: true};
+    }
+    <span class="tok-keyword">let</span> <span class="tok-definition">value</span> = <span class="tok-keyword">this</span>.list.value;
+    <span class="tok-keyword">this</span>.list = <span class="tok-keyword">this</span>.list.rest;
+    <span class="tok-keyword">return</span> {<span class="tok-definition">value</span>, <span class="tok-definition">done</span>: false};
+  }
+}</pre>
+
+<p><a class="p_ident" id="p-N8qXdZBlps" href="#p-N8qXdZBlps" tabindex="-1" role="presentation"></a>The class tracks the progress of iterating through the list by updating its <code>list</code> property to move to the next list object whenever a value is returned and reports that it is done when that list is empty (null).</p>
+
+<p><a class="p_ident" id="p-Iu3bFayPkp" href="#p-Iu3bFayPkp" tabindex="-1" role="presentation"></a>Let’s set up the <code>List</code> class to be iterable. Throughout this book, I’ll occasionally use after-the-fact prototype manipulation to add methods to classes so that the individual pieces of code remain small and self contained. In a regular program, where there is no need to split the code into small pieces, you’d declare these methods directly in the class instead.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-o1rzfIRpoY" href="#c-o1rzfIRpoY" tabindex="-1" role="presentation"></a>List.prototype[Symbol.iterator] = <span class="tok-keyword">function</span>() {
+  <span class="tok-keyword">return</span> <span class="tok-keyword">new</span> ListIterator(<span class="tok-keyword">this</span>);
+};</pre>
+
+<p><a class="p_ident" id="p-E7+RwcKNya" href="#p-E7+RwcKNya" tabindex="-1" role="presentation"></a>We can now loop over a list with <code>for</code>/<code>of</code>.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-mtRaGo5zew" href="#c-mtRaGo5zew" tabindex="-1" role="presentation"></a><span class="tok-keyword">let</span> <span class="tok-definition">list</span> = List.fromArray([<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>]);
+<span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> <span class="tok-definition">element</span> <span class="tok-keyword">of</span> list) {
+  console.log(element);
+}
+<span class="tok-comment">// → 1</span>
+<span class="tok-comment">// → 2</span>
+<span class="tok-comment">// → 3</span></pre>
+
+<p><a class="p_ident" id="p-1/0HTvmJYu" href="#p-1/0HTvmJYu" tabindex="-1" role="presentation"></a>The <code>...</code> syntax in array notation and function calls similarly works with any iterable object. For example, you can use <code>[...value]</code> to create an array containing the elements in an arbitrary iterable object.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-h/UOuG536h" href="#c-h/UOuG536h" tabindex="-1" role="presentation"></a>console.log([...<span class="tok-string">&quot;PCI&quot;</span>]);
+<span class="tok-comment">// → [&quot;P&quot;, &quot;C&quot;, &quot;I&quot;]</span></pre>
+
+<h2><a class="h_ident" id="h-/a3bnONnws" href="#h-/a3bnONnws" tabindex="-1" role="presentation"></a>Inheritance</h2>
+
+<p><a class="p_ident" id="p-s4f4wqT5wi" href="#p-s4f4wqT5wi" tabindex="-1" role="presentation"></a>Imagine we need a list type much like the <code>List</code> class we saw before, but because we will be asking for its length all the time, we don’t want it to have to scan through its <code>rest</code> every time. Instead, we want to store the length in every instance for efficient access.</p>
+
+<p><a class="p_ident" id="p-iJREewMgVn" href="#p-iJREewMgVn" tabindex="-1" role="presentation"></a>JavaScript’s prototype system makes it possible to create a <em>new</em> class, much like the old class, but with new definitions for some of its properties. The prototype for the new class derives from the old prototype but adds a new definition for, say, the <code>length</code> getter.</p>
+
+<p><a class="p_ident" id="p-yxSbbf8oT4" href="#p-yxSbbf8oT4" tabindex="-1" role="presentation"></a>In object-oriented programming terms, this is called <em>inheritance</em>. The new class inherits properties and behavior from the old class.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-bM/xGe1d1z" href="#c-bM/xGe1d1z" tabindex="-1" role="presentation"></a><span class="tok-keyword">class</span> LengthList <span class="tok-keyword">extends</span> List {
+  <span class="tok-definition">#length</span>;
+
+  <span class="tok-definition">constructor</span>(<span class="tok-definition">value</span>, <span class="tok-definition">rest</span>) {
+    <span class="tok-atom">super</span>(value, rest);
+    <span class="tok-keyword">this</span>.#length = <span class="tok-atom">super</span>.length;
+  }
+
+  <span class="tok-keyword">get</span> <span class="tok-definition">length</span>() {
+    <span class="tok-keyword">return</span> <span class="tok-keyword">this</span>.#length;
+  }
+}
+
+console.log(LengthList.fromArray([<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>]).length);
+<span class="tok-comment">// → 3</span></pre>
+
+<p><a class="p_ident" id="p-EbjAUADbj8" href="#p-EbjAUADbj8" tabindex="-1" role="presentation"></a>The use of the word <code>extends</code> indicates that this class shouldn’t be directly based on the default <code>Object</code> prototype but on some other class. This is called the <em>superclass</em>. The derived class is the <em>subclass</em>.</p>
+
+<p><a class="p_ident" id="p-nuE67XuPmk" href="#p-nuE67XuPmk" tabindex="-1" role="presentation"></a>To initialize a <code>LengthList</code> instance, the constructor calls the constructor of its superclass through the <code>super</code> keyword. This is necessary because if this new object is to behave (roughly) like a <code>List</code>, it is going to need the instance properties that lists have.</p>
+
+<p><a class="p_ident" id="p-RmJyDDSWTz" href="#p-RmJyDDSWTz" tabindex="-1" role="presentation"></a>The constructor then stores the list’s length in a private property. If we had written <code>this.length</code> there, the class’s own getter would have been called, which doesn’t work yet since <code>#length</code> hasn’t been filled in yet. We can use <code>super.something</code> to call methods and getters on the superclass’s prototype, which is often useful.</p>
+
+<p><a class="p_ident" id="p-apvJjMYcsg" href="#p-apvJjMYcsg" tabindex="-1" role="presentation"></a>Inheritance allows us to build slightly different data types from existing data types with relatively little work. It is a fundamental part of the object-oriented tradition, alongside encapsulation and polymorphism. But while the latter two are now generally regarded as wonderful ideas, inheritance is more controversial.</p>
+
+<p><a class="p_ident" id="p-CWDhzksvzb" href="#p-CWDhzksvzb" tabindex="-1" role="presentation"></a>Whereas encapsulation and polymorphism can be used to <em>separate</em> pieces of code from one another, reducing the tangledness of the overall program, inheritance fundamentally ties classes together, creating <em>more</em> tangle. When inheriting from a class, you usually have to know more about how it works than when simply using it. Inheritance can be a useful tool to make some types of programs more succinct, but it shouldn’t be the first tool you reach for, and you probably shouldn’t actively go looking for opportunities to construct class hierarchies (family trees of classes).</p>
+
+<h2><a class="h_ident" id="h-Fdk67dJHwg" href="#h-Fdk67dJHwg" tabindex="-1" role="presentation"></a>The instanceof operator</h2>
+
+<p><a class="p_ident" id="p-wnmK5D9foe" href="#p-wnmK5D9foe" tabindex="-1" role="presentation"></a>It is occasionally useful to know whether an object was derived from a specific class. For this, JavaScript provides a binary operator called <code>instanceof</code>.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-wtZ2QK2G5a" href="#c-wtZ2QK2G5a" tabindex="-1" role="presentation"></a>console.log(
+  <span class="tok-keyword">new</span> LengthList(<span class="tok-number">1</span>, <span class="tok-keyword">null</span>) <span class="tok-keyword">instanceof</span> LengthList);
+<span class="tok-comment">// → true</span>
+console.log(<span class="tok-keyword">new</span> LengthList(<span class="tok-number">2</span>, <span class="tok-keyword">null</span>) <span class="tok-keyword">instanceof</span> List);
+<span class="tok-comment">// → true</span>
+console.log(<span class="tok-keyword">new</span> List(<span class="tok-number">3</span>, <span class="tok-keyword">null</span>) <span class="tok-keyword">instanceof</span> LengthList);
+<span class="tok-comment">// → false</span>
+console.log([<span class="tok-number">1</span>] <span class="tok-keyword">instanceof</span> Array);
+<span class="tok-comment">// → true</span></pre>
+
+<p><a class="p_ident" id="p-+hFJQaiLG6" href="#p-+hFJQaiLG6" tabindex="-1" role="presentation"></a>The operator will see through inherited types, so a <code>LengthList</code> is an instance of <code>List</code>. The operator can also be applied to standard constructors like <code>Array</code>. Almost every object is an instance of <code>Object</code>.</p>
+
+<h2><a class="h_ident" id="h-ErccPg/l98" href="#h-ErccPg/l98" tabindex="-1" role="presentation"></a>Summary</h2>
+
+<p><a class="p_ident" id="p-ZoMazvCyv8" href="#p-ZoMazvCyv8" tabindex="-1" role="presentation"></a>Objects do more than just hold their own properties. They have prototypes, which are other objects. They’ll act as if they have properties they don’t have as long as their prototype has that property. Simple objects have <code>Object.prototype</code> as their prototype.</p>
+
+<p><a class="p_ident" id="p-A+dQsxCVz8" href="#p-A+dQsxCVz8" tabindex="-1" role="presentation"></a>Constructors, which are functions whose names usually start with a capital letter, can be used with the <code>new</code> operator to create new objects. The new object’s prototype will be the object found in the <code>prototype</code> property of the constructor. You can make good use of this by putting the properties that all values of a given type share into their prototype. There’s a <code>class</code> notation that provides a clear way to define a constructor and its prototype.</p>
+
+<p><a class="p_ident" id="p-AFyYjRH+5G" href="#p-AFyYjRH+5G" tabindex="-1" role="presentation"></a>You can define getters and setters to secretly call methods every time an object’s property is accessed. Static methods are methods stored in a class’s constructor rather than its prototype.</p>
+
+<p><a class="p_ident" id="p-U1iTgKNfyX" href="#p-U1iTgKNfyX" tabindex="-1" role="presentation"></a>The <code>instanceof</code> operator can, given an object and a constructor, tell you whether that object is an instance of that constructor.</p>
+
+<p><a class="p_ident" id="p-LOAETrspuz" href="#p-LOAETrspuz" tabindex="-1" role="presentation"></a>One useful thing to do with objects is to specify an interface for them and tell everybody that they are supposed to talk to your object only through that interface. The rest of the details that make up your object are now <em>encapsulated</em>, hidden behind the interface. You can use private properties to hide a part of your object from the outside world.</p>
+
+<p><a class="p_ident" id="p-nz8jafatnY" href="#p-nz8jafatnY" tabindex="-1" role="presentation"></a>More than one type may implement the same interface. Code written to use an interface automatically knows how to work with any number of different objects that provide the interface. This is called <em>polymorphism</em>.</p>
+
+<p><a class="p_ident" id="p-fg/ZL+fqD3" href="#p-fg/ZL+fqD3" tabindex="-1" role="presentation"></a>When implementing multiple classes that differ in only some details, it can be helpful to write the new classes as <em>subclasses</em> of an existing class, <em>inheriting</em> part of its behavior.</p>
+
+<h2><a class="h_ident" id="h-TcUD2vzyMe" href="#h-TcUD2vzyMe" tabindex="-1" role="presentation"></a>Exercises</h2>
+
+<h3 id="exercise_vector"><a class="i_ident" id="i-zO8FRQBMAy" href="#i-zO8FRQBMAy" tabindex="-1" role="presentation"></a>A vector type</h3>
+
+<p><a class="p_ident" id="p-YtkHcQdZSH" href="#p-YtkHcQdZSH" tabindex="-1" role="presentation"></a>Write a class <code>Vec</code> that represents a vector in two-dimensional space. It takes <code>x</code> and <code>y</code> parameters (numbers), that it saves to properties of the same name.</p>
+
+<p><a class="p_ident" id="p-7B3ixqpWia" href="#p-7B3ixqpWia" tabindex="-1" role="presentation"></a>Give the <code>Vec</code> prototype two methods, <code>plus</code> and <code>minus</code>, that take another vector as a parameter and return a new vector that has the sum or difference of the two vectors’ (<code>this</code> and the parameter) <em>x</em> and <em>y</em> values.</p>
+
+<p><a class="p_ident" id="p-F5nP+jpza3" href="#p-F5nP+jpza3" tabindex="-1" role="presentation"></a>Add a getter property <code>length</code> to the prototype that computes the length of the vector—that is, the distance of the point (<em>x</em>, <em>y</em>) from the origin (0, 0).</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-f3P62tUJWH" href="#c-f3P62tUJWH" tabindex="-1" role="presentation"></a><span class="tok-comment">// Your code here.</span>
+
+console.log(<span class="tok-keyword">new</span> Vec(<span class="tok-number">1</span>, <span class="tok-number">2</span>).plus(<span class="tok-keyword">new</span> Vec(<span class="tok-number">2</span>, <span class="tok-number">3</span>)));
+<span class="tok-comment">// → Vec{x: 3, y: 5}</span>
+console.log(<span class="tok-keyword">new</span> Vec(<span class="tok-number">1</span>, <span class="tok-number">2</span>).minus(<span class="tok-keyword">new</span> Vec(<span class="tok-number">2</span>, <span class="tok-number">3</span>)));
+<span class="tok-comment">// → Vec{x: -1, y: -1}</span>
+console.log(<span class="tok-keyword">new</span> Vec(<span class="tok-number">3</span>, <span class="tok-number">4</span>).length);
+<span class="tok-comment">// → 5</span></pre>
+
+<details class="solution"><summary>Display hints...</summary><div class="solution-text">
+
+<p><a class="p_ident" id="p-jRIa414Yh5" href="#p-jRIa414Yh5" tabindex="-1" role="presentation"></a>Look back to the <code>Rabbit</code> class example if you’re unsure how <code>class</code> declarations look.</p>
+
+<p><a class="p_ident" id="p-2lTcnsjfvm" href="#p-2lTcnsjfvm" tabindex="-1" role="presentation"></a>Adding a getter property to the constructor can be done by putting the word <code>get</code> before the method name. To compute the distance from (0, 0) to (x, y), you can use the Pythagorean theorem, which says that the square of the distance we are looking for is equal to the square of the x-coordinate plus the square of the y-coordinate. Thus, √(x<sup>2</sup> + y<sup>2</sup>) is the number you want. <code>Math.sqrt</code> is the way you compute a square root in JavaScript and <code>x ** 2</code> can be used to square a number.</p>
+
+</div></details>
+
+<h3><a class="i_ident" id="i-rpYp9Ou4LG" href="#i-rpYp9Ou4LG" tabindex="-1" role="presentation"></a>Groups</h3>
+
+<p id="groups"><a class="p_ident" id="p-1TnXiDoyR2" href="#p-1TnXiDoyR2" tabindex="-1" role="presentation"></a>The standard JavaScript environment provides another data structure called <code>Set</code>. Like an instance of <code>Map</code>, a set holds a collection of values. Unlike <code>Map</code>, it does not associate other values with those—it just tracks which values are part of the set. A value can be part of a set only once—adding it again doesn’t have any effect.</p>
+
+<p><a class="p_ident" id="p-IBo4QI1mvy" href="#p-IBo4QI1mvy" tabindex="-1" role="presentation"></a>Write a class called <code>Group</code> (since <code>Set</code> is already taken). Like <code>Set</code>, it has <code>add</code>, <code>delete</code>, and <code>has</code> methods. Its constructor creates an empty group, <code>add</code> adds a value to the group (but only if it isn’t already a member), <code>delete</code> removes its argument from the group (if it was a member), and <code>has</code> returns a Boolean value indicating whether its argument is a member of the group.</p>
+
+<p><a class="p_ident" id="p-cHm3PZ0L5i" href="#p-cHm3PZ0L5i" tabindex="-1" role="presentation"></a>Use the <code>===</code> operator, or something equivalent such as <code>indexOf</code>, to determine whether two values are the same.</p>
+
+<p><a class="p_ident" id="p-CbJ60eqr+J" href="#p-CbJ60eqr+J" tabindex="-1" role="presentation"></a>Give the class a static <code>from</code> method that takes an iterable object as its argument and creates a group that contains all the values produced by iterating over it.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-dNauaecKx+" href="#c-dNauaecKx+" tabindex="-1" role="presentation"></a><span class="tok-keyword">class</span> Group {
+  <span class="tok-comment">// Your code here.</span>
+}
+
+<span class="tok-keyword">let</span> <span class="tok-definition">group</span> = Group.from([<span class="tok-number">10</span>, <span class="tok-number">20</span>]);
+console.log(group.has(<span class="tok-number">10</span>));
+<span class="tok-comment">// → true</span>
+console.log(group.has(<span class="tok-number">30</span>));
+<span class="tok-comment">// → false</span>
+group.add(<span class="tok-number">10</span>);
+group.delete(<span class="tok-number">10</span>);
+console.log(group.has(<span class="tok-number">10</span>));
+<span class="tok-comment">// → false</span></pre>
+
+<details class="solution"><summary>Display hints...</summary><div class="solution-text">
+
+<p><a class="p_ident" id="p-fQA7KS4poU" href="#p-fQA7KS4poU" tabindex="-1" role="presentation"></a>The easiest way to do this is to store an array of group members in an instance property. The <code>includes</code> or <code>indexOf</code> methods can be used to check whether a given value is in the array.</p>
+
+<p><a class="p_ident" id="p-/dVCq4SNi6" href="#p-/dVCq4SNi6" tabindex="-1" role="presentation"></a>Your class’s constructor can set the member collection to an empty array. When <code>add</code> is called, it must check whether the given value is in the array or add it otherwise, possibly using <code>push</code>.</p>
+
+<p><a class="p_ident" id="p-GVg0o9XSa+" href="#p-GVg0o9XSa+" tabindex="-1" role="presentation"></a>Deleting an element from an array, in <code>delete</code>, is less straightforward, but you can use <code>filter</code> to create a new array without the value. Don’t forget to overwrite the property holding the members with the newly filtered version of the array.</p>
+
+<p><a class="p_ident" id="p-uNRo2OReFq" href="#p-uNRo2OReFq" tabindex="-1" role="presentation"></a>The <code>from</code> method can use a <code>for</code>/<code>of</code> loop to get the values out of the iterable object and call <code>add</code> to put them into a newly created group.</p>
+
+</div></details>
+
+<h3><a class="i_ident" id="i-djD3XDJ27V" href="#i-djD3XDJ27V" tabindex="-1" role="presentation"></a>Iterable groups</h3>
+
+<p id="group_iterator"><a class="p_ident" id="p-azaOoj0ezw" href="#p-azaOoj0ezw" tabindex="-1" role="presentation"></a>Make the <code>Group</code> class from the previous exercise iterable. Refer  to the section about the iterator interface earlier in the chapter if you aren’t clear on the exact form of the interface anymore.</p>
+
+<p><a class="p_ident" id="p-SoL9V7zUCt" href="#p-SoL9V7zUCt" tabindex="-1" role="presentation"></a>If you used an array to represent the group’s members, don’t just return the iterator created by calling the <code>Symbol.iterator</code> method on the array. That would work, but it defeats the purpose of this exercise.</p>
+
+<p><a class="p_ident" id="p-h9xzbPAOXK" href="#p-h9xzbPAOXK" tabindex="-1" role="presentation"></a>It is okay if your iterator behaves strangely when the group is modified during iteration.</p>
+
+<pre tabindex="0" class="snippet" data-language="javascript" ><a class="c_ident" id="c-n6ZNn/zRLj" href="#c-n6ZNn/zRLj" tabindex="-1" role="presentation"></a><span class="tok-comment">// Your code here (and the code from the previous exercise)</span>
+
+<span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> <span class="tok-definition">value</span> <span class="tok-keyword">of</span> Group.from([<span class="tok-string">&quot;a&quot;</span>, <span class="tok-string">&quot;b&quot;</span>, <span class="tok-string">&quot;c&quot;</span>])) {
+  console.log(value);
+}
+<span class="tok-comment">// → a</span>
+<span class="tok-comment">// → b</span>
+<span class="tok-comment">// → c</span></pre>
+
+<details class="solution"><summary>Display hints...</summary><div class="solution-text">
+
+<p><a class="p_ident" id="p-URAzFlYuQP" href="#p-URAzFlYuQP" tabindex="-1" role="presentation"></a>It is probably worthwhile to define a new class <code>GroupIterator</code>. Iterator instances should have a property that tracks the current position in the group. Every time <code>next</code> is called, it checks whether it is done and, if not, moves past the current value and returns it.</p>
+
+<p><a class="p_ident" id="p-h7IDV/LpHi" href="#p-h7IDV/LpHi" tabindex="-1" role="presentation"></a>The <code>Group</code> class itself gets a method named by <code>Symbol.iterator</code> that, when called, returns a new instance of the iterator class for that group.</p>
+
+</div></details><nav><a href="05_higher_order.html" title="previous chapter" aria-label="previous chapter">◂</a> <a href="index.html" title="cover" aria-label="cover">●</a> <a href="07_robot.html" title="next chapter" aria-label="next chapter">▸</a>&nbsp;<button class=help title="help" aria-label="help"><strong>?</strong></button>
+</nav>
+</article>
+
+<script src="ejs.js"></script>
