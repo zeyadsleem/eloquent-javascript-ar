@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.B6DnVw3o.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D9FWdf6C.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/B7dpyB5z.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.C5LMpoy2.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/zSyj8-xD.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Duq5sWkb.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D1EqRFHO.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C5cbM9bU.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.Dz70_hYq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DRrEq7gI.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DQGEpqZ6.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/HXU5bQoR.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CnU9nHRV.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/4.BePt0bst.js" rel="modulepreload">
+		<!--12qhfyh--><meta name="description" content="الترجمة العربية الكاملة لكتاب Eloquent JavaScript لماريْن هافربيك"/><!----><!--swqvjo--><meta name="description" content="التعابير النمطية من كتاب جافاسكربت البليغة"/><!----><title>التعابير النمطية - جافاسكربت البليغة</title>
+		<link href="../../_app/immutable/assets/0.BpYK8r0g.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../"><span class="logo__title">جافاسكربت البليغة</span> <span class="logo__subtitle">Eloquent JavaScript</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span><span></span><span></span></button> <nav class="site-nav"><!--[--><a href="../../">المحتويات</a><a href="../../about">عن الكتاب</a><a href="../../search">البحث</a><!--]--> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذا الفصل</p> <ul><!--[--><li><a href="#إنشاء-تعبير-نمطي">إنشاء تعبير نمطي</a></li><li><a href="#اختبار-التطابقات">اختبار التطابقات</a></li><li><a href="#مجموعات-المحارف">مجموعات المحارف</a></li><li><a href="#المحارف-الدولية">المحارف الدولية</a></li><li><a href="#تكرار-أجزاء-من-النمط">تكرار أجزاء من النمط</a></li><li><a href="#تجميع-التعبيرات-الفرعية">تجميع التعبيرات الفرعية</a></li><li><a href="#التطابقات-والمجموعات">التطابقات والمجموعات</a></li><li><a href="#صنف-date">صنف Date</a></li><li><a href="#الحدود-والاستطلاع-الأمامي">الحدود والاستطلاع الأمامي</a></li><li><a href="#أنماط-الاختيار">أنماط الاختيار</a></li><li><a href="#ميكانيكا-المطابقة">ميكانيكا المطابقة</a></li><li><a href="#التتبع-الخلفي">التتبع الخلفي</a></li><li><a href="#الطريقة-replace">الطريقة replace</a></li><li><a href="#الشراهة">الشراهة</a></li><li><a href="#إنشاء-كائنات-regexp-ديناميكيا">إنشاء كائنات RegExp ديناميكياً</a></li><li><a href="#الطريقة-search">الطريقة search</a></li><li><a href="#خاصية-lastindex">خاصية lastIndex</a></li><li><a href="#تحليل-ملف-ini">تحليل ملف INI</a></li><li><a href="#وحدات-الشيفرة-والمحارف">وحدات الشيفرة والمحارف</a></li><li><a href="#الملخص">الملخص</a></li><li><a href="#التمارين">التمارين</a></li><li class="toc__depth-3"><a href="#غولف-التعبيرات-النمطية">غولف التعبيرات النمطية</a></li><li class="toc__depth-3"><a href="#أسلوب-الاقتباس">أسلوب الاقتباس</a></li><li class="toc__depth-3"><a href="#الأعداد-مرة-أخرى">الأعداد مرة أخرى</a></li><!--]--></ul></aside> <article class="chapter"><div class="chapter__header"><p class="chapter__number">الفصل 09</p> <h1>التعابير النمطية</h1></div> <div class="book-content"><!----><blockquote>
+<p>بعض الناس، حين يواجهون مشكلة، يفكرون: «أعرف، سأستخدم التعبيرات النمطية». والآن أصبحت لديهم مشكلتان.</p>
+<p>— جيمي زاوينسكي</p>
+</blockquote>
+<blockquote>
+<p>حين تقطع الخشب عكس اتجاه أليافه، تحتاج إلى قوة كبيرة. وحين تبرمج عكس اتجاه المشكلة، تحتاج إلى شيفرة كثيرة.</p>
+<p>— المعلم يوان-ما، كتاب البرمجة</p>
+</blockquote>
+<p><img src="../../images/book/chapter_picture_9.jpg" alt="رسم توضيحي لنظام سكك حديدية يمثل البنية النحوية للتعبيرات النمطية"></p>
+<p>أدوات البرمجة وتقنياتها تبقى وتنتشر بطريقة فوضوية تطورية. فليست دائماً أفضل الأدوات أو ألمعها هي التي تفوز، بل تلك التي تعمل بشكل كافٍ ضمن المكان المناسب، أو التي تصادف أنها اندمجت مع قطعة تقنية ناجحة أخرى.</p>
+<p>في هذا الفصل، سأناقش إحدى هذه الأدوات، <em>التعبيرات النمطية</em> (regular expressions). التعبيرات النمطية طريقة لوصف الأنماط في بيانات النصوص. وهي تشكّل لغة صغيرة مستقلة جزءاً من JavaScript وكثير من اللغات والأنظمة الأخرى.</p>
+<p>التعبيرات النمطية بالغة الإرباك وبالغة الفائدة في آن واحد. فصياغتها غامضة وواجهة البرمجة التي توفرها JavaScript لها ركيكة. لكنها أداة قوية لفحص النصوص ومعالجتها. وفهم التعبيرات النمطية فهماً صحيحاً سيجعلك مبرمجاً أكثر فعالية.</p>
+<h2 id="إنشاء-تعبير-نمطي">إنشاء تعبير نمطي</h2>
+<p>التعبير النمطي نوع من الكائنات. ويمكن إما إنشاؤه بالبانية <code>RegExp</code> أو كتابته كقيمة حرفية بتطويق نمط بين محرفي الشرطة المائلة (<code>/</code>).</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> re1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-string">&quot;abc&quot;</span>);
+<span class="hljs-keyword">let</span> re2 = <span class="hljs-regexp">/abc/</span>;
+</code></pre>
+<p>كلا كائني التعبير النمطي يمثلان النمط نفسه: محرف <em>a</em> متبوعاً بـ <em>b</em> متبوعاً بـ <em>c</em>.</p>
+<p>عند استخدام البانية <code>RegExp</code>، يُكتب النمط كنص عادي، لذا تنطبق القواعد المعتادة على الشرطات العكسية.</p>
+<p>أما الصيغة الثانية، حيث يظهر النمط بين محرفي الشرطة المائلة، فتعامل الشرطات العكسية معاملة مختلفة بعض الشيء. أولاً، بما أن الشرطة المائلة تنهي النمط، نحتاج إلى وضع شرطة عكسية قبل أي شرطة مائلة نريد أن تكون <em>جزءاً</em> من النمط. وإضافة إلى ذلك، فإن الشرطات العكسية التي ليست جزءاً من رموز محارف خاصة (مثل <code>\n</code>) ستُحفظ بدلاً من تجاهلها كما يحدث في النصوص، وستغيّر معنى النمط. وبعض المحارف، مثل علامات الاستفهام وعلامات الجمع، لها معانٍ خاصة في التعبيرات النمطية ويجب أن تسبقها شرطة عكسية إن كان المقصود تمثيل المحرف نفسه.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> aPlus = <span class="hljs-regexp">/A\+/</span>;
+</code></pre>
+<h2 id="اختبار-التطابقات">اختبار التطابقات</h2>
+<p>لكائنات التعبيرات النمطية عدد من الطرائق. أبسطها <code>test</code>. وإذا مررت لها نصاً، فستعيد قيمة منطقية تخبرك ما إذا كان النص يحتوي على تطابق للنمط في التعبير.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/abc/</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;abcde&quot;</span>));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/abc/</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;abxde&quot;</span>));
+<span class="hljs-comment">// → false</span>
+</code></pre>
+<p>التعبير النمطي المكوَّن من محارف غير خاصة فقط يمثل ببساطة ذلك التسلسل من المحارف. وإذا ظهر <em>abc</em> في أي مكان من النص الذي نختبره (وليس في البداية فقط)، فستعيد <code>test</code> القيمة <code>true</code>.</p>
+<h2 id="مجموعات-المحارف">مجموعات المحارف</h2>
+<p>معرفة ما إذا كان نص يحتوي على <em>abc</em> يمكن أن تُنجز بالطريقة نفسها باستدعاء <code>indexOf</code>. والتعبيرات النمطية مفيدة لأنها تتيح لنا وصف أنماط أكثر تعقيداً.</p>
+<p>لنفترض أننا نريد مطابقة أي عدد. في التعبير النمطي، وضع مجموعة محارف بين قوسين مربعين يجعل ذلك الجزء من التعبير يطابق أي محرف من المحارف بين القوسين.</p>
+<p>كلا التعبيرين التاليين يطابق كل النصوص التي تحتوي على رقم:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/[0123456789]/</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;in 1992&quot;</span>));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/[0-9]/</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;in 1992&quot;</span>));
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>داخل القوسين المربعين، يمكن استخدام شرطة (<code>-</code>) بين محرفين للإشارة إلى مدى من المحارف، حيث يحدد ترتيبها الرقم في معيار Unicode للمحرف. والمحارف من 0 إلى 9 تقع متجاورة تماماً في هذا الترتيب (الرموز من 48 إلى 57)، لذا يغطي <code>[0-9]</code> جميعها ويطابق أي رقم.</p>
+<p>لعدد من مجموعات المحارف الشائعة اختصارات مدمجة خاصة بها. والأرقام إحداها: <code>\d</code> تعني الشيء نفسه الذي تعنيه <code>[0-9]</code>.</p>
+<table>
+<thead>
+<tr>
+<th><code>\d</code></th>
+<th>أي محرف رقمي</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\w</code></td>
+<td>محرف أبجدي رقمي («محرف كلمة»)</td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td>أي محرف فراغ (مسافة، جدولة، سطر جديد، وما شابه)</td>
+</tr>
+<tr>
+<td><code>\D</code></td>
+<td>محرف <em>ليس</em> رقماً</td>
+</tr>
+<tr>
+<td><code>\W</code></td>
+<td>محرف غير أبجدي رقمي</td>
+</tr>
+<tr>
+<td><code>\S</code></td>
+<td>محرف غير فراغ</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>أي محرف عدا السطر الجديد</td>
+</tr>
+</tbody>
+</table>
+<p>يمكنك مطابقة صيغة تاريخ ووقت مثل 01-30-2003 15:20 بالتعبير التالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> dateTime = <span class="hljs-regexp">/\d\d-\d\d-\d\d\d\d \d\d:\d\d/</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(dateTime.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;01-30-2003 15:20&quot;</span>));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(dateTime.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;30-jan-2003 15:20&quot;</span>));
+<span class="hljs-comment">// → false</span>
+</code></pre>
+<p>يبدو ذلك التعبير النمطي فظيعاً تماماً، أليس كذلك؟ نصفه شرطات عكسية، تُنتج ضجيجاً خلفياً يصعّب رصد النمط الفعلي المعبَّر عنه. وسنرى نسخة محسّنة قليلاً من هذا التعبير <a href="../../chapter/regular_expressions#date_regexp_counted">لاحقاً</a>.</p>
+<p>يمكن استخدام رموز الشرطة العكسية هذه داخل القوسين المربعين أيضاً. فمثلاً، <code>[\d.]</code> تعني أي رقم أو محرف نقطة. والنقطة نفسها، بين القوسين المربعين، تفقد معناها الخاص. وينطبق الشيء نفسه على المحارف الخاصة الأخرى، مثل علامة الجمع (<code>+</code>).</p>
+<p>لـ<em>عكس</em> مجموعة محارف — أي للتعبير عن أنك تريد مطابقة أي محرف <em>عدا</em> المحارف الموجودة في المجموعة — يمكنك كتابة محرف العناية (<code>^</code>) بعد قوس الفتح.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> nonBinary = <span class="hljs-regexp">/[^01]/</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(nonBinary.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;1100100010100110&quot;</span>));
+<span class="hljs-comment">// → false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(nonBinary.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;0111010112101001&quot;</span>));
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<h2 id="المحارف-الدولية">المحارف الدولية</h2>
+<p>بسبب التنفيذ المبسّط الأولي في JavaScript، وبسبب أن هذا الأسلوب المبسّط جُمّد لاحقاً كسلوك قياسي، فإن التعبيرات النمطية في JavaScript غبية نوعاً ما تجاه المحارف التي لا تظهر في اللغة الإنجليزية. فمثلاً، بحسب ما تعنيه التعبيرات النمطية في JavaScript، «محرف الكلمة» هو فقط أحد 26 محرفاً في الأبجدية اللاتينية (كبيرة أو صغيرة)، والأرقام العشرية، ولسبب ما، محرف الشرطة السفلية. وأشياء مثل <em>é</em> أو <em>β</em>، وهي بالتأكيد محارف كلمات، لن تطابق <code>\w</code> (وستطابق <em>بالفعل</em> <code>\W</code> الكبيرة، فئة غير الكلمات).</p>
+<p>بحادث تاريخي غريب، لا تعاني <code>\s</code> (الفراغ) من هذه المشكلة وتطابق كل المحارف التي يعتبرها معيار Unicode فراغاً، بما في ذلك أشياء مثل المسافة غير الفاصلة وفاصل العلة المنغولي.</p>
+<p>من الممكن استخدام <code>\p</code> في تعبير نمطي لمطابقة كل المحارف التي يسنِد إليها معيار Unicode خاصية معينة. وهذا يتيح لنا مطابقة أشياء مثل الحروف بطريقة أكثر عالمية. لكن، مرة أخرى بسبب التوافق مع معايير اللغة الأصلية، لا يُتعرف على تلك إلا عندما تضع محرف <code>u</code> (لـ Unicode) بعد التعبير النمطي.</p>
+<table>
+<thead>
+<tr>
+<th><code>\p{L}</code></th>
+<th>أي حرف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\p{N}</code></td>
+<td>أي محرف عددي</td>
+</tr>
+<tr>
+<td><code>\p{P}</code></td>
+<td>أي محرف ترقيم</td>
+</tr>
+<tr>
+<td><code>\P{L}</code></td>
+<td>أي محرف غير حرف (P الكبيرة تعكس)</td>
+</tr>
+<tr>
+<td><code>\p{Script=Hangul}</code></td>
+<td>أي محرف من الكتابة المعطاة (انظر <a href="../../chapter/higher_order_functions#scripts">الفصل 5</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>استخدام <code>\w</code> لمعالجة نصوص قد تحتاج إلى التعامل مع نص غير إنجليزي (أو حتى نص إنجليزي بكلمات مستعارة مثل «cliché») عبء، لأنه لن يعامل محارف مثل «é» كحروف. ورغم أن مجموعات الخصائص <code>\p</code> تميل إلى الإسهاب قليلاً، فإنها أكثر متانة.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/\p{L}/u</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;α&quot;</span>));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/\p{L}/u</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;!&quot;</span>));
+<span class="hljs-comment">// → false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/\p{Script=Greek}/u</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;α&quot;</span>));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/\p{Script=Arabic}/u</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;α&quot;</span>));
+<span class="hljs-comment">// → false</span>
+</code></pre>
+<p>من ناحية أخرى، إن كنت تطابق أعداداً لتفعل بها شيئاً، فغالباً ما تريد فعلاً <code>\d</code> للأرقام، لأن تحويل محارف رقمية اعتباطية إلى عدد في JavaScript ليس شيئاً تستطيع دالة مثل <code>Number</code> فعله نيابة عنك.</p>
+<h2 id="تكرار-أجزاء-من-النمط">تكرار أجزاء من النمط</h2>
+<p>نعرف الآن كيف نطابق رقماً واحداً. فماذا لو أردنا مطابقة عدد كامل — تسلسل من رقم واحد أو أكثر؟</p>
+<p>عندما تضع علامة جمع (<code>+</code>) بعد شيء ما في تعبير نمطي، فإنها تشير إلى أن العنصر قد يتكرر أكثر من مرة. وهكذا، <code>/\d+/</code> تطابق محرفاً رقمياً واحداً أو أكثر.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/&#x27;\d+&#x27;/</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;&#x27;123&#x27;&quot;</span>));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/&#x27;\d+&#x27;/</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;&#x27;&#x27;&quot;</span>));
+<span class="hljs-comment">// → false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/&#x27;\d*&#x27;/</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;&#x27;123&#x27;&quot;</span>));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/&#x27;\d*&#x27;/</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;&#x27;&#x27;&quot;</span>));
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>للنجمة (<code>*</code>) معنى مشابه لكنها تتيح للنمط أن يطابق صفر مرات أيضاً. فالشيء المتبوع بنجمة لا يمنع النمط من المطابقة أبداً — سيطابق صفر حالات فقط إن لم يجد أي نص مناسب للمطابقة.</p>
+<p>وعلامة الاستفهام (<code>?</code>) تجعل جزءاً من النمط <em>اختيارياً</em>، أي أنه قد يظهر صفر مرة أو مرة واحدة. في المثال التالي، يُسمح بظهور محرف <em>u</em>، لكن النمط يطابق أيضاً عند غيابه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> neighbor = <span class="hljs-regexp">/neighbou?r/</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(neighbor.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;neighbour&quot;</span>));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(neighbor.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;neighbor&quot;</span>));
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>للإشارة إلى أن نمطاً ينبغي أن يظهر عدداً محدداً بدقة من المرات، استخدم الأقواس المعقوفة. فمثلاً، وضع <code>{4}</code> بعد عنصر يقتضي ظهوره أربع مرات بالضبط. ومن الممكن أيضاً تحديد مدى بهذه الطريقة: <code>{2,4}</code> تعني أن العنصر يجب أن يظهر مرتين على الأقل وأربع مرات على الأكثر.</p>
+<p>وإليك نسخة أخرى من نمط التاريخ والوقت تتيح أياماً وشهوراً وساعات من خانة واحدة أو خانتين. وهي أيضاً أسهل قليلاً في فكّ رموزها.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> dateTime = <span class="hljs-regexp">/\d{1,2}-\d{1,2}-\d{4} \d{1,2}:\d{2}/</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(dateTime.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;1-30-2003 8:45&quot;</span>));
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>يمكنك أيضاً تحديد مديات مفتوحة عند استخدام الأقواس المعقوفة بحذف العدد بعد الفاصلة. فمثلاً، <code>{5,}</code> تعني خمس مرات أو أكثر.</p>
+<h2 id="تجميع-التعبيرات-الفرعية">تجميع التعبيرات الفرعية</h2>
+<p>لاستخدام معامل مثل <code>*</code> أو <code>+</code> على أكثر من عنصر في وقت واحد، يجب استخدام الأقواس الهلالية. فالجزء من التعبير النمطي المطوَّق بأقواس هلالية يُحتسب عنصراً واحداً فيما يتعلق بالمعاملات التي تليه.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> cartoonCrying = <span class="hljs-regexp">/boo+(hoo+)+/i</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(cartoonCrying.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;Boohoooohoohooo&quot;</span>));
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>تسري علامتا <code>+</code> الأولى والثانية على الحرف <code>o</code> الثاني في <code>boo</code> و<code>hoo</code> على التوالي. أما علامة <code>+</code> الثالثة فتسري على المجموعة <code>(hoo+)</code> كاملة، فتطابق تسلسلاً واحداً أو أكثر من ذلك النوع.</p>
+<p>والمحرف <code>i</code> في نهاية التعبير في المثال يجعل هذا التعبير النمطي غير حساس لحالة الأحرف، فيتيح له مطابقة <em>B</em> الكبيرة في النص المدخل، رغم أن النمط نفسه مكتوب كله بحروف صغيرة.</p>
+<h2 id="التطابقات-والمجموعات">التطابقات والمجموعات</h2>
+<p>الطريقة <code>test</code> هي أبسط طريقة على الإطلاق لمطابقة تعبير نمطي. فهي تخبرك فقط هل تطابق أم لا، ولا شيء غير ذلك. وللتعبيرات النمطية أيضاً طريقة <code>exec</code> (execute) التي ستعيد <code>null</code> إن لم يُعثر على تطابق، وتعيد كائناً يحوي معلومات عن التطابق في غير ذلك.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> match = <span class="hljs-regexp">/\d+/</span>.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;one two 100&quot;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(match);
+<span class="hljs-comment">// → [&quot;100&quot;]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(match.<span class="hljs-property">index</span>);
+<span class="hljs-comment">// → 8</span>
+</code></pre>
+<p>الكائن المُعاد من <code>exec</code> له خاصية <code>index</code> تخبرنا <em>بأين</em> يبدأ التطابق الناجح في النص. عدا ذلك، يشبه الكائن (وهو في الواقع كذلك) مصفوفة نصوص، عنصرها الأول هو النص الذي طوبق. في المثال السابق، هذا هو تسلسل الأرقام الذي كنا نبحث عنه.</p>
+<p>ولقيم النصوص طريقة <code>match</code> تتصرف تصرفاً مشابهاً.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;one two 100&quot;</span>.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/\d+/</span>));
+<span class="hljs-comment">// → [&quot;100&quot;]</span>
+</code></pre>
+<p>عندما يحتوي التعبير النمطي على تعبيرات فرعية مجمَّعة بأقواس هلالية، سيظهر النص الذي طابق تلك المجموعات في المصفوفة أيضاً. والتطابق الكامل هو دائماً العنصر الأول. والعنصر التالي هو الجزء الذي طابقته المجموعة الأولى (تلك التي يأتي قوسها الفتح أولاً في التعبير)، ثم المجموعة الثانية، وهكذا.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> quotedText = <span class="hljs-regexp">/&#x27;([^&#x27;]*)&#x27;/</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(quotedText.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;she said &#x27;hello&#x27;&quot;</span>));
+<span class="hljs-comment">// → [&quot;&#x27;hello&#x27;&quot;, &quot;hello&quot;]</span>
+</code></pre>
+<p>عندما لا تُطابَق مجموعة إطلاقاً (مثلاً، عندما تتبعها علامة استفهام)، سيشغل موضعها في مصفوفة الخرج القيمة <code>undefined</code>. وعندما تُطابَق مجموعة عدة مرات (مثلاً، عندما تتبعها <code>+</code>)، فإن آخر تطابق فقط هو الذي يظهر في المصفوفة.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/bad(ly)?/</span>.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;bad&quot;</span>));
+<span class="hljs-comment">// → [&quot;bad&quot;, undefined]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/(\d)+/</span>.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;123&quot;</span>));
+<span class="hljs-comment">// → [&quot;123&quot;, &quot;3&quot;]</span>
+</code></pre>
+<p>إن أردت استخدام الأقواس الهلالية للتجميع فقط، دون أن تظهر في مصفوفة التطابقات، يمكنك وضع <code>?:</code> بعد قوس الفتح.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/(?:na)+/</span>.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;banana&quot;</span>));
+<span class="hljs-comment">// → [&quot;nana&quot;]</span>
+</code></pre>
+<p>يمكن أن تكون المجموعات مفيدة لاستخراج أجزاء من نص. فإن لم نكن نريد فقط التحقق مما إذا كان نص يحتوي على تاريخ، بل أيضاً استخراجه وبناء كائن يمثله، يمكننا تطويق أنماط الأرقام بأقواس هلالية وانتقاء التاريخ مباشرة من ناتج <code>exec</code>.</p>
+<p>لكن أولاً سنأخذ انحرافاً وجيزاً لمناقشة الطريقة المدمجة لتمثيل قيم التاريخ والوقت في JavaScript.</p>
+<h2 id="صنف-date">صنف Date</h2>
+<p>لدى JavaScript صنف قياسي <code>Date</code> لتمثيل التواريخ، أو بالأحرى نقاط في الزمن. وإن أنشأت كائن تاريخ ببساطة باستخدام <code>new</code>، فستحصل على التاريخ والوقت الحاليين.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>());
+<span class="hljs-comment">// → Fri Feb 02 2024 18:03:06 GMT+0100 (CET)</span>
+</code></pre>
+<p>يمكنك أيضاً إنشاء كائن لزمن محدد.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-number">2009</span>, <span class="hljs-number">11</span>, <span class="hljs-number">9</span>));
+<span class="hljs-comment">// → Wed Dec 09 2009 00:00:00 GMT+0100 (CET)</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-number">2009</span>, <span class="hljs-number">11</span>, <span class="hljs-number">9</span>, <span class="hljs-number">12</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>));
+<span class="hljs-comment">// → Wed Dec 09 2009 12:59:59 GMT+0100 (CET)</span>
+</code></pre>
+<p>تستخدم JavaScript اصطلاحاً تبدأ فيه أرقام الشهور من الصفر (فديسمبر هو 11)، بينما تبدأ أرقام الأيام من واحد. هذا مربك وسخيف. فكن حذراً.</p>
+<p>والمعطيات الأربعة الأخيرة (الساعات والدقائق والثواني والميلي ثواني) اختيارية وتُعتبر صفراً عند عدم إعطائها.</p>
+<p>تُخزَّن الطوابع الزمنية كعدد الميلي ثواني منذ بداية عام 1970، في المنطقة الزمنية UTC. وهذا يتبع اصطلاحاً وضعته «زمن يونكس»، الذي اخترع في ذلك الوقت تقريباً. ويمكنك استخدام أعداد سالبة للأزمنة السابقة لـ 1970. والطريقة <code>getTime</code> على كائن تاريخ تعيد هذا العدد. وهو كبير، كما يمكنك أن تتخيل.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-number">2013</span>, <span class="hljs-number">11</span>, <span class="hljs-number">19</span>).<span class="hljs-title function_">getTime</span>());
+<span class="hljs-comment">// → 1387407600000</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-number">1387407600000</span>));
+<span class="hljs-comment">// → Thu Dec 19 2013 00:00:00 GMT+0100 (CET)</span>
+</code></pre>
+<p>إن أعطيت البانية <code>Date</code> معطى واحداً، فسيُعامَل ذلك المعطى كعدد ميلي ثوانٍ كهذا. ويمكنك الحصول على عدد الميلي ثواني الحالي بإنشاء كائن <code>Date</code> جديد واستدعاء <code>getTime</code> عليه أو باستدعاء الدالة <code>Date.now</code>.</p>
+<p>توفر كائنات التاريخ طرائق مثل <code>getFullYear</code> و<code>getMonth</code> و<code>getDate</code> و<code>getHours</code> و<code>getMinutes</code> و<code>getSeconds</code> لاستخراج مكوّناتها. وإلى جانب <code>getFullYear</code> هناك أيضاً <code>getYear</code>، التي تعطيك السنة ناقص 1900 (مثل <code>98</code> أو <code>125</code>) وهي عديمة الفائدة غالباً.</p>
+<p>بوضع أقواس هلالية حول أجزاء التعبير التي تهمنا، يمكننا الآن إنشاء كائن تاريخ من نص.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">getDate</span>(<span class="hljs-params">string</span>) {
+  <span class="hljs-keyword">let</span> [_, month, day, year] =
+    <span class="hljs-regexp">/(\d{1,2})-(\d{1,2})-(\d{4})/</span>.<span class="hljs-title function_">exec</span>(string);
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(year, month - <span class="hljs-number">1</span>, day);
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">getDate</span>(<span class="hljs-string">&quot;1-30-2003&quot;</span>));
+<span class="hljs-comment">// → Thu Jan 30 2003 00:00:00 GMT+0100 (CET)</span>
+</code></pre>
+<p>ارتباط الشرطة السفلية (<code>_</code>) يُتجاهل ويُستخدم فقط لتخطي عنصر التطابق الكامل في المصفوفة التي يعيدها <code>exec</code>.</p>
+<h2 id="الحدود-والاستطلاع-الأمامي">الحدود والاستطلاع الأمامي</h2>
+<p>للأسف، ستستخرج <code>getDate</code> بسعادة أيضاً تاريخاً من النص <code>&quot;100-1-30000&quot;</code>. فقد يحدث تطابق في أي مكان من النص، لذا في هذه الحالة، سيبدأ من المحرف الثاني وينتهي عند المحرف قبل الأخير.</p>
+<p>إن أردنا فرض أن يمتد التطابق على النص كله، يمكننا إضافة العلامتين <code>^</code> و<code>$</code>. فمحرف العناية يطابق بداية النص المدخل، بينما تطابق علامة الدولار نهايته. وهكذا، <code>/^\d+$/</code> تطابق نصاً يتكوّن كله من رقم واحد أو أكثر، و<code>/^!/</code> تطابق أي نص يبدأ بعلامة تعجب، و<code>/x^/</code> لا تطابق أي نص (إذ لا يمكن أن يكون هناك <code>x</code> قبل بداية النص).</p>
+<p>وهناك أيضاً العلامة <code>\b</code> التي تطابق <em>حدود الكلمات</em>، أي المواضع التي يكون فيها محرف كلمة على جانب، ومحرف غير كلمة على الجانب الآخر. وللأسف، تستخدم هذه المفهوم المبسّط نفسه لمحارف الكلمات الذي تستخدمه <code>\w</code>، ولذلك فهي ليست موثوقة كثيراً.</p>
+<p>لاحظ أن علامات الحدود هذه لا تطابق أي محارف فعلية. إنها تفرض فقط أن شرطاً معيناً يتحقق في المكان الذي تظهر فيه في النمط.</p>
+<p>وتفعل اختبارات <em>الاستطلاع الأمامي</em> (look-ahead) شيئاً مشابهاً. فهي توفر نمطاً وتجعل التطابق يفشل إن لم يطابق المدخل ذلك النمط، لكنها لا تحرّك موضع التطابق فعلياً إلى الأمام. وتُكتب بين <code>(?=</code> و<code>)</code>.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/a(?=e)/</span>.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;braeburn&quot;</span>));
+<span class="hljs-comment">// → [&quot;a&quot;]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/a(?! )/</span>.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;a b&quot;</span>));
+<span class="hljs-comment">// → null</span>
+</code></pre>
+<p>المحرف <code>e</code> في المثال الأول ضروري للمطابقة، لكنه ليس جزءاً من النص المطابَق. وصيغة <code>(?! )</code> تعبّر عن استطلاع أمامي <em>سلبي</em>. وهذا يطابق فقط إن <em>لم</em> يطابق النمط الموجود بين القوسين، مما يجعل المثال الثاني يطابق فقط محارف <code>a</code> التي ليس بعدها مسافة.</p>
+<h2 id="أنماط-الاختيار">أنماط الاختيار</h2>
+<p>لنفترض أننا نريد معرفة ما إذا كان نص ما يحتوي لا على عدد فحسب، بل على عدد متبوعاً بإحدى الكلمات <em>pig</em> أو <em>cow</em> أو <em>chicken</em>، أو أي من صيغ جمعها.</p>
+<p>يمكننا كتابة ثلاثة تعبيرات نمطية واختبارها بالتتابع، لكن هناك طريقة أجمل. فمحرف الأنبوب (<code>|</code>) يدل على اختيار بين النمط الواقع إلى يساره والنمط الواقع إلى يمينه. ويمكننا استخدامه في تعبيرات كهذه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animalCount = <span class="hljs-regexp">/\d+ (pig|cow|chicken)s?/</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(animalCount.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;15 pigs&quot;</span>));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(animalCount.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;15 pugs&quot;</span>));
+<span class="hljs-comment">// → false</span>
+</code></pre>
+<p>يمكن استخدام الأقواس الهلالية لتحديد الجزء من النمط الذي يسري عليه معامل الأنبوب، ويمكنك وضع عدة معاملات كهذه بجانب بعضها البعض للتعبير عن اختيار بين أكثر من بديلين.</p>
+<h2 id="ميكانيكا-المطابقة">ميكانيكا المطابقة</h2>
+<p>من حيث المفهوم، عند استخدام <code>exec</code> أو <code>test</code>، يبحث محرّك التعبيرات النمطية عن تطابق في نصك بمحاولة مطابقة التعبير أولاً من بداية النص، ثم من المحرف الثاني، وهكذا حتى يجد تطابقاً أو يصل إلى نهاية النص. وسيعيد إما أول تطابق يمكن العثور عليه أو يفشل في العثور على أي تطابق إطلاقاً.</p>
+<p>ولإجراء المطابقة الفعلية، يعامل المحرّك التعبير النمطي كأنه مخطط انسيابي. وهذا مخطط تعبير الماشية في المثال السابق:</p>
+<p><img src="../../images/book/re_pigchickens.svg" alt="مخطط سكك حديدية يمر أولاً عبر صندوق مكتوب عليه 'digit'، وله حلقة تعود من بعده إلى قبله، ثم صندوق لمحرف مسافة. بعد ذلك يتفرع الخط إلى ثلاثة، ماراً بصناديق لـ 'pig' و'cow' و'chicken'. بعدها يلتقي من جديد، ويمر عبر صندوق مكتوب عليه 's'، وهو بما أنه اختياري، له أيضاً خط يمر به متجاوزاً إياه. وأخيراً يصل الخط إلى حالة القبول."></p>
+<p>إن استطعنا إيجاد مسار من الجانب الأيسر للمخطط إلى الجانب الأيمن، فإن تعبيرنا يطابق. ونحتفظ بموضع حالي في النص، وفي كل مرة نمر عبر صندوق، نتحقق من أن الجزء من النص بعد موضعنا الحالي يطابق ذلك الصندوق.</p>
+<h2 id="التتبع-الخلفي">التتبع الخلفي</h2>
+<p>التعبير النمطي <code>/^([01]+b|[\da-f]+h|\d+)$/</code> يطابق إما عدداً ثنائياً متبوعاً بـ <code>b</code>، أو عدداً سادس عشرياً (أي الأساس 16، حيث تمثل الحروف من <code>a</code> إلى <code>f</code> الأرقام من 10 إلى 15) متبوعاً بـ <code>h</code>، أو عدداً عشرياً عادياً بلا محرف لاحقة. وهذا المخطط المقابل:</p>
+<p><img src="../../images/book/re_number.svg" alt="مخطط سكك حديدية للتعبير النمطي '^([01]+b|+|[a-f]+h)$'"></p>
+<p>عند مطابقة هذا التعبير، كثيراً ما يُدخل الفرع العلوي (الثنائي) رغم أن المدخل لا يحتوي فعلاً على عدد ثنائي. فمثلاً، عند مطابقة النص <code>&quot;103&quot;</code>، لا يتضح إلا عند <code>3</code> أننا في الفرع الخطأ. والنص <em>يطابق</em> التعبير بالفعل، لكن ليس الفرع الذي نحن فيه حالياً.</p>
+<p>لذا <em>يتتبع المطابق خلفياً</em>. فعند دخول فرع، يتذكر موضعه الحالي (في هذه الحالة، عند بداية النص، بعد أول صندوق حدود في المخطط مباشرة) ليتمكن من العودة ومحاولة فرع آخر إن لم ينجح الفرع الحالي. وبالنسبة للنص <code>&quot;103&quot;</code>، بعد مصادفة المحرف <code>3</code>، يبدأ المطابق في تجربة فرع الأعداد السادسة عشرية، الذي يفشل بدوره لأنه لا يوجد <code>h</code> بعد العدد. ثم يجرب فرع العدد العشري. وهذا يناسب، ويُبلَّغ عن تطابق في نهاية الأمر.</p>
+<p>يتوقف المطابق بمجرد أن يجد تطابقاً كاملاً. وهذا يعني أنه إن أمكن لعدة فروع أن تطابق نصاً ما، فلن يُستخدم إلا الفرع الأول (مرتباً حسب موضع الفروع في التعبير النمطي).</p>
+<p>يحدث التتبع الخلفي أيضاً مع معاملات التكرار مثل + و<code>*</code>. فإن طابقت <code>/^.*x/</code> مع <code>&quot;abcxe&quot;</code>، سيحاول الجزء <code>.*</code> أولاً استهلاك النص كله. ثم سيدرك المحرّك أنه يحتاج إلى <code>x</code> لمطابقة النمط. وبما أنه لا يوجد <code>x</code> بعد نهاية النص، تحاول معاملة النجمة مطابقة محرف واحد أقل. لكن المطابق لا يجد <code>x</code> بعد <code>abcx</code> أيضاً، فيتتبع خلفياً مرة أخرى، مطابقاً معاملة النجمة مع <code>abc</code> فقط. و<em>الآن</em> يجد <code>x</code> حيث يحتاجه ويبلّغ عن تطابق ناجح من الموضعين 0 إلى 4.</p>
+<p>من الممكن كتابة تعبيرات نمطية ستُجري قدراً <em>كبيراً جداً</em> من التتبع الخلفي. وتحدث هذه المشكلة عندما يستطيع نمط مطابقة قطعة من المدخل بطرق مختلفة كثيرة. فمثلاً، إن ارتبكنا أثناء كتابة تعبير نمطي للأعداد الثنائية، فقد نكتب عن غير قصد شيئاً مثل <code>/([01]+)+b/</code>.</p>
+<p><img src="../../images/book/re_slow.svg" alt="مخطط سكك حديدية للتعبير النمطي '([01]+)+b'"></p>
+<p>إن حاول ذلك مطابقة سلسلة طويلة من الأصفار والواحدات بلا محرف <em>b</em> في آخرها، يمر المطابق أولاً عبر الحلقة الداخلية حتى تنفد الأرقام. ثم يلاحظ أنه لا يوجد <em>b</em>، فيتتبع خلفياً موضعاً واحداً، ويمر عبر الحلقة الخارجية مرة واحدة، ويستسلم مرة أخرى، محاولاً التتبع الخلفي خارج الحلقة الداخلية مرة إضافية. وسيواصل تجربة كل مسار ممكن عبر هاتين الحلقتين. وهذا يعني أن مقدار العمل <em>يتضاعف</em> مع كل محرف إضافي. وحتى مع بضع عشرات من المحارف فقط، سيستغرق التطابق الناتج عملياً إلى الأبد.</p>
+<h2 id="الطريقة-replace">الطريقة replace</h2>
+<p>لقيم النصوص طريقة <code>replace</code> يمكن استخدامها لاستبدال جزء من النص بنص آخر.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;papa&quot;</span>.<span class="hljs-title function_">replace</span>(<span class="hljs-string">&quot;p&quot;</span>, <span class="hljs-string">&quot;m&quot;</span>));
+<span class="hljs-comment">// → mapa</span>
+</code></pre>
+<p>يمكن أن يكون المعطى الأول أيضاً تعبيراً نمطياً، وفي هذه الحالة يُستبدل أول تطابق للتعبير النمطي. وعندما يُضاف خيار <code>g</code> (لـ <em>global</em>) بعد التعبير النمطي، تُستبدل <em>كل</em> التطابقات في النص، لا الأول فقط.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Borobudur&quot;</span>.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/[ou]/</span>, <span class="hljs-string">&quot;a&quot;</span>));
+<span class="hljs-comment">// → Barobudur</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Borobudur&quot;</span>.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/[ou]/g</span>, <span class="hljs-string">&quot;a&quot;</span>));
+<span class="hljs-comment">// → Barabadar</span>
+</code></pre>
+<p>القوة الحقيقية لاستخدام التعبيرات النمطية مع <code>replace</code> تأتي من كوننا نستطيع الإشارة إلى المجموعات المطابَقة في نص الاستبدال. فمثلاً، لنفترض أن لدينا نصاً كبيراً يحتوي على أسماء أشخاص، اسم واحد في كل سطر، بصيغة <code>Lastname, Firstname</code>. وإن أردنا تبديل هذين الاسمين وإزالة الفاصلة للحصول على صيغة <code>Firstname Lastname</code>، يمكننا استخدام الشيفرة التالية:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(
+  <span class="hljs-string">&quot;Liskov, Barbara\nMcCarthy, John\nMilner, Robin&quot;</span>
+    .<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/(\p{L}+), (\p{L}+)/gu</span>, <span class="hljs-string">&quot;$2 $1&quot;</span>));
+<span class="hljs-comment">// → Barbara Liskov</span>
+<span class="hljs-comment">//   John McCarthy</span>
+<span class="hljs-comment">//   Robin Milner</span>
+</code></pre>
+<p>يشير <code>$1</code> و<code>$2</code> في نص الاستبدال إلى المجموعتين المطوَّقتين بأقواس في النمط. فيُستبدل <code>$1</code> بالنص الذي طابق المجموعة الأولى، و<code>$2</code> بالثانية، وهكذا، حتى <code>$9</code>. ويمكن الإشارة إلى التطابق الكامل بـ <code>$&amp;</code>.</p>
+<p>من الممكن تمرير دالة — بدلاً من نص — كمعطى ثانٍ لـ <code>replace</code>. ولكل استبدال، ستُستدعى الدالة بالمجموعات المطابَقة (إضافة إلى التطابق الكامل) كمعطيات، وستُدرج قيمة إرجاعها في النص الجديد.</p>
+<p>وإليك مثالاً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> stock = <span class="hljs-string">&quot;1 lemon, 2 cabbages, and 101 eggs&quot;</span>;
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">minusOne</span>(<span class="hljs-params">match, amount, unit</span>) {
+  amount = <span class="hljs-title class_">Number</span>(amount) - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">if</span> (amount == <span class="hljs-number">1</span>) { <span class="hljs-comment">// بقي واحد فقط، أزل حرف الجمع &#x27;s&#x27;</span>
+    unit = unit.<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>, unit.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>);
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (amount == <span class="hljs-number">0</span>) {
+    amount = <span class="hljs-string">&quot;no&quot;</span>;
+  }
+  <span class="hljs-keyword">return</span> amount + <span class="hljs-string">&quot; &quot;</span> + unit;
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(stock.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/(\d+) (\p{L}+)/gu</span>, minusOne));
+<span class="hljs-comment">// → no lemon, 1 cabbage, and 100 eggs</span>
+</code></pre>
+<p>تأخذ هذه الشيفرة نصاً، وتجد كل حالات ظهور عدد متبوع بكلمة أبجدية رقمية، وتعيد نصاً ينقص فيه واحد من كل كمية كهذه.</p>
+<p>تنتهي المجموعة <code>(\d+)</code> كمعطى <code>amount</code> للدالة، وتُربط المجموعة <code>(\p{L}+)</code> بـ <code>unit</code>. وتحوّل الدالة <code>amount</code> إلى عدد — وهو ما ينجح دائماً، لأنها طابقت <code>\d+</code> سابقاً — وتُجري بعض التعديلات في حال لم يبق إلا واحد أو صفر.</p>
+<h2 id="الشراهة">الشراهة</h2>
+<p>يمكننا استخدام <code>replace</code> لكتابة دالة تزيل كل التعليقات من قطعة من شيفرة JavaScript. وإليك محاولة أولى:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">stripComments</span>(<span class="hljs-params">code</span>) {
+  <span class="hljs-keyword">return</span> code.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\/\/.*|\/\*[^]*\*\//g</span>, <span class="hljs-string">&quot;&quot;</span>);
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">stripComments</span>(<span class="hljs-string">&quot;1 + /* 2 */3&quot;</span>));
+<span class="hljs-comment">// → 1 + 3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">stripComments</span>(<span class="hljs-string">&quot;x = 10;// ten!&quot;</span>));
+<span class="hljs-comment">// → x = 10;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">stripComments</span>(<span class="hljs-string">&quot;1 /* a */+/* b */ 1&quot;</span>));
+<span class="hljs-comment">// → 1  1</span>
+</code></pre>
+<p>الجزء الواقع قبل معامل <code>|</code> يطابق محرفي شرطة مائلة متبوعين بأي عدد من المحارف عدا محرف السطر الجديد. أما الجزء الخاص بالتعليقات متعددة الأسطر فأكثر تعقيداً. نستخدم <code>[^]</code> (أي محرف ليس في المجموعة الفارغة من المحارف) كطريقة لمطابقة أي محرف. ولا يمكننا استخدام نقطة هنا فقط لأن تعليقات الكتل يمكن أن تستمر على سطر جديد، ومحرف النقطة لا يطابق محارف السطر الجديد.</p>
+<p>لكن الخرج في السطر الأخير يبدو وقد أخطأ. لماذا؟</p>
+<p>الجزء <code>[^]*</code> من التعبير، كما وصفت في القسم عن التتبع الخلفي، سيطابق أولاً أكبر قدر ممكن. وإن تسبب ذلك في فشل الجزء التالي من النمط، يتحرك المطابق محرفاً واحداً إلى الخلف ويحاول مجدداً من هناك. في المثال، يحاول المطابق أولاً مطابقة بقية النص كله ثم يتحرك إلى الخلف من هناك. وسيجد حالة ظهور لـ <code>*/</code> بعد الرجوع أربعة محارف ويطابقها. هذا ليس ما أردناه — كانت النية مطابقة تعليق واحد، لا الذهاب إلى نهاية الشيفرة وإيجاد نهاية آخر تعليق كتلة.</p>
+<p>بسبب هذا السلوك، نقول إن معاملات التكرار (<code>+</code> و<code>*</code> و<code>?</code> و<code>{}</code>) <em>شرهة</em>، أي أنها تطابق أكبر قدر ممكن ثم تتتبع خلفياً من هناك. وإن وضعت علامة استفهام بعدها (<code>+?</code> و<code>*?</code> و<code>??</code> و<code>{}?</code>)، تصبح غير شرهة وتبدأ بمطابقة أقل قدر ممكن، فلا تطابق أكثر إلا عندما لا يناسب النمط المتبقي التطابق الأصغر.</p>
+<p>وهذا بالضبط ما نريده في هذه الحالة. فبجعل النجمة تطابق أصغر امتداد من المحارف يوصلنا إلى <code>*/</code>، نستهلك تعليق كتلة واحداً ولا شيء أكثر.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">stripComments</span>(<span class="hljs-params">code</span>) {
+  <span class="hljs-keyword">return</span> code.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\/\/.*|\/\*[^]*?\*\//g</span>, <span class="hljs-string">&quot;&quot;</span>);
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">stripComments</span>(<span class="hljs-string">&quot;1 /* a */+/* b */ 1&quot;</span>));
+<span class="hljs-comment">// → 1 + 1</span>
+</code></pre>
+<p>يمكن ردّ كثير من العلل في برامج التعبيرات النمطية إلى استخدام معامل شره عن غير قصد حيث يعمل معامل غير شره بشكل أفضل. فعند استخدام معامل تكرار، فضّل الصيغة غير الشرهة.</p>
+<h2 id="إنشاء-كائنات-regexp-ديناميكيا">إنشاء كائنات RegExp ديناميكياً</h2>
+<p>في بعض الحالات قد لا تعرف النمط الدقيق الذي تحتاج إلى المطابقة معه عند كتابة شيفرتك. لنفترض أنك تريد اختبار اسم المستخدم في قطعة نص. يمكنك بناء نص واستخدام البانية <code>RegExp</code> عليه.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> name = <span class="hljs-string">&quot;harry&quot;</span>;
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-string">&quot;(^|\\s)&quot;</span> + name + <span class="hljs-string">&quot;($|\\s)&quot;</span>, <span class="hljs-string">&quot;gi&quot;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(regexp.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;Harry is a dodgy character.&quot;</span>));
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>عند إنشاء الجزء <code>\s</code> من النص، علينا استخدام شرطتين عكسيتين لأننا نكتبهما في نص عادي، لا في تعبير نمطي مطوَّق بشرطات مائلة. ويحتوي المعطى الثاني للبانية <code>RegExp</code> على خيارات التعبير النمطي — في هذه الحالة، <code>&quot;gi&quot;</code> للعام وغير الحساس لحالة الأحرف.</p>
+<p>لكن ماذا لو كان الاسم <code>&quot;dea+hl[]rd&quot;</code> لأن مستخدمنا مراهق مهووس بالتقنية؟ سيؤدي ذلك إلى تعبير نمطي لا معنى له ولن يطابق اسم المستخدم فعلاً.</p>
+<p>للتحايل على هذا، يمكننا إضافة شرطات عكسية قبل أي محرف له معنى خاص.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> name = <span class="hljs-string">&quot;dea+hl[]rd&quot;</span>;
+<span class="hljs-keyword">let</span> escaped = name.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/[\\[.+*?(){|^$]/g</span>, <span class="hljs-string">&quot;\\$&amp;&quot;</span>);
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-string">&quot;(^|\\s)&quot;</span> + escaped + <span class="hljs-string">&quot;($|\\s)&quot;</span>,
+                        <span class="hljs-string">&quot;gi&quot;</span>);
+<span class="hljs-keyword">let</span> text = <span class="hljs-string">&quot;This dea+hl[]rd guy is super annoying.&quot;</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(regexp.<span class="hljs-title function_">test</span>(text));
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<h2 id="الطريقة-search">الطريقة search</h2>
+<p>بينما لا يمكن استدعاء الطريقة <code>indexOf</code> على النصوص بتعبير نمطي، هناك طريقة أخرى، <code>search</code>، تتوقع فعلاً تعبيراً نمطياً. ومثل <code>indexOf</code>، تعيد أول فهرس وُجد فيه التعبير، أو -1 عندما لم يُوجد.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;  word&quot;</span>.<span class="hljs-title function_">search</span>(<span class="hljs-regexp">/\S/</span>));
+<span class="hljs-comment">// → 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;    &quot;</span>.<span class="hljs-title function_">search</span>(<span class="hljs-regexp">/\S/</span>));
+<span class="hljs-comment">// → -1</span>
+</code></pre>
+<p>للأسف، لا توجد طريقة للإشارة إلى أن المطابقة ينبغي أن تبدأ عند إزاحة معطاة (كما يمكننا مع المعطى الثاني لـ <code>indexOf</code>)، وهو ما سيكون مفيداً غالباً.</p>
+<h2 id="خاصية-lastindex">خاصية lastIndex</h2>
+<p>لا توفر الطريقة <code>exec</code> بالمثل طريقة مريحة لبدء البحث من موضع معطى في النص. لكنها توفر طريقة <em>غير</em> مريحة.</p>
+<p>لكائنات التعبيرات النمطية خصائص. وإحدى هذه الخصائص <code>source</code>، التي تحتوي على النص الذي أُنشئ منه التعبير. وخاصية أخرى هي <code>lastIndex</code>، التي تتحكم، في ظروف محدودة، في المكان الذي سيبدأ منه التطابق التالي.</p>
+<p>وهذه الظروف هي أن يكون التعبير النمطي مفعّلاً فيه الخيار العام (<code>g</code>) أو اللاصق (<code>y</code>)، وأن تحدث المطابقة عبر الطريقة <code>exec</code>. ومرة أخرى، كان الحل الأقل إرباكاً هو مجرد السماح بتمرير معطى إضافي إلى <code>exec</code>، لكن الإرباك سمة أساسية في واجهة التعبيرات النمطية في JavaScript.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> pattern = <span class="hljs-regexp">/y/g</span>;
+pattern.<span class="hljs-property">lastIndex</span> = <span class="hljs-number">3</span>;
+<span class="hljs-keyword">let</span> match = pattern.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;xyzzy&quot;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(match.<span class="hljs-property">index</span>);
+<span class="hljs-comment">// → 4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(pattern.<span class="hljs-property">lastIndex</span>);
+<span class="hljs-comment">// → 5</span>
+</code></pre>
+<p>إن نجحت المطابقة، يحدّث الاستدعاء لـ <code>exec</code> خاصية <code>lastIndex</code> تلقائياً لتشير إلى ما بعد التطابق. وإن لم يُعثر على تطابق، تُعاد <code>lastIndex</code> إلى 0، وهي القيمة التي تحملها أيضاً في كائن تعبير نمطي مُنشأ حديثاً.</p>
+<p>الفرق بين الخيارين العام واللاصق هو أنه عند تفعيل اللاصق، لن تنجح المطابقة إلا إن بدأت مباشرة عند <code>lastIndex</code>، بينما مع العام، سيبحث إلى الأمام عن موضع يمكن أن تبدأ منه مطابقة.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> <span class="hljs-variable language_">global</span> = <span class="hljs-regexp">/abc/g</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">global</span>.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;xyz abc&quot;</span>));
+<span class="hljs-comment">// → [&quot;abc&quot;]</span>
+<span class="hljs-keyword">let</span> sticky = <span class="hljs-regexp">/abc/y</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(sticky.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;xyz abc&quot;</span>));
+<span class="hljs-comment">// → null</span>
+</code></pre>
+<p>عند استخدام قيمة تعبير نمطي مشتركة لعدة استدعاءات لـ <code>exec</code>، يمكن أن تسبب هذه التحديثات التلقائية لخاصية <code>lastIndex</code> مشكلات. فقد يبدأ تعبيرك النمطي عن غير قصد عند فهرس متبقٍ من استدعاء سابق.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> digit = <span class="hljs-regexp">/\d/g</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(digit.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;here it is: 1&quot;</span>));
+<span class="hljs-comment">// → [&quot;1&quot;]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(digit.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&quot;and now: 1&quot;</span>));
+<span class="hljs-comment">// → null</span>
+</code></pre>
+<p>وثمة تأثير مثير آخر للخيار العام هو أنه يغيّر طريقة عمل الطريقة <code>match</code> على النصوص. فعند استدعائها بتعبير عام، بدلاً من إرجاع مصفوفة شبيهة بتلك التي يعيدها <code>exec</code>، ستجد <code>match</code> <em>كل</em> تطابقات النمط في النص وتعيد مصفوفة تحتوي على النصوص المطابَقة.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Banana&quot;</span>.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/an/g</span>));
+<span class="hljs-comment">// → [&quot;an&quot;, &quot;an&quot;]</span>
+</code></pre>
+<p>فكن حذراً مع التعبيرات النمطية العامة. والحالات التي تكون فيها ضرورية — استدعاءات <code>replace</code> والأماكن التي تريد فيها استخدام <code>lastIndex</code> صراحة — هي عادةً المواقف التي تريد استخدامها فيها.</p>
+<p>من الأمور الشائعة إيجاد كل تطابقات تعبير نمطي في نص. ويمكننا فعل ذلك باستخدام الطريقة <code>matchAll</code>.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> input = <span class="hljs-string">&quot;A string with 3 numbers in it... 42 and 88.&quot;</span>;
+<span class="hljs-keyword">let</span> matches = input.<span class="hljs-title function_">matchAll</span>(<span class="hljs-regexp">/\d+/g</span>);
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> match <span class="hljs-keyword">of</span> matches) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Found&quot;</span>, match[<span class="hljs-number">0</span>], <span class="hljs-string">&quot;at&quot;</span>, match.<span class="hljs-property">index</span>);
+}
+<span class="hljs-comment">// → Found 3 at 14</span>
+<span class="hljs-comment">//   Found 42 at 33</span>
+<span class="hljs-comment">//   Found 88 at 40</span>
+</code></pre>
+<p>تعيد هذه الطريقة مصفوفة من مصفوفات التطابق. ويجب <em>أن</em> يكون التعبير النمطي المعطى لـ <code>matchAll</code> مفعّلاً فيه <code>g</code>.</p>
+<h2 id="تحليل-ملف-ini">تحليل ملف INI</h2>
+<p>لنختم الفصل بمشكلة تستدعي التعبيرات النمطية. تخيّل أننا نكتب برنامجاً لجمع معلومات عن أعدائنا من الإنترنت تلقائياً. (لن نكتب ذلك البرنامج فعلاً هنا، فقط الجزء الذي يقرأ ملف الإعدادات. آسف.) يبدو ملف الإعدادات هكذا:</p>
+<pre><code>searchengine=https://duckduckgo.com/?q=$1
+spitefulness=9.7
+
+; التعليقات تسبقها فاصلة منقوطة...
+; كل قسم يخص عدواً واحداً
+[larry]
+fullname=Larry Doe
+type=kindergarten bully
+website=http://www.geocities.com/CapeCanaveral/11451
+
+[davaeorn]
+fullname=Davaeorn
+type=evil wizard
+outputdir=/home/marijn/enemies/davaeorn
+</code></pre>
+<p>القواعد الدقيقة لهذه الصيغة — وهي صيغة ملفات مستخدمة على نطاق واسع، تسمى عادة ملف <em>INI</em> — هي كما يلي:</p>
+<ul>
+<li>تُتجاهل الأسطر الفارغة والأسطر التي تبدأ بفواصل منقوطة.</li>
+<li>الأسطر المطوَّقة بـ <code>[</code> و<code>]</code> تبدأ قسماً جديداً.</li>
+<li>الأسطر التي تحتوي على معرّف أبجدي رقمي متبوع بمحرف <code>=</code> تضيف إعداداً إلى القسم الحالي.</li>
+<li>أي شيء آخر غير صالح.</li>
+</ul>
+<p>مهمتنا تحويل نص كهذا إلى كائن تحمل خصائصه نصوصاً للإعدادات المكتوبة قبل أول ترويسة قسم، وكائنات فرعية للأقسام، تحمل تلك الكائنات الفرعية إعدادات القسم.</p>
+<p>بما أن الصيغة يجب أن تُعالَج سطراً بسطر، فإن تقسيم الملف إلى أسطر منفصلة بداية جيدة. رأينا الطريقة <code>split</code> في <a href="../../chapter/data_structures_objects_and_arrays#split">الفصل 4</a>. لكن بعض أنظمة التشغيل تستخدم لفصل الأسطر ليس محرف السطر الجديد فقط بل محرف إرجاع عربة متبوعاً بسطر جديد (<code>&quot;\r\n&quot;</code>). وبما أن الطريقة <code>split</code> تتيح أيضاً تعبيراً نمطياً كمعطى لها، يمكننا استخدام تعبير نمطي مثل <code>/\r?\n/</code> للتقسيم بطريقة تتيح كلاً من <code>&quot;\n&quot;</code> و<code>&quot;\r\n&quot;</code> بين الأسطر.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">parseINI</span>(<span class="hljs-params">string</span>) {
+  <span class="hljs-comment">// ابدأ بكائن لحمل الحقول في المستوى الأعلى</span>
+  <span class="hljs-keyword">let</span> result = {};
+  <span class="hljs-keyword">let</span> section = result;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> line <span class="hljs-keyword">of</span> string.<span class="hljs-title function_">split</span>(<span class="hljs-regexp">/\r?\n/</span>)) {
+    <span class="hljs-keyword">let</span> match;
+    <span class="hljs-keyword">if</span> (match = line.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/^(\w+)=(.*)$/</span>)) {
+      section[match[<span class="hljs-number">1</span>]] = match[<span class="hljs-number">2</span>];
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (match = line.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/^\[(.*)\]$/</span>)) {
+      section = result[match[<span class="hljs-number">1</span>]] = {};
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!<span class="hljs-regexp">/^\s*(;|$)/</span>.<span class="hljs-title function_">test</span>(line)) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&quot;Line &#x27;&quot;</span> + line + <span class="hljs-string">&quot;&#x27; is not valid.&quot;</span>);
+    }
+  };
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">parseINI</span>(<span class="hljs-string">`
+name=Vasilis
+[address]
+city=Tessaloniki`</span>));
+<span class="hljs-comment">// → {name: &quot;Vasilis&quot;, address: {city: &quot;Tessaloniki&quot;}}</span>
+</code></pre>
+<p>تمر الشيفرة على أسطر الملف وتبني كائناً. وتُخزَّن الخصائص في المستوى الأعلى مباشرة في ذلك الكائن، بينما تُخزَّن الخصائص الموجودة في الأقسام في كائن قسم منفصل. ويربط ارتباط <code>section</code> الكائن الخاص بالقسم الحالي.</p>
+<p>هناك نوعان من الأسطر المهمة — ترويسات الأقسام أو أسطر الخصائص. وعندما يكون السطر خاصية عادية، يُخزَّن في القسم الحالي. وعندما يكون ترويسة قسم، يُنشأ كائن قسم جديد، ويُضبط <code>section</code> ليشير إليه.</p>
+<p>لاحظ الاستخدام المتكرر لـ <code>^</code> و<code>$</code> للتأكد من أن التعبير يطابق السطر كله، لا جزءاً منه فقط. وإغفال هذين يؤدي إلى شيفرة تعمل غالباً لكنها تتصرف بغرابة مع بعض المدخلات، وهو ما قد يكون علّة صعبة التتبع.</p>
+<p>يستفيد النمط <code>if (match = string.match(...))</code> من كون قيمة تعبير الإسناد (<code>=</code>) هي القيمة المُسندة. فكثيراً ما لا تكون متأكداً من أن استدعاءك لـ <code>match</code> سينجح، لذا لا يمكنك الوصول إلى الكائن الناتج إلا داخل جملة <code>if</code> تختبر ذلك. ولكي لا نكسر السلسلة الجميلة من صيغ <code>else if</code>، نُسند ناتج المطابقة إلى ارتباط ونستخدم ذلك الإسناد فوراً كاختبار لجملة <code>if</code>.</p>
+<p>إن لم يكن السطر ترويسة قسم أو خاصية، تتحقق الدالة مما إذا كان تعليقاً أو سطراً فارغاً باستخدام التعبير <code>/^\s*(;|$)/</code> لمطابقة الأسطر التي تحتوي إما على فراغ فقط، أو على فراغ متبوع بفاصلة منقوطة (مما يجعل بقية السطر تعليقاً). وعندما لا يطابق سطر أيّاً من الصيغ المتوقعة، ترمي الدالة استثناءً.</p>
+<h2 id="وحدات-الشيفرة-والمحارف">وحدات الشيفرة والمحارف</h2>
+<p>ثمة خطأ تصميمي آخر جُمّد كمعيار في التعبيرات النمطية في JavaScript، وهو أن معاملات مثل <code>.</code> أو <code>?</code> تعمل افتراضياً على وحدات الشيفرة (كما نوقش في <a href="../../chapter/higher_order_functions#code_units">الفصل 5</a>)، لا على المحارف الفعلية. وهذا يعني أن المحارف المكوّنة من وحدتي شيفرة تتصرف بغرابة.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/🍎{3}/</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;🍎🍎🍎&quot;</span>));
+<span class="hljs-comment">// → false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/&lt;.&gt;/</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;&lt;🌹&gt;&quot;</span>));
+<span class="hljs-comment">// → false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/&lt;.&gt;/u</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;&lt;🌹&gt;&quot;</span>));
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>المشكلة أن 🍎 في السطر الأول تُعامَل كوحدتي شيفرة، ويُطبَّق <code>{3}</code> على الوحدة الثانية فقط. وبالمثل، تطابق النقطة وحدة شيفرة واحدة، لا الوحدتين اللتين تكوّنان رمز الوردة التعبيري.</p>
+<p>يجب إضافة خيار <code>u</code> (Unicode) إلى تعبيرك النمطي ليجعله يعامل هذه المحارف معاملة سليمة.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/🍎{3}/u</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;🍎🍎🍎&quot;</span>));
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<h2 id="الملخص">الملخص</h2>
+<p>التعبيرات النمطية كائنات تمثل أنماطاً في النصوص. وهي تستخدم لغتها الخاصة للتعبير عن هذه الأنماط.</p>
+<table>
+<thead>
+<tr>
+<th><code>/abc/</code></th>
+<th>تسلسل من المحارف</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/[abc]/</code></td>
+<td>أي محرف من مجموعة محارف</td>
+</tr>
+<tr>
+<td><code>/[^abc]/</code></td>
+<td>أي محرف <em>ليس</em> في مجموعة محارف</td>
+</tr>
+<tr>
+<td><code>/[0-9]/</code></td>
+<td>أي محرف في مدى من المحارف</td>
+</tr>
+<tr>
+<td><code>/x+/</code></td>
+<td>ظهور واحد أو أكثر للنمط <code>x</code></td>
+</tr>
+<tr>
+<td><code>/x+?/</code></td>
+<td>ظهور واحد أو أكثر، غير شره</td>
+</tr>
+<tr>
+<td><code>/x*/</code></td>
+<td>صفر ظهور أو أكثر</td>
+</tr>
+<tr>
+<td><code>/x?/</code></td>
+<td>صفر أو ظهور واحد</td>
+</tr>
+<tr>
+<td><code>/x{2,4}/</code></td>
+<td>من ظهورين إلى أربعة ظهورات</td>
+</tr>
+<tr>
+<td><code>/(abc)/</code></td>
+<td>مجموعة</td>
+</tr>
+<tr>
+<td>`/a</td>
+<td>b</td>
+</tr>
+<tr>
+<td><code>/\d/</code></td>
+<td>أي محرف رقمي</td>
+</tr>
+<tr>
+<td><code>/\w/</code></td>
+<td>محرف أبجدي رقمي («محرف كلمة»)</td>
+</tr>
+<tr>
+<td><code>/\s/</code></td>
+<td>أي محرف فراغ</td>
+</tr>
+<tr>
+<td><code>/./</code></td>
+<td>أي محرف عدا أسطر الجديدة</td>
+</tr>
+<tr>
+<td><code>/\p{L}/u</code></td>
+<td>أي محرف حرف</td>
+</tr>
+<tr>
+<td><code>/^/</code></td>
+<td>بداية المدخل</td>
+</tr>
+<tr>
+<td><code>/$/</code></td>
+<td>نهاية المدخل</td>
+</tr>
+<tr>
+<td><code>/(?=a)/</code></td>
+<td>اختبار استطلاع أمامي</td>
+</tr>
+</tbody>
+</table>
+<p>للتعبير النمطي طريقة <code>test</code> لاختبار ما إذا كان نص معطى يطابقه. وله أيضاً طريقة <code>exec</code> التي تعيد، عند العثور على تطابق، مصفوفة تحتوي على كل المجموعات المطابَقة. ولهذه المصفوفة خاصية <code>index</code> تشير إلى المكان الذي بدأ منه التطابق.</p>
+<p>وللنصوص طريقة <code>match</code> لمطابقتها مع تعبير نمطي وطريقة <code>search</code> للبحث عن واحد، تعيد موضع بداية التطابق فقط. وطريقتهما <code>replace</code> يمكنها استبدال تطابقات نمط بنص استبدال أو دالة استبدال.</p>
+<p>يمكن أن يكون للتعبيرات النمطية خيارات، تُكتب بعد الشرطة المائلة الختامية. فالخيار <code>i</code> يجعل المطابقة غير حساسة لحالة الأحرف. والخيار <code>g</code> يجعل التعبير <em>عاماً</em>، مما يؤدي، بين أمور أخرى، إلى أن الطريقة <code>replace</code> تستبدل كل الحالات لا الأولى فقط. والخيار <code>y</code> يجعل التعبير لاصقاً، أي أنه لن يبحث إلى الأمام ويتخطى جزءاً من النص عند البحث عن تطابق. والخيار <code>u</code> يشغّل وضع Unicode، الذي يتيح صيغة <code>\p</code> ويصلح عدداً من المشكلات المتعلقة بالتعامل مع المحارف التي تشغل وحدتي شيفرة.</p>
+<p>التعبيرات النمطية أداة حادة بمقبض ركيك. فهي تبسّط بعض المهام تبسيطاً هائلاً لكنها قد تصبح سريعاً غير قابلة للإدارة عند تطبيقها على مشكلات معقدة. وجزء من معرفة كيفية استخدامها هو مقاومة الرغبة في حشر أشياء فيها لا تستطيع التعبير عنها بوضوح.</p>
+<h2 id="التمارين">التمارين</h2>
+<p>يكاد يكون لا مفر من أن ترتبك وتُصاب بالإحباط، أثناء العمل على هذه التمارين، بسبب سلوك بعض التعبيرات النمطية الذي لا يمكن تفسيره. وأحياناً يساعد إدخال تعبيرك في أداة على الإنترنت مثل <a href="https://www.debuggex.com"><em>debuggex.com</em></a> لترى ما إذا كان تصويرها البصري يوافق ما قصدته ولتجرب كيف تستجيب لمختلف النصوص المدخلة.</p>
+<h3 id="غولف-التعبيرات-النمطية">غولف التعبيرات النمطية</h3>
+<p><em>غولف الشيفرة</em> مصطلح يُستخدم للعبة محاولة التعبير عن برنامج معين بأقل عدد ممكن من المحارف. وبالمثل، <em>غولف التعبيرات النمطية</em> هو ممارسة كتابة أصغر تعبير نمطي ممكن لمطابقة نمط معطى و<em>فقط</em> ذلك النمط.</p>
+<p>لكل من العناصر التالية، اكتب تعبيراً نمطياً لاختبار ما إذا كان النمط المعطى يظهر في نص. وينبغي أن يطابق التعبير النمطي فقط النصوص التي تحتوي على النمط. وعندما يعمل تعبيرك، انظر إن كان يمكنك جعله أصغر.</p>
+<ol>
+<li><em>car</em> و<em>cat</em></li>
+<li><em>pop</em> و<em>prop</em></li>
+<li><em>ferret</em> و<em>ferry</em> و<em>ferrari</em></li>
+<li>أي كلمة تنتهي بـ <em>ious</em></li>
+<li>محرف فراغ متبوع بنقطة أو فاصلة أو نقطتين رأسيتين أو فاصلة منقوطة</li>
+<li>كلمة أطول من ستة أحرف</li>
+<li>كلمة بدون الحرف <em>e</em> (أو <em>E</em>)</li>
+</ol>
+<p>راجع الجدول في <a href="../../chapter/regular_expressions#summary_regexp">ملخص الفصل</a> للمساعدة. واختبر كل حل ببضعة نصوص اختبارية.</p>
+<pre><code class="language-js"><span class="hljs-comment">// املأ التعبيرات النمطية</span>
+
+<span class="hljs-title function_">verify</span>(<span class="hljs-regexp">/.../</span>,
+       [<span class="hljs-string">&quot;my car&quot;</span>, <span class="hljs-string">&quot;bad cats&quot;</span>],
+       [<span class="hljs-string">&quot;camper&quot;</span>, <span class="hljs-string">&quot;high art&quot;</span>]);
+
+<span class="hljs-title function_">verify</span>(<span class="hljs-regexp">/.../</span>,
+       [<span class="hljs-string">&quot;pop culture&quot;</span>, <span class="hljs-string">&quot;mad props&quot;</span>],
+       [<span class="hljs-string">&quot;plop&quot;</span>, <span class="hljs-string">&quot;prrrop&quot;</span>]);
+
+<span class="hljs-title function_">verify</span>(<span class="hljs-regexp">/.../</span>,
+       [<span class="hljs-string">&quot;ferret&quot;</span>, <span class="hljs-string">&quot;ferry&quot;</span>, <span class="hljs-string">&quot;ferrari&quot;</span>],
+       [<span class="hljs-string">&quot;ferrum&quot;</span>, <span class="hljs-string">&quot;transfer A&quot;</span>]);
+
+<span class="hljs-title function_">verify</span>(<span class="hljs-regexp">/.../</span>,
+       [<span class="hljs-string">&quot;how delicious&quot;</span>, <span class="hljs-string">&quot;spacious room&quot;</span>],
+       [<span class="hljs-string">&quot;ruinous&quot;</span>, <span class="hljs-string">&quot;consciousness&quot;</span>]);
+
+<span class="hljs-title function_">verify</span>(<span class="hljs-regexp">/.../</span>,
+       [<span class="hljs-string">&quot;bad punctuation .&quot;</span>],
+       [<span class="hljs-string">&quot;escape the period&quot;</span>]);
+
+<span class="hljs-title function_">verify</span>(<span class="hljs-regexp">/.../</span>,
+       [<span class="hljs-string">&quot;Siebentausenddreihundertzweiundzwanzig&quot;</span>],
+       [<span class="hljs-string">&quot;no&quot;</span>, <span class="hljs-string">&quot;three small words&quot;</span>]);
+
+<span class="hljs-title function_">verify</span>(<span class="hljs-regexp">/.../</span>,
+       [<span class="hljs-string">&quot;red platypus&quot;</span>, <span class="hljs-string">&quot;wobbling nest&quot;</span>],
+       [<span class="hljs-string">&quot;earth bed&quot;</span>, <span class="hljs-string">&quot;bedrøvet abe&quot;</span>, <span class="hljs-string">&quot;BEET&quot;</span>]);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">verify</span>(<span class="hljs-params">regexp, yes, no</span>) {
+  <span class="hljs-comment">// تجاهل التمارين غير المكتملة</span>
+  <span class="hljs-keyword">if</span> (regexp.<span class="hljs-property">source</span> == <span class="hljs-string">&quot;...&quot;</span>) <span class="hljs-keyword">return</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> str <span class="hljs-keyword">of</span> yes) <span class="hljs-keyword">if</span> (!regexp.<span class="hljs-title function_">test</span>(str)) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Failure to match &#x27;<span class="hljs-subst">${str}</span>&#x27;`</span>);
+  }
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> str <span class="hljs-keyword">of</span> no) <span class="hljs-keyword">if</span> (regexp.<span class="hljs-title function_">test</span>(str)) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Unexpected match for &#x27;<span class="hljs-subst">${str}</span>&#x27;`</span>);
+  }
+}
+</code></pre>
+<h3 id="أسلوب-الاقتباس">أسلوب الاقتباس</h3>
+<p>تخيّل أنك كتبت قصة واستخدمت علامات اقتباس مفردة في كل مكان لتمييز قطع الحوار. والآن تريد استبدال كل علامات اقتباس الحوار بعلامات اقتباس مزدوجة، مع الإبقاء على العلامات المفردة المستخدمة في الانقباضات مثل <em>aren't</em>.</p>
+<p>فكّر في نمط يميّز هذين النوعين من استخدام الاقتباس واكتب استدعاءً للطريقة <code>replace</code> يقوم بالاستبدال الصحيح.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> text = <span class="hljs-string">&quot;&#x27;I&#x27;m the cook,&#x27; he said, &#x27;it&#x27;s my job.&#x27;&quot;</span>;
+<span class="hljs-comment">// غيّر هذا الاستدعاء.</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(text.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/A/g</span>, <span class="hljs-string">&quot;B&quot;</span>));
+<span class="hljs-comment">// → &quot;I&#x27;m the cook,&quot; he said, &quot;it&#x27;s my job.&quot;</span>
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>الحل الأكثر وضوحاً هو استبدال علامات الاقتباس التي على جانب واحد منها على الأقل محرف غير حرف فقط — شيء مثل <code>/\P{L}'|'\P{L}/u</code>. لكن عليك أيضاً أن تأخذ بداية السطر ونهايته في الحسبان.</p>
+<p>وإضافة إلى ذلك، يجب أن تتأكد من أن الاستبدال يتضمن أيضاً المحارف التي طابقها النمط <code>\P{L}</code> حتى لا تُسقط. ويمكن فعل ذلك بتطويقها بأقواس هلالية وتضمين مجموعاتها في نص الاستبدال (<code>$1</code>، <code>$2</code>). والمجموعات غير المطابَقة سيُستبدل بها لا شيء.</p>
+</details>
+<h3 id="الأعداد-مرة-أخرى">الأعداد مرة أخرى</h3>
+<p>اكتب تعبيراً يطابق أعداد JavaScript فقط. ويجب أن يدعم إشارة سالب أو زائد اختيارية أمام العدد، والنقطة العشرية، وصيغة الأس — <code>5e-3</code> أو <code>1E10</code> — مع إشارة اختيارية أمام الأس أيضاً. ولاحظ أيضاً أنه ليس ضرورياً وجود أرقام قبل النقطة أو بعدها، لكن العدد لا يمكن أن يكون نقطة وحدها. أي أن <code>.5</code> و<code>5.</code> عددان صالحان في JavaScript، أما نقطة وحيدة فليست كذلك.</p>
+<pre><code class="language-js"><span class="hljs-comment">// املأ هذا التعبير النمطي.</span>
+<span class="hljs-keyword">let</span> number = <span class="hljs-regexp">/^...$/</span>;
+
+<span class="hljs-comment">// اختبارات:</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> str <span class="hljs-keyword">of</span> [<span class="hljs-string">&quot;1&quot;</span>, <span class="hljs-string">&quot;-1&quot;</span>, <span class="hljs-string">&quot;+15&quot;</span>, <span class="hljs-string">&quot;1.55&quot;</span>, <span class="hljs-string">&quot;.5&quot;</span>, <span class="hljs-string">&quot;5.&quot;</span>,
+                 <span class="hljs-string">&quot;1.3e2&quot;</span>, <span class="hljs-string">&quot;1E-4&quot;</span>, <span class="hljs-string">&quot;1e+12&quot;</span>]) {
+  <span class="hljs-keyword">if</span> (!number.<span class="hljs-title function_">test</span>(str)) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Failed to match &#x27;<span class="hljs-subst">${str}</span>&#x27;`</span>);
+  }
+}
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> str <span class="hljs-keyword">of</span> [<span class="hljs-string">&quot;1a&quot;</span>, <span class="hljs-string">&quot;+-1&quot;</span>, <span class="hljs-string">&quot;1.2.3&quot;</span>, <span class="hljs-string">&quot;1+1&quot;</span>, <span class="hljs-string">&quot;1e4.5&quot;</span>,
+                 <span class="hljs-string">&quot;.5.&quot;</span>, <span class="hljs-string">&quot;1f5&quot;</span>, <span class="hljs-string">&quot;.&quot;</span>]) {
+  <span class="hljs-keyword">if</span> (number.<span class="hljs-title function_">test</span>(str)) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Incorrectly accepted &#x27;<span class="hljs-subst">${str}</span>&#x27;`</span>);
+  }
+}
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>أولاً، لا تنسَ الشرطة العكسية قبل النقطة.</p>
+<p>يمكن مطابقة الإشارة الاختيارية أمام العدد، وكذلك أمام الأس، بـ <code>[+\-]?</code> أو <code>(\+|-|)</code> (زائد، ناقص، أو لا شيء).</p>
+<p>الجزء الأكثر تعقيداً في التمرين هو مشكلة مطابقة كل من <code>&quot;5.&quot;</code> و<code>&quot;.5&quot;</code> دون مطابقة <code>&quot;.&quot;</code> أيضاً. ولهذا، الحل الجيد هو استخدام معامل <code>|</code> للفصل بين الحالتين — إما رقم واحد أو أكثر متبوع اختيارياً بنقطة وصفر أرقام أو أكثر <em>أو</em> نقطة متبوعة برقم واحد أو أكثر.</p>
+<p>وأخيراً، لجعل <em>e</em> غير حساسة لحالة الأحرف، إما أضف خيار <code>i</code> إلى التعبير النمطي أو استخدم <code>[eE]</code>.</p>
+</details>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../chapter/bugs_and_errors"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">العلل والأخطاء</span></a><!--]--> <!--[0--><a class="next" href="../../chapter/modules"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">الوحدات</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">جافاسكربت البليغة (Eloquent JavaScript) — الطبعة الرابعة</p> <p class="site-footer__text">الكتاب الأصلي من تأليف Marijn Haverbeke، مرخّص بموجب <a target="_blank" rel="noopener noreferrer">رخصة Creative Commons BY-NC 3.0</a>. هذه ترجمة عربية غير رسمية وغير تجارية مع الإسناد الكامل للمؤلف.</p></div> <nav class="site-footer__nav"><a href="../../">المحتويات</a> <a href="../../about">عن الكتاب</a> <a href="../../search">البحث</a> <a target="_blank" rel="noopener noreferrer" href="https://eloquentjavascript.net/">النص الأصلي</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_wd5njw = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/eloquent-javascript-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.B6DnVw3o.js"),
+						import("../../_app/immutable/entry/app.C5LMpoy2.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 4],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

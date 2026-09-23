@@ -1,0 +1,609 @@
+const p="04",s="data_structures_objects_and_arrays",n="بنى البيانات: الكائنات والمصفوفات",a="Data Structures: Objects and Arrays",l=[{depth:2,id:"السنجاب-المتحول",text:"السنجاب المتحوّل"},{depth:2,id:"مجموعات-البيانات",text:"مجموعات البيانات"},{depth:2,id:"الخصائص",text:"الخصائص"},{depth:2,id:"الطرق",text:"الطرق"},{depth:2,id:"الكائنات",text:"الكائنات"},{depth:2,id:"قابلية-التغيير",text:"قابلية التغيير"},{depth:2,id:"سجل-المستذئب",text:"سجل المستذئب"},{depth:2,id:"حساب-الارتباط",text:"حساب الارتباط"},{depth:2,id:"حلقات-المصفوفات",text:"حلقات المصفوفات"},{depth:2,id:"التحليل-النهائي",text:"التحليل النهائي"},{depth:2,id:"مزيد-من-حديث-المصفوفات",text:"مزيد من حديث المصفوفات"},{depth:2,id:"النصوص-وخصائصها",text:"النصوص وخصائصها"},{depth:2,id:"وسطاء-البقية",text:"وسطاء البقية"},{depth:2,id:"كائن-math",text:"كائن Math"},{depth:2,id:"التفكيك",text:"التفكيك"},{depth:2,id:"الوصول-الاختياري-إلى-الخصائص",text:"الوصول الاختياري إلى الخصائص"},{depth:2,id:"json",text:"JSON"},{depth:2,id:"الملخص",text:"الملخص"},{depth:2,id:"التمارين",text:"التمارين"},{depth:3,id:"مجموع-نطاق",text:"مجموع نطاق"},{depth:3,id:"عكس-مصفوفة",text:"عكس مصفوفة"},{depth:3,id:"قائمة",text:"قائمة"},{depth:3,id:"مقارنة-عميقة",text:"مقارنة عميقة"}],e=`<blockquote>
+<p>في مناسبتين سُئلت: «أرجوك يا سيد باباج، إن وضعت في الآلة أرقاماً خاطئة، فهل ستخرج الإجابات الصحيحة؟» [...] ولا أستطيع أن أستوعب على نحو سليم نوع الالتباس في الأفكار الذي قد يدفع إلى سؤال كهذا.</p>
+<p>— تشارلز باباج، مقتطفات من حياة فيلسوف (1864)</p>
+</blockquote>
+<p><img src="/images/book/chapter_picture_4.jpg" alt="رسم توضيحي لسنجاب بجانب كومة من الكتب وزوج من النظارات. ويظهر قمر ونجوم في الخلفية."></p>
+<p>الأعداد والقيم المنطقية والنصوص هي الذرات التي تُبنى منها بنى البيانات. لكن أنواعاً كثيرة من المعلومات تتطلب أكثر من ذرة واحدة. وتتيح لنا <em>الكائنات</em> تجميع القيم—بما فيها كائنات أخرى—لبناء بنى أكثر تعقيداً.</p>
+<p>كانت البرامج التي بنيناها حتى الآن محدودة لأنها كانت تعمل على أنواع بيانات بسيطة فقط. وبعد تعلّم أساسيات بنى البيانات في هذا الفصل، ستعرف ما يكفي لبدء كتابة برامج مفيدة.</p>
+<p>سيمضي هذا الفصل في مثال برمجي واقعي إلى حد ما، مقدِّماً المفاهيم أثناء تطبيقها على المسألة المطروحة. وسيبني كود المثال غالباً على دوال وارتباطات قُدّمت سابقاً في الكتاب.</p>
+<h2 id="السنجاب-المتحول">السنجاب المتحوّل</h2>
+<p>من وقت لآخر، عادةً بين الثامنة والعاشرة مساءً، يجد جاك نفسه متحولاً إلى قارض صغير مكسوّ بالفرو ذي ذيل كثّ.</p>
+<p>من جهة، جاك سعيد جداً بأنه لا يعاني الاستذئاب (lycanthropy) الكلاسيكي. فالتحول إلى سنجاب يسبب مشكلات أقل من التحول إلى ذئب. فبدلاً من أن يقلق من أن يأكل الجار عن غير قصد (<em>هذا</em> سيكون محرجاً)، يقلق من أن يأكله قط الجار. وبعد مناسبتين استيقظ فيهما على غصن رفيع محفوف بالخطر في قمة بلوطة، عارياً وتائه الذهن، أخذ يقفل أبواب غرفته ونوافذها ليلاً ويضع بعض الجوز على الأرض ليبقي نفسه مشغولاً.</p>
+<p>لكن جاك يفضّل التخلص من حالته تماماً. فحدوث التحول على نحو غير منتظم يجعله يشك في أن شيئاً ما قد يحفّزه. وقد اعتقد لفترة أنه لا يحدث إلا في الأيام التي يكون فيها قريباً من أشجار البلوط. غير أن تجنّب أشجار البلوط لم يحل المشكلة.</p>
+<p>وقد تحوّل جاك إلى نهج أكثر علمية، فبدأ يدوّن يومياً كل ما يفعله في يوم معين وما إذا كان قد تغيّر شكله. وبهذه البيانات يأمل في حصر الظروف التي تحفّز التحولات.</p>
+<p>أول ما يحتاجه هو بنية بيانات لتخزين هذه المعلومات.</p>
+<h2 id="مجموعات-البيانات">مجموعات البيانات</h2>
+<p>للتعامل مع كتلة من البيانات الرقمية، علينا أولاً إيجاد طريقة لتمثيلها في ذاكرة آلتنا. لنفترض، مثلاً، أننا نريد تمثيل مجموعة من الأعداد هي 2 و3 و5 و7 و11.</p>
+<p>يمكننا الإبداع بالنصوص—فالنصوص يمكن أن يكون لها أي طول، ومن ثم يمكننا وضع قدر كبير من البيانات فيها—ونستخدم <code>&quot;2 3 5 7 11&quot;</code> تمثيلاً لنا. لكن هذا مرهق. إذ سيتعين علينا أن نستخرج الأرقام بطريقة ما ونحوّلها مرة أخرى إلى أعداد للوصول إليها.</p>
+<p>لحسن الحظ، توفّر JavaScript نوع بيانات مخصصاً لتخزين متتاليات من القيم. ويسمى <em>مصفوفة</em> (array)، ويُكتب كقائمة من القيم بين قوسين مربعين، تفصل بينها فواصل.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> listOfNumbers = [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">11</span>];
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(listOfNumbers[<span class="hljs-number">2</span>]);
+<span class="hljs-comment">// → 5</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(listOfNumbers[<span class="hljs-number">0</span>]);
+<span class="hljs-comment">// → 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(listOfNumbers[<span class="hljs-number">2</span> - <span class="hljs-number">1</span>]);
+<span class="hljs-comment">// → 3</span>
+</code></pre>
+<p>تُستخدم الأقواس المربعة أيضاً في صيغة الوصول إلى العناصر داخل المصفوفة. فزوج من الأقواس المربعة يلي تعبيراً مباشرةً، وداخله تعبير آخر، يبحث عن العنصر في التعبير الأيسر الذي يقابل <em>الفهرس</em> (index) الذي يمنحه التعبير الموجود بين القوسين.</p>
+<p>أول فهرس في المصفوفة هو صفر، لا واحد، لذا يُستحصل على العنصر الأول بـ <code>listOfNumbers[0]</code>. وللعدّ بدءاً من الصفر تقليد طويل في التقنية، وهو منطقي جداً من بعض الوجوه، لكنه يحتاج إلى بعض التعوّد. فكّر في الفهرس على أنه عدد العناصر التي يجب تخطيها، بدءاً من أول المصفوفة.</p>
+<h2 id="الخصائص">الخصائص</h2>
+<p>رأينا في فصول سابقة بعض التعبيرات مثل <code>myString.length</code> (للحصول على طول نص) و<code>Math.max</code> (دالة القيمة العظمى). تصل هذه التعبيرات إلى <em>خاصية</em> (property) في قيمة ما. في الحالة الأولى نصل إلى الخاصية <code>length</code> في القيمة الموجودة في <code>myString</code>. وفي الثانية نصل إلى الخاصية المسماة <code>max</code> في الكائن <code>Math</code> (وهو مجموعة من الثوابت والدوال المتعلقة بالرياضيات).</p>
+<p>تمتلك جميع قيم JavaScript تقريباً خصائص. والاستثناءان هما <code>null</code> و<code>undefined</code>. وإذا حاولت الوصول إلى خاصية في إحدى هاتين القيمتين غير القيمتين، فستحصل على خطأ:</p>
+<pre><code class="language-js"><span class="hljs-literal">null</span>.<span class="hljs-property">length</span>;
+<span class="hljs-comment">// → TypeError: null has no properties</span>
+</code></pre>
+<p>الطريقتان الرئيسيتان للوصول إلى الخصائص في JavaScript هما بالنقطة وبالأقواس المربعة. يصل كل من <code>value.x</code> و<code>value[x]</code> إلى خاصية في <code>value</code>—لكن ليس بالضرورة إلى الخاصية نفسها. والفرق في كيفية تفسير <code>x</code>. فعند استخدام النقطة، تكون الكلمة التي بعد النقطة هي الاسم الحرفي للخاصية. وعند استخدام الأقواس المربعة، <em>يُقيَّم</em> التعبير الواقع بين القوسين للحصول على اسم الخاصية. فبينما يجلب <code>value.x</code> خاصية <code>value</code> المسماة &quot;x&quot;، يأخذ <code>value[x]</code> قيمة المتغير المسمى <code>x</code> ويستخدمها، محوّلة إلى نص، اسماً للخاصية.</p>
+<p>إن كنت تعرف أن الخاصية التي تهمك تسمى <em>color</em>، فتقول <code>value.color</code>. وإن أردت استخراج الخاصية التي يسمّيها القيمة المحفوظة في الارتباط <code>i</code>، فتقول <code>value[i]</code>. أسماء الخصائص نصوص. ويمكن أن تكون أي نص، لكن صيغة النقطة لا تعمل إلا مع الأسماء التي تبدو كأسماء ارتباطات صحيحة—تبدأ بحرف أو شرطة سفلية، ولا تحتوي إلا على حروف وأرقام وشرطات سفلية. وإذا أردت الوصول إلى خاصية تسمى <em>2</em> أو <em>John Doe</em>، فيجب استخدام الأقواس المربعة: <code>value[2]</code> أو <code>value[&quot;John Doe&quot;]</code>.</p>
+<p>تُخزَّن العناصر في المصفوفة كخصائص للمصفوفة، باستخدام أعداد كأسماء خصائص. ولأنك لا تستطيع استخدام صيغة النقطة مع الأعداد، ولأنك تريد عادة استخدام ارتباط يحمل الفهرس على أي حال، فعليك استخدام صيغة الأقواس للوصول إليها.</p>
+<p>ومثل النصوص تماماً، تمتلك المصفوفات خاصية <code>length</code> تخبرنا بعدد عناصر المصفوفة.</p>
+<h2 id="الطرق">الطرق</h2>
+<p>تحتوي قيم النصوص والمصفوفات، إضافة إلى خاصية <code>length</code>، على عدد من الخصائص التي تحمل قيم دوال.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> doh = <span class="hljs-string">&quot;Doh&quot;</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">typeof</span> doh.<span class="hljs-property">toUpperCase</span>);
+<span class="hljs-comment">// → function</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(doh.<span class="hljs-title function_">toUpperCase</span>());
+<span class="hljs-comment">// → DOH</span>
+</code></pre>
+<p>لكل نص خاصية <code>toUpperCase</code>. وعند استدعائها تُرجع نسخة من النص حُوّلت فيها جميع الحروف إلى أحرف كبيرة. وهناك أيضاً <code>toLowerCase</code>، التي تعمل في الاتجاه المعاكس.</p>
+<p>ومن المثير للاهتمام أنه رغم أن استدعاء <code>toUpperCase</code> لا يمرر أي معطيات، فإن الدالة تصل بطريقة ما إلى النص <code>&quot;Doh&quot;</code>، القيمة التي استدعينا خاصيتها. وستكتشف كيف يعمل هذا في <a href="/chapter/the_secret_life_of_objects#obj_methods">الفصل 6</a>.</p>
+<p>تسمى الخصائص التي تحتوي دوال عادة <em>طرق</em> (methods) القيمة التي تنتمي إليها، كما في &quot;<code>toUpperCase</code> طريقة في النص&quot;.</p>
+<p>يوضح هذا المثال طريقتين يمكنك استخدامهما للتعامل مع المصفوفات.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> sequence = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+sequence.<span class="hljs-title function_">push</span>(<span class="hljs-number">4</span>);
+sequence.<span class="hljs-title function_">push</span>(<span class="hljs-number">5</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(sequence);
+<span class="hljs-comment">// → [1, 2, 3, 4, 5]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(sequence.<span class="hljs-title function_">pop</span>());
+<span class="hljs-comment">// → 5</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(sequence);
+<span class="hljs-comment">// → [1, 2, 3, 4]</span>
+</code></pre>
+<p>تضيف الطريقة <code>push</code> قيماً إلى نهاية المصفوفة. وتفعل الطريقة <code>pop</code> العكس، إذ تزيل آخر قيمة في المصفوفة وتُرجعها.</p>
+<p>هذه الأسماء الطريفة إلى حد ما هي المصطلحات التقليدية للعمليات على <em>مكدّس</em> (stack). والمكدّس، في البرمجة، بنية بيانات تتيح لك دفع القيم إليه وإخراجها مرة أخرى بالترتيب المعاكس، بحيث يُزال ما أُضيف أخيراً أولاً. والمكدّسات شائعة في البرمجة—وقد تتذكر مكدّس استدعاء الدوال من <a href="/chapter/functions#stack">الفصل السابق</a>، وهو مثال على الفكرة نفسها.</p>
+<h2 id="الكائنات">الكائنات</h2>
+<p>لنعد إلى السنجاب المتحوّل. يمكن تمثيل مجموعة من مدوّنات يومية بمصفوفة، لكن المدوّنات لا تتكون من عدد أو نص فحسب—فكل مدوّنة تحتاج إلى تخزين قائمة أنشطة وقيمة منطقية تشير إلى ما إذا كان جاك قد تحوّل إلى سنجاب أم لا. ويفضّل أن نجمع هذه معاً في قيمة واحدة ثم نضع تلك القيم المجمّعة في مصفوفة من مدوّنات السجل.</p>
+<p>قيم النوع <em>كائن</em> (object) هي مجموعات اعتباطية من الخصائص. وإحدى طرق إنشاء كائن استخدام الأقواس المعقوفة كتعبير.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> day1 = {
+  <span class="hljs-attr">squirrel</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">events</span>: [<span class="hljs-string">&quot;work&quot;</span>, <span class="hljs-string">&quot;touched tree&quot;</span>, <span class="hljs-string">&quot;pizza&quot;</span>, <span class="hljs-string">&quot;running&quot;</span>]
+};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(day1.<span class="hljs-property">squirrel</span>);
+<span class="hljs-comment">// → false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(day1.<span class="hljs-property">wolf</span>);
+<span class="hljs-comment">// → undefined</span>
+day1.<span class="hljs-property">wolf</span> = <span class="hljs-literal">false</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(day1.<span class="hljs-property">wolf</span>);
+<span class="hljs-comment">// → false</span>
+</code></pre>
+<p>داخل الأقواس المعقوفة تكتب قائمة خصائص تفصل بينها فواصل. ولكل خاصية اسم يتبعه محرف النقطتين (:) فقيمة. وعند كتابة كائن على عدة أسطر، تساعد المسافات البادئة كما في هذا المثال على سهولة القراءة. أما الخصائص التي ليست أسماؤها أسماء ارتباطات صحيحة أو أعداداً صحيحة فيجب وضعها بين علامتي اقتباس:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> descriptions = {
+  <span class="hljs-attr">work</span>: <span class="hljs-string">&quot;Went to work&quot;</span>,
+  <span class="hljs-string">&quot;touched tree&quot;</span>: <span class="hljs-string">&quot;Touched a tree&quot;</span>
+};
+</code></pre>
+<p>هذا يعني أن للأقواس المعقوفة <em>معنيين</em> في JavaScript. ففي بداية جملة تبدأ كتلة من الجمل. وفي أي موضع آخر تصف كائناً. ولحسن الحظ، نادراً ما يكون من المفيد أن تبدأ جملة بكائن بين أقواس معقوفة، لذا ليس التباس المعنيين مشكلة كبيرة. والحالة الوحيدة التي يظهر فيها ذلك هي عندما تريد إرجاع كائن من دالة سهم مختصرة—فلا يمكنك كتابة <code>n =&gt; {prop: n}</code> لأن الأقواس المعقوفة ستُفسَّر كجسم دالة. وبدلاً من ذلك عليك وضع مجموعة من الأقواس الهلالية حول الكائن ليتضح أنه تعبير.</p>
+<p>قراءة خاصية غير موجودة تمنحك القيمة <code>undefined</code>.</p>
+<p>ويمكن إسناد قيمة إلى تعبير خاصية باستخدام المعامل <code>=</code>. وهذا سيستبدل قيمة الخاصية إن كانت موجودة أصلاً، أو ينشئ خاصية جديدة في الكائن إن لم تكن موجودة.</p>
+<p>ولنعد قليلاً إلى نموذج المجسّات الذي وصفنا به الارتباطات—فارتباطات الخصائص مشابهة. فهي <em>تمسك</em> القيم، لكن ارتباطات وخصائص أخرى قد تكون متمسكة بالقيم نفسها. ويمكنك التفكير في الكائنات كأخطبوطات لها أي عدد من المجسّات، وعلى كل مجسّ منها اسم مكتوب.</p>
+<p>يقطع المعامل <code>delete</code> مجسّاً من هذا الأخطبوط. وهو معامل أحادي، وعند تطبيقه على خاصية كائن يزيل الخاصية المسماة من الكائن. وهذا ليس أمراً شائعاً، لكنه ممكن.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> anObject = {<span class="hljs-attr">left</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">right</span>: <span class="hljs-number">2</span>};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(anObject.<span class="hljs-property">left</span>);
+<span class="hljs-comment">// → 1</span>
+<span class="hljs-keyword">delete</span> anObject.<span class="hljs-property">left</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(anObject.<span class="hljs-property">left</span>);
+<span class="hljs-comment">// → undefined</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;left&quot;</span> <span class="hljs-keyword">in</span> anObject);
+<span class="hljs-comment">// → false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;right&quot;</span> <span class="hljs-keyword">in</span> anObject);
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>المعامل الثنائي <code>in</code>، عند تطبيقه على نص وكائن، يخبرك ما إذا كان ذلك الكائن يملك خاصية بهذا الاسم. والفرق بين إسناد <code>undefined</code> إلى خاصية وحذفها فعلاً هو أن الكائن في الحالة الأولى لا يزال <em>يملك</em> الخاصية (لكنها ليست ذات قيمة مهمة)، أما في الحالة الثانية فالخاصية لم تعد موجودة وسيُرجع <code>in</code> القيمة <code>false</code>.</p>
+<p>لمعرفة الخصائص التي يملكها كائن، يمكنك استخدام الدالة <code>Object.keys</code>. أعطِ الدالة كائناً وستُرجع مصفوفة من النصوص—أسماء خصائص الكائن:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>({<span class="hljs-attr">x</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">z</span>: <span class="hljs-number">2</span>}));
+<span class="hljs-comment">// → [&quot;x&quot;, &quot;y&quot;, &quot;z&quot;]</span>
+</code></pre>
+<p>وهناك دالة <code>Object.assign</code> التي تنسخ جميع الخصائص من كائن إلى آخر:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> objectA = {<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">b</span>: <span class="hljs-number">2</span>};
+<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">assign</span>(objectA, {<span class="hljs-attr">b</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">c</span>: <span class="hljs-number">4</span>});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(objectA);
+<span class="hljs-comment">// → {a: 1, b: 3, c: 4}</span>
+</code></pre>
+<p>إذاً المصفوفات مجرد نوع من الكائنات متخصص في تخزين متتاليات من الأشياء. وإذا قيّمت <code>typeof []</code> فستُنتج <code>&quot;object&quot;</code>. ويمكنك تصوّر المصفوفات كأخطبوطات طويلة مسطحة اصطفت مجسّاتها في صف أنيق، وعليها تسميات بأعداد.</p>
+<p>سيمثّل جاك السجل الذي يدوّنه بمصفوفة من الكائنات:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> journal = [
+  {<span class="hljs-attr">events</span>: [<span class="hljs-string">&quot;work&quot;</span>, <span class="hljs-string">&quot;touched tree&quot;</span>, <span class="hljs-string">&quot;pizza&quot;</span>,
+            <span class="hljs-string">&quot;running&quot;</span>, <span class="hljs-string">&quot;television&quot;</span>],
+   <span class="hljs-attr">squirrel</span>: <span class="hljs-literal">false</span>},
+  {<span class="hljs-attr">events</span>: [<span class="hljs-string">&quot;work&quot;</span>, <span class="hljs-string">&quot;ice cream&quot;</span>, <span class="hljs-string">&quot;cauliflower&quot;</span>,
+            <span class="hljs-string">&quot;lasagna&quot;</span>, <span class="hljs-string">&quot;touched tree&quot;</span>, <span class="hljs-string">&quot;brushed teeth&quot;</span>],
+   <span class="hljs-attr">squirrel</span>: <span class="hljs-literal">false</span>},
+  {<span class="hljs-attr">events</span>: [<span class="hljs-string">&quot;weekend&quot;</span>, <span class="hljs-string">&quot;cycling&quot;</span>, <span class="hljs-string">&quot;break&quot;</span>, <span class="hljs-string">&quot;peanuts&quot;</span>,
+            <span class="hljs-string">&quot;beer&quot;</span>],
+   <span class="hljs-attr">squirrel</span>: <span class="hljs-literal">true</span>},
+  <span class="hljs-comment">/* وهكذا... */</span>
+];
+</code></pre>
+<h2 id="قابلية-التغيير">قابلية التغيير</h2>
+<p>سنصل قريباً إلى البرمجة الفعلية، لكن أولاً هناك قطعة نظرية أخرى يجب فهمها.</p>
+<p>رأينا أن قيم الكائنات يمكن تعديلها. أما أنواع القيم التي ناقشناها في فصول سابقة، مثل الأعداد والنصوص والقيم المنطقية، فهي جميعاً <em>غير قابلة للتغيير</em> (immutable)—يستحيل تغيير قيم من تلك الأنواع. يمكنك دمجها واشتقاق قيم جديدة منها، لكن عندما تأخذ قيمة نصية معينة، فستبقى تلك القيمة دائماً هي نفسها. ولا يمكن تغيير النص الموجود داخلها. فإذا كان لديك نص يحتوي <code>&quot;cat&quot;</code>، فلا يمكن لشيفرة أخرى تغيير محرف في نصك ليجعله يهجّئ <code>&quot;rat&quot;</code>.</p>
+<p>تعمل الكائنات بطريقة مختلفة. فأنت <em>تستطيع</em> تغيير خصائصها، ما يجعل قيمة كائن واحدة ذات محتوى مختلف في أوقات مختلفة.</p>
+<p>عندما يكون لدينا عددان، 120 و120، يمكننا اعتبارهما العدد نفسه بالضبط، سواء أشارا إلى البتات الفيزيائية نفسها أم لا. أما مع الكائنات فهناك فرق بين وجود إشارتين إلى الكائن نفسه ووجود كائنين مختلفين يحتويان الخصائص نفسها. تأمل الشيفرة التالية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> object1 = {<span class="hljs-attr">value</span>: <span class="hljs-number">10</span>};
+<span class="hljs-keyword">let</span> object2 = object1;
+<span class="hljs-keyword">let</span> object3 = {<span class="hljs-attr">value</span>: <span class="hljs-number">10</span>};
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(object1 == object2);
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(object1 == object3);
+<span class="hljs-comment">// → false</span>
+
+object1.<span class="hljs-property">value</span> = <span class="hljs-number">15</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(object2.<span class="hljs-property">value</span>);
+<span class="hljs-comment">// → 15</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(object3.<span class="hljs-property">value</span>);
+<span class="hljs-comment">// → 10</span>
+</code></pre>
+<p>يمسك الارتباطان <code>object1</code> و<code>object2</code> الكائن <em>نفسه</em>، ولهذا يؤدي تغيير <code>object1</code> إلى تغيير قيمة <code>object2</code> أيضاً. ويقال إن لهما <em>الهوية</em> (identity) نفسها. أما الارتباط <code>object3</code> فيشير إلى كائن مختلف، يحتوي في البداية الخصائص نفسها الموجودة في <code>object1</code> لكنه يحيا حياة منفصلة.</p>
+<p>يمكن أن تكون الارتباطات أيضاً قابلة للتغيير أو ثابتة، لكن هذا منفصل عن طريقة تصرف قيمها. فرغم أن قيم الأعداد لا تتغير، يمكنك استخدام ارتباط <code>let</code> لتتبّع عدد متغير عبر تغيير القيمة التي يشير إليها الارتباط. وبالمثل، فرغم أن ارتباط <code>const</code> إلى كائن لا يمكن تغييره هو نفسه وسيظل يشير إلى الكائن ذاته، فإن <em>محتويات</em> ذلك الكائن قد تتغير.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> score = {<span class="hljs-attr">visitors</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">home</span>: <span class="hljs-number">0</span>};
+<span class="hljs-comment">// هذا مقبول</span>
+score.<span class="hljs-property">visitors</span> = <span class="hljs-number">1</span>;
+<span class="hljs-comment">// هذا غير مسموح</span>
+score = {<span class="hljs-attr">visitors</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">home</span>: <span class="hljs-number">1</span>};
+</code></pre>
+<p>عند مقارنة الكائنات بمعامل <code>==</code> في JavaScript، فإنه يقارن بالهوية: ولن يُنتج <code>true</code> إلا إذا كان الكائنان القيمة نفسها بالضبط. أما مقارنة كائنين مختلفين فستُرجع <code>false</code>، حتى إن كانت لهما خصائص متطابقة. ولا توجد في JavaScript عملية مقارنة &quot;عميقة&quot; مدمجة تقارن الكائنات بمحتوياتها، لكن يمكنك كتابتها بنفسك (وهو أحد <a href="/chapter/data_structures_objects_and_arrays#exercise_deep_compare">التمارين</a> في نهاية هذا الفصل).</p>
+<h2 id="سجل-المستذئب">سجل المستذئب</h2>
+<p>يشغّل جاك مفسّر JavaScript الخاص به ويهيّئ البيئة التي يحتاجها لتدوين سجله:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> journal = [];
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">addEntry</span>(<span class="hljs-params">events, squirrel</span>) {
+  journal.<span class="hljs-title function_">push</span>({events, squirrel});
+}
+</code></pre>
+<p>لاحظ أن الكائن المضاف إلى السجل يبدو غريباً بعض الشيء. فبدلاً من إعلان خصائص مثل <code>events: events</code>، يكتفي بذكر اسم الخاصية: <code>events</code>. وهذه صيغة مختصرة تعني الشيء نفسه—فإذا لم يتبع اسم الخاصية في صيغة الأقواس المعقوفة قيمة، تُؤخذ قيمته من الارتباط الذي يحمل الاسم نفسه.</p>
+<p>كل مساء في العاشرة—أو في الصباح التالي أحياناً، بعد النزول من الرف الأعلى في خزانة كتبه—يسجّل جاك يومه:</p>
+<pre><code class="language-js"><span class="hljs-title function_">addEntry</span>([<span class="hljs-string">&quot;work&quot;</span>, <span class="hljs-string">&quot;touched tree&quot;</span>, <span class="hljs-string">&quot;pizza&quot;</span>, <span class="hljs-string">&quot;running&quot;</span>,
+          <span class="hljs-string">&quot;television&quot;</span>], <span class="hljs-literal">false</span>);
+<span class="hljs-title function_">addEntry</span>([<span class="hljs-string">&quot;work&quot;</span>, <span class="hljs-string">&quot;ice cream&quot;</span>, <span class="hljs-string">&quot;cauliflower&quot;</span>, <span class="hljs-string">&quot;lasagna&quot;</span>,
+          <span class="hljs-string">&quot;touched tree&quot;</span>, <span class="hljs-string">&quot;brushed teeth&quot;</span>], <span class="hljs-literal">false</span>);
+<span class="hljs-title function_">addEntry</span>([<span class="hljs-string">&quot;weekend&quot;</span>, <span class="hljs-string">&quot;cycling&quot;</span>, <span class="hljs-string">&quot;break&quot;</span>, <span class="hljs-string">&quot;peanuts&quot;</span>,
+          <span class="hljs-string">&quot;beer&quot;</span>], <span class="hljs-literal">true</span>);
+</code></pre>
+<p>وبمجرد أن تتوفر لديه نقاط بيانات كافية، يعتزم استخدام الإحصاء لمعرفة أي من هذه الأحداث قد يكون مرتبطاً بالتحولات إلى سنجاب.</p>
+<p><em>الارتباط</em> (correlation) مقياس للاعتماد بين متغيرات إحصائية. والمتغير الإحصائي ليس تماماً كمتغير البرمجة. ففي الإحصاء تكون لديك عادة مجموعة من <em>القياسات</em>، ويُقاس كل متغير في كل قياس. ويُعبَّر عن الارتباط بين المتغيرات عادة بقيمة تتراوح بين -1 و1. وارتباط يساوي صفراً يعني أن المتغيرين غير مرتبطين. وارتباط يساوي 1 يعني أن الاثنين مرتبطان ارتباطاً تاماً—فإذا عرفت أحدهما عرفت الآخر. كما يعني الارتباط -1 أن المتغيرين مرتبطان ارتباطاً تاماً لكنهما متعاكسان—فعندما يكون أحدهما صحيحاً يكون الآخر خاطئاً.</p>
+<p>ولحساب مقياس الارتباط بين متغيرين منطقيين، يمكننا استخدام <em>معامل فاي</em> (phi coefficient) (<em>ϕ</em>). وهو صيغة مدخلها جدول تكراري يحتوي عدد المرات التي رُصدت فيها التوليفات المختلفة للمتغيرين. ومخرج الصيغة عدد بين -1 و1 يصف الارتباط.</p>
+<p>يمكننا أخذ حدث أكل البيتزا ووضعه في جدول تكراري كهذا، حيث يشير كل عدد إلى عدد المرات التي وقعت فيها تلك التوليفة في قياساتنا.</p>
+<p><img src="/images/book/pizza-squirrel.svg" alt="جدول من صفين وعمودين يعرض متغير البيتزا على المحور الأفقي ومتغير السنجاب على المحور العمودي. توضح كل خلية عدد المرات التي وقعت فيها تلك التوليفة. في 76 حالة لم يحدث أي منهما. وفي 9 حالات كانت البيتزا وحدها صحيحة. وفي 4 حالات كان السنجاب وحده صحيحاً. وفي حالة واحدة وقع الاثنان معاً."></p>
+<p>إذا سمّينا ذلك الجدول <em>n</em>، يمكننا حساب <em>ϕ</em> باستخدام الصيغة التالية:</p>
+<table>
+<thead>
+<tr>
+<th><em>ϕ</em> =</th>
+<th><em>n</em>11<em>n</em>00 − <em>n</em>10<em>n</em>01 √ <em>n</em>1•<em>n</em>0•<em>n</em>•1<em>n</em>•0</th>
+</tr>
+</thead>
+</table>
+<p>(إذا كنت في هذه اللحظة تضع الكتاب جانباً لتستغرق في استرجاع مروع لحصة الرياضيات في الصف العاشر—تمهّل! لا أنوي تعذيبك بصفحات لا تنتهي من الرموز الغامضة—إنها هذه الصيغة الواحدة فقط في الوقت الحالي. وحتى معها، كل ما نفعله هو تحويلها إلى JavaScript.)</p>
+<p>ترمز الصيغة <em>n</em>01 إلى عدد القياسات التي يكون فيها المتغير الأول (كونه سنجاباً) خاطئاً (0) والمتغير الثاني (البيتزا) صحيحاً (1). وفي جدول البيتزا، <em>n</em>01 يساوي 9.</p>
+<p>وتشير القيمة <em>n</em>1• إلى مجموع كل القياسات التي يكون فيها المتغير الأول صحيحاً، وهو 5 في الجدول المثال. وبالمثل تشير <em>n</em>•0 إلى مجموع القياسات التي يكون فيها المتغير الثاني خاطئاً.</p>
+<p>إذاً في جدول البيتزا، سيكون الجزء الواقع فوق خط القسمة (المقسوم) هو 1×76−4×9 = 40، والجزء الواقع تحته (المقسوم عليه) هو الجذر التربيعي لـ 5×85×10×80، أي √340,000. والناتج <em>ϕ</em> ≈ 0.069، وهو ضئيل. فلا يبدو أن أكل البيتزا يؤثر في التحولات.</p>
+<h2 id="حساب-الارتباط">حساب الارتباط</h2>
+<p>يمكننا تمثيل جدول من صفين وعمودين في JavaScript بمصفوفة من أربعة عناصر (<code>[76, 9, 4, 1]</code>). ويمكننا أيضاً استخدام تمثيلات أخرى، مثل مصفوفة تحتوي مصفوفتين من عنصرين (<code>[[76, 9], [4, 1]]</code>) أو كائن بأسماء خصائص مثل <code>&quot;11&quot;</code> و<code>&quot;01&quot;</code>، لكن المصفوفة المسطحة بسيطة وتجعل التعبيرات التي تصل إلى الجدول قصيرة على نحو مريح. وسنفسّر فهارس المصفوفة كأعداد ثنائية من بتّين، حيث يشير الرقم الأيسر (الأكثر أهمية) إلى متغير السنجاب ويشير الرقم الأيمن (الأقل أهمية) إلى متغير الحدث. مثلاً، يشير العدد الثنائي <code>10</code> إلى الحالة التي تحوّل فيها جاك إلى سنجاب بالفعل لكن الحدث (لنقل &quot;البيتزا&quot;) لم يقع. وقد حدث ذلك أربع مرات. ولأن العدد الثنائي <code>10</code> يساوي 2 في النظام العشري، سنخزّن هذا العدد عند الفهرس 2 في المصفوفة.</p>
+<p>وهذه هي الدالة التي تحسب معامل <em>ϕ</em> من مصفوفة كهذه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">phi</span>(<span class="hljs-params">table</span>) {
+  <span class="hljs-keyword">return</span> (table[<span class="hljs-number">3</span>] * table[<span class="hljs-number">0</span>] - table[<span class="hljs-number">2</span>] * table[<span class="hljs-number">1</span>]) /
+    <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sqrt</span>((table[<span class="hljs-number">2</span>] + table[<span class="hljs-number">3</span>]) *
+              (table[<span class="hljs-number">0</span>] + table[<span class="hljs-number">1</span>]) *
+              (table[<span class="hljs-number">1</span>] + table[<span class="hljs-number">3</span>]) *
+              (table[<span class="hljs-number">0</span>] + table[<span class="hljs-number">2</span>]));
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">phi</span>([<span class="hljs-number">76</span>, <span class="hljs-number">9</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>]));
+<span class="hljs-comment">// → 0.068599434</span>
+</code></pre>
+<p>هذا نقل مباشر لصيغة <em>ϕ</em> إلى JavaScript. و<code>Math.sqrt</code> هي دالة الجذر التربيعي، كما يوفرها الكائن <code>Math</code> في بيئة JavaScript قياسية. وعلينا جمع حقلين من الجدول للحصول على حقول مثل n1• لأن مجاميع الصفوف أو الأعمدة لا تُخزَّن مباشرة في بنية بياناتنا.</p>
+<p>يدوّن جاك سجله طوال ثلاثة أشهر. ومجموعة البيانات الناتجة متاحة في <a href="https://eloquentjavascript.net/code#4">بيئة التجربة</a> الخاصة بهذا الفصل، حيث تُخزَّن في الارتباط <code>JOURNAL</code>، وفي <a href="https://eloquentjavascript.net/code/journal.js">ملف</a> قابل للتنزيل.</p>
+<p>لاستخراج جدول من صفين وعمودين لحدث معين من السجل، يجب أن نمرّ على جميع المدوّنات ونحصي عدد المرات التي يقع فيها الحدث بالنسبة إلى التحولات إلى سنجاب:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">tableFor</span>(<span class="hljs-params">event, journal</span>) {
+  <span class="hljs-keyword">let</span> table = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; journal.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-keyword">let</span> entry = journal[i], index = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">if</span> (entry.<span class="hljs-property">events</span>.<span class="hljs-title function_">includes</span>(event)) index += <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">if</span> (entry.<span class="hljs-property">squirrel</span>) index += <span class="hljs-number">2</span>;
+    table[index] += <span class="hljs-number">1</span>;
+  }
+  <span class="hljs-keyword">return</span> table;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">tableFor</span>(<span class="hljs-string">&quot;pizza&quot;</span>, <span class="hljs-variable constant_">JOURNAL</span>));
+<span class="hljs-comment">// → [76, 9, 4, 1]</span>
+</code></pre>
+<p>تمتلك المصفوفات طريقة <code>includes</code> تتحقق مما إذا كانت قيمة معينة موجودة في المصفوفة. وتستخدم الدالة ذلك لتحديد ما إذا كان اسم الحدث الذي يهمها جزءاً من قائمة أحداث يوم معين.</p>
+<p>يحدد جسم الحلقة في <code>tableFor</code> الخانة التي تقع فيها كل مدوّنة سجل في الجدول عبر التحقق مما إذا كانت المدوّنة تحتوي الحدث المعني وما إذا كان الحدث يقع مع حادثة تحوّل إلى سنجاب. ثم تضيف الحلقة واحداً إلى الخانة الصحيحة في الجدول.</p>
+<p>أصبحت لدينا الآن الأدوات اللازمة لحساب الارتباطات الفردية. والخطوة الوحيدة المتبقية هي إيجاد ارتباط لكل نوع من الأحداث المسجلة ومعرفة ما إذا كان شيء ما يبرز.</p>
+<h2 id="حلقات-المصفوفات">حلقات المصفوفات</h2>
+<p>في دالة <code>tableFor</code> توجد حلقة كهذه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-variable constant_">JOURNAL</span>.<span class="hljs-property">length</span>; i++) {
+  <span class="hljs-keyword">let</span> entry = <span class="hljs-variable constant_">JOURNAL</span>[i];
+  <span class="hljs-comment">// افعل شيئاً بـ entry</span>
+}
+</code></pre>
+<p>هذا النوع من الحلقات شائع في JavaScript الكلاسيكية—فالمرور على المصفوفات عنصراً عنصراً أمر يتكرر كثيراً، وللقيام به كنت تدير عدّاداً على طول المصفوفة وتنتقي كل عنصر بدوره.</p>
+<p>وهناك طريقة أبسط لكتابة حلقات كهذه في JavaScript الحديثة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> entry <span class="hljs-keyword">of</span> <span class="hljs-variable constant_">JOURNAL</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`<span class="hljs-subst">\${entry.events.length}</span> events.\`</span>);
+}
+</code></pre>
+<p>عندما تستخدم حلقة <code>for</code> الكلمة <code>of</code> بعد تعريف متغيرها، فإنها تمرّ على عناصر القيمة المعطاة بعد <code>of</code>. وهذا لا يعمل مع المصفوفات فحسب، بل مع النصوص وبعض بنى البيانات الأخرى أيضاً. وسنناقش <em>كيف</em> يعمل ذلك في <a href="/chapter/the_secret_life_of_objects">الفصل 6</a>.</p>
+<h2 id="التحليل-النهائي">التحليل النهائي</h2>
+<p>نحتاج إلى حساب ارتباط لكل نوع من الأحداث الواردة في مجموعة البيانات. وللقيام بذلك، علينا أولاً أن <em>نجد</em> كل نوع من الأحداث.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">journalEvents</span>(<span class="hljs-params">journal</span>) {
+  <span class="hljs-keyword">let</span> events = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> entry <span class="hljs-keyword">of</span> journal) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> event <span class="hljs-keyword">of</span> entry.<span class="hljs-property">events</span>) {
+      <span class="hljs-keyword">if</span> (!events.<span class="hljs-title function_">includes</span>(event)) {
+        events.<span class="hljs-title function_">push</span>(event);
+      }
+    }
+  }
+  <span class="hljs-keyword">return</span> events;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">journalEvents</span>(<span class="hljs-variable constant_">JOURNAL</span>));
+<span class="hljs-comment">// → [&quot;carrot&quot;, &quot;exercise&quot;, &quot;weekend&quot;, &quot;bread&quot;, …]</span>
+</code></pre>
+<p>وبإضافة أي أسماء أحداث ليست موجودة فيه أصلاً إلى المصفوفة <code>events</code>، تجمع الدالة كل نوع من الأحداث.</p>
+<p>وباستخدام تلك الدالة يمكننا رؤية جميع الارتباطات:</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> event <span class="hljs-keyword">of</span> <span class="hljs-title function_">journalEvents</span>(<span class="hljs-variable constant_">JOURNAL</span>)) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(event + <span class="hljs-string">&quot;:&quot;</span>, <span class="hljs-title function_">phi</span>(<span class="hljs-title function_">tableFor</span>(event, <span class="hljs-variable constant_">JOURNAL</span>)));
+}
+<span class="hljs-comment">// → carrot:   0.0140970969</span>
+<span class="hljs-comment">// → exercise: 0.0685994341</span>
+<span class="hljs-comment">// → weekend:  0.1371988681</span>
+<span class="hljs-comment">// → bread:   -0.0757554019</span>
+<span class="hljs-comment">// → pudding: -0.0648203724</span>
+<span class="hljs-comment">// وهكذا...</span>
+</code></pre>
+<p>يبدو أن معظم الارتباطات قريبة من الصفر. فأكل الجزر أو الخبز أو البودينغ لا يحفّز على ما يبدو الاستذئاب السنجابي. لكن التحولات <em>تبدو</em> فعلاً أكثر حدوثاً إلى حد ما في عطلات نهاية الأسبوع. لنرشّح النتائج لعرض الارتباطات الأكبر من 0.1 أو الأصغر من -0.1 فقط:</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> event <span class="hljs-keyword">of</span> <span class="hljs-title function_">journalEvents</span>(<span class="hljs-variable constant_">JOURNAL</span>)) {
+  <span class="hljs-keyword">let</span> correlation = <span class="hljs-title function_">phi</span>(<span class="hljs-title function_">tableFor</span>(event, <span class="hljs-variable constant_">JOURNAL</span>));
+  <span class="hljs-keyword">if</span> (correlation &gt; <span class="hljs-number">0.1</span> || correlation &lt; -<span class="hljs-number">0.1</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(event + <span class="hljs-string">&quot;:&quot;</span>, correlation);
+  }
+}
+<span class="hljs-comment">// → weekend:        0.1371988681</span>
+<span class="hljs-comment">// → brushed teeth: -0.3805211953</span>
+<span class="hljs-comment">// → candy:          0.1296407447</span>
+<span class="hljs-comment">// → work:          -0.1371988681</span>
+<span class="hljs-comment">// → spaghetti:      0.2425356250</span>
+<span class="hljs-comment">// → reading:        0.1106828054</span>
+<span class="hljs-comment">// → peanuts:        0.5902679812</span>
+</code></pre>
+<p>آها! هناك عاملان ارتباطهما أقوى بوضوح من البقية. فأكل الفول السوداني له أثر إيجابي قوي في احتمال التحول إلى سنجاب، بينما لتنظيف الأسنان أثر سلبي كبير.</p>
+<p>مثير للاهتمام. لنجرّب شيئاً.</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> entry <span class="hljs-keyword">of</span> <span class="hljs-variable constant_">JOURNAL</span>) {
+  <span class="hljs-keyword">if</span> (entry.<span class="hljs-property">events</span>.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&quot;peanuts&quot;</span>) &amp;&amp;
+     !entry.<span class="hljs-property">events</span>.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&quot;brushed teeth&quot;</span>)) {
+    entry.<span class="hljs-property">events</span>.<span class="hljs-title function_">push</span>(<span class="hljs-string">&quot;peanut teeth&quot;</span>);
+  }
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">phi</span>(<span class="hljs-title function_">tableFor</span>(<span class="hljs-string">&quot;peanut teeth&quot;</span>, <span class="hljs-variable constant_">JOURNAL</span>)));
+<span class="hljs-comment">// → 1</span>
+</code></pre>
+<p>هذه نتيجة قوية. فظاهرة التحول تحدث تحديداً عندما يأكل جاك الفول السوداني ولا ينظف أسنانه. لو لم يكن مهملاً إلى هذا الحد في نظافة أسنانه، لما لاحظ مصابه أصلاً.</p>
+<p>وعلى علم بهذا، يتوقف جاك عن أكل الفول السوداني تماماً فيجد أن تحولاته تتوقف.</p>
+<p>لكن لا تمضي سوى أشهر قليلة حتى يلاحظ أن شيئاً ما ينقص هذه الحياة البشرية تماماً. فمن دون مغامراته الوحشية، لا يكاد جاك يشعر أنه حي. فيقرر أن يفضّل أن يكون حيواناً برياً بدوام كامل. وبعد أن يبني بيتاً شجرياً صغيراً جميلاً في الغابة ويزوّده بموزّع زبدة الفول السوداني ومؤونة تكفي عشر سنوات منها، يغيّر شكله للمرة الأخيرة، ويعيش حياة السنجاب القصيرة المليئة بالحيوية.</p>
+<h2 id="مزيد-من-حديث-المصفوفات">مزيد من حديث المصفوفات</h2>
+<p>قبل إنهاء الفصل، أريد أن أقدّم لك بعض المفاهيم الأخرى المتعلقة بالكائنات. وسأبدأ ببعض طرق المصفوفات المفيدة عموماً.</p>
+<p>رأينا <code>push</code> و<code>pop</code>، اللتين تضيفان العناصر إلى نهاية المصفوفة وتزيلانها منها، <a href="/chapter/data_structures_objects_and_arrays#array_methods">سابقاً</a> في هذا الفصل. أما الطريقتان المقابلتان للإضافة إلى بداية المصفوفة والإزالة منها فتسمّيان <code>unshift</code> و<code>shift</code>.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> todoList = [];
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">remember</span>(<span class="hljs-params">task</span>) {
+  todoList.<span class="hljs-title function_">push</span>(task);
+}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getTask</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> todoList.<span class="hljs-title function_">shift</span>();
+}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">rememberUrgently</span>(<span class="hljs-params">task</span>) {
+  todoList.<span class="hljs-title function_">unshift</span>(task);
+}
+</code></pre>
+<p>يدير هذا البرنامج طابور مهام. فتضيف المهام إلى نهاية الطابور باستدعاء <code>remember(&quot;groceries&quot;)</code>، وعندما تصبح مستعداً للقيام بشيء، تستدعي <code>getTask()</code> للحصول على العنصر الأول في الطابور (وإزالته). أما دالة <code>rememberUrgently</code> فتضيف مهمة أيضاً لكنها تضيفها إلى مقدمة الطابور لا إلى مؤخرته.</p>
+<p>للبحث عن قيمة معينة، توفّر المصفوفات طريقة <code>indexOf</code>. وتبحث الطريقة في المصفوفة من البداية إلى النهاية وتُرجع الفهرس الذي وُجدت فيه القيمة المطلوبة—أو -1 إن لم توجد. وللبحث من النهاية بدلاً من البداية، هناك طريقة مشابهة تسمى <code>lastIndexOf</code>:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>].<span class="hljs-title function_">indexOf</span>(<span class="hljs-number">2</span>));
+<span class="hljs-comment">// → 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>].<span class="hljs-title function_">lastIndexOf</span>(<span class="hljs-number">2</span>));
+<span class="hljs-comment">// → 3</span>
+</code></pre>
+<p>تأخذ كل من <code>indexOf</code> و<code>lastIndexOf</code> معطىً ثانياً اختيارياً يشير إلى موضع بدء البحث.</p>
+<p>وثمة طريقة أساسية أخرى للمصفوفات هي <code>slice</code>، وتأخذ فهرس البداية وفهرس النهاية وتُرجع مصفوفة تحتوي العناصر الواقعة بينهما فقط. وفهرس البداية مشمول بينما فهرس النهاية غير مشمول.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>].<span class="hljs-title function_">slice</span>(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>));
+<span class="hljs-comment">// → [2, 3]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>].<span class="hljs-title function_">slice</span>(<span class="hljs-number">2</span>));
+<span class="hljs-comment">// → [2, 3, 4]</span>
+</code></pre>
+<p>وعند عدم إعطاء فهرس النهاية، تأخذ <code>slice</code> جميع العناصر التي بعد فهرس البداية. ويمكنك أيضاً حذف فهرس البداية لنسخ المصفوفة بأكملها.</p>
+<p>ويمكن استخدام الطريقة <code>concat</code> لضم المصفوفات بعضها إلى بعض وإنشاء مصفوفة جديدة، على غرار ما يفعله المعامل <code>+</code> مع النصوص.</p>
+<p>يوضح المثال التالي كلاً من <code>concat</code> و<code>slice</code> أثناء العمل. فهو يأخذ مصفوفة وفهرساً ويُرجع مصفوفة جديدة نسخة من المصفوفة الأصلية مع إزالة العنصر الموجود عند الفهرس المعطى:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">remove</span>(<span class="hljs-params">array, index</span>) {
+  <span class="hljs-keyword">return</span> array.<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>, index)
+    .<span class="hljs-title function_">concat</span>(array.<span class="hljs-title function_">slice</span>(index + <span class="hljs-number">1</span>));
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">remove</span>([<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>, <span class="hljs-string">&quot;c&quot;</span>, <span class="hljs-string">&quot;d&quot;</span>, <span class="hljs-string">&quot;e&quot;</span>], <span class="hljs-number">2</span>));
+<span class="hljs-comment">// → [&quot;a&quot;, &quot;b&quot;, &quot;d&quot;, &quot;e&quot;]</span>
+</code></pre>
+<p>وإذا مرّرت إلى <code>concat</code> معطىً ليس مصفوفة، ستُضاف تلك القيمة إلى المصفوفة الجديدة كما لو كانت مصفوفة من عنصر واحد.</p>
+<h2 id="النصوص-وخصائصها">النصوص وخصائصها</h2>
+<p>يمكننا قراءة خصائص مثل <code>length</code> و<code>toUpperCase</code> من قيم النصوص. لكن إذا حاولنا إضافة خاصية جديدة، فإنها لا تثبت.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> kim = <span class="hljs-string">&quot;Kim&quot;</span>;
+kim.<span class="hljs-property">age</span> = <span class="hljs-number">88</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(kim.<span class="hljs-property">age</span>);
+<span class="hljs-comment">// → undefined</span>
+</code></pre>
+<p>قيم النوع نص وعدد وقيمة منطقية ليست كائنات، ورغم أن اللغة لا تعترض إذا حاولت إسناد خصائص جديدة إليها، فإنها لا تخزّن تلك الخصائص فعلاً. وكما ذُكر سابقاً، فمثل هذه القيم غير قابلة للتغيير ولا يمكن تغييرها.</p>
+<p>لكن لهذه الأنواع خصائص مدمجة. فكل قيمة نصية تملك عدداً من الطرق. ومن أكثرها فائدة <code>slice</code> و<code>indexOf</code>، وهما تشبهان طريقتَي المصفوفة بالاسم نفسه:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;coconuts&quot;</span>.<span class="hljs-title function_">slice</span>(<span class="hljs-number">4</span>, <span class="hljs-number">7</span>));
+<span class="hljs-comment">// → nut</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;coconut&quot;</span>.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&quot;u&quot;</span>));
+<span class="hljs-comment">// → 5</span>
+</code></pre>
+<p>وأحد الفروق أن <code>indexOf</code> في النص يمكنها البحث عن نص يحتوي أكثر من محرف واحد، بينما تبحث طريقة المصفوفة المقابلة عن عنصر واحد فقط:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;one two three&quot;</span>.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&quot;ee&quot;</span>));
+<span class="hljs-comment">// → 11</span>
+</code></pre>
+<p>وتزيل الطريقة <code>trim</code> المسافات البيضاء (المسافات وأسطر جديدة ومحارف الجدولة وما شابهها) من بداية النص ونهايته:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;  okay \\n &quot;</span>.<span class="hljs-title function_">trim</span>());
+<span class="hljs-comment">// → okay</span>
+</code></pre>
+<p>ودالة <code>zeroPad</code> من <a href="/chapter/functions">الفصل السابق</a> موجودة أيضاً كطريقة. وتسمى <code>padStart</code> وتأخذ الطول المطلوب ومحرف الحشو معطيين:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>(<span class="hljs-number">6</span>).<span class="hljs-title function_">padStart</span>(<span class="hljs-number">3</span>, <span class="hljs-string">&quot;0&quot;</span>));
+<span class="hljs-comment">// → 006</span>
+</code></pre>
+<p>يمكنك تقسيم نص عند كل موضع يظهر فيه نص آخر باستخدام <code>split</code>، وإعادة جمعه باستخدام <code>join</code>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> sentence = <span class="hljs-string">&quot;Secretarybirds specialize in stomping&quot;</span>;
+<span class="hljs-keyword">let</span> words = sentence.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot; &quot;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(words);
+<span class="hljs-comment">// → [&quot;Secretarybirds&quot;, &quot;specialize&quot;, &quot;in&quot;, &quot;stomping&quot;]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(words.<span class="hljs-title function_">join</span>(<span class="hljs-string">&quot;. &quot;</span>));
+<span class="hljs-comment">// → Secretarybirds. specialize. in. stomping</span>
+</code></pre>
+<p>ويمكن تكرار النص بالطريقة <code>repeat</code>، التي تُنشئ نصاً جديداً يحتوي نسخاً متعددة من النص الأصلي ملصوقة بعضها ببعض:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;LA&quot;</span>.<span class="hljs-title function_">repeat</span>(<span class="hljs-number">3</span>));
+<span class="hljs-comment">// → LALALA</span>
+</code></pre>
+<p>رأينا بالفعل خاصية <code>length</code> في نوع النص. والوصول إلى المحارف المنفردة في نص يشبه الوصول إلى عناصر مصفوفة (مع تعقيد سنناقشه في <a href="/chapter/higher_order_functions#code_units">الفصل 5</a>).</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> string = <span class="hljs-string">&quot;abc&quot;</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(string.<span class="hljs-property">length</span>);
+<span class="hljs-comment">// → 3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(string[<span class="hljs-number">1</span>]);
+<span class="hljs-comment">// → b</span>
+</code></pre>
+<h2 id="وسطاء-البقية">وسطاء البقية</h2>
+<p>قد يكون من المفيد أن تقبل دالة أي عدد من المعطيات. فمثلاً، تحسب <code>Math.max</code> القيمة العظمى <em>لجميع</em> المعطيات التي تُعطاها. ولكتابة دالة كهذه، تضع ثلاث نقاط قبل آخر وسيط في الدالة، هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">max</span>(<span class="hljs-params">...numbers</span>) {
+  <span class="hljs-keyword">let</span> result = -<span class="hljs-title class_">Infinity</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> number <span class="hljs-keyword">of</span> numbers) {
+    <span class="hljs-keyword">if</span> (number &gt; result) result = number;
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">max</span>(<span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">9</span>, -<span class="hljs-number">2</span>));
+<span class="hljs-comment">// → 9</span>
+</code></pre>
+<p>وعند استدعاء دالة كهذه، يُربط <em>وسيط البقية</em> (rest parameter) بمصفوفة تحتوي جميع المعطيات الإضافية. وإذا كانت هناك وسطاء آخرون قبله، فلا تكون قيمهم جزءاً من تلك المصفوفة. وعندما يكون الوسيط الوحيد، كما في <code>max</code>، فإنه يحمل جميع المعطيات.</p>
+<p>ويمكنك استخدام صيغة النقاط الثلاث المشابهة لـ<em>استدعاء</em> دالة بمصفوفة من المعطيات.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> numbers = [<span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">7</span>];
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">max</span>(...numbers));
+<span class="hljs-comment">// → 7</span>
+</code></pre>
+<p>وهذا &quot;ينشر&quot; المصفوفة في استدعاء الدالة، فيمرّر عناصرها كمعطيات منفصلة. ويمكن تضمين مصفوفة كهذه مع معطيات أخرى، كما في <code>max(9, ...numbers, 2)</code>.</p>
+<p>وبالمثل تتيح صيغة الأقواس المربعة للمصفوفات لمعامل النقاط الثلاث نشر مصفوفة أخرى داخل المصفوفة الجديدة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> words = [<span class="hljs-string">&quot;never&quot;</span>, <span class="hljs-string">&quot;fully&quot;</span>];
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>([<span class="hljs-string">&quot;will&quot;</span>, ...words, <span class="hljs-string">&quot;understand&quot;</span>]);
+<span class="hljs-comment">// → [&quot;will&quot;, &quot;never&quot;, &quot;fully&quot;, &quot;understand&quot;]</span>
+</code></pre>
+<p>وهذا يعمل حتى في الكائنات بين الأقواس المعقوفة، حيث يضيف جميع الخصائص من كائن آخر. وإذا أُضيفت خاصية عدة مرات، فالقيمة الأخيرة المضافَة هي التي تفوز:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> coordinates = {<span class="hljs-attr">x</span>: <span class="hljs-number">10</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">0</span>};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>({...coordinates, <span class="hljs-attr">y</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">z</span>: <span class="hljs-number">1</span>});
+<span class="hljs-comment">// → {x: 10, y: 5, z: 1}</span>
+</code></pre>
+<h2 id="كائن-math">كائن Math</h2>
+<p>كما رأينا، <code>Math</code> كيس متنوع من الدوال المساعدة المتعلقة بالأعداد مثل <code>Math.max</code> (القيمة العظمى) و<code>Math.min</code> (القيمة الصغرى) و<code>Math.sqrt</code> (الجذر التربيعي).</p>
+<p>يُستخدم كائن <code>Math</code> كحاوية لتجميع مجموعة من الوظائف المترابطة. ولا يوجد سوى كائن <code>Math</code> واحد، ونادراً ما يكون مفيداً كقيمة. بل إنه يوفر <em>فضاء أسماء</em> (namespace) كي لا تضطر كل هذه الدوال والقيم إلى أن تكون ارتباطات عامة.</p>
+<p>وكثرة الارتباطات العامة &quot;تلوّث&quot; فضاء الأسماء. فكلما زاد عدد الأسماء المستخدمة، زاد احتمال أن تستبدل عن غير قصد قيمة ارتباط موجود. فمثلاً، ليس مستبعداً أن تريد تسمية شيء ما <code>max</code> في أحد برامجك. ولأن دالة <code>max</code> المدمجة في JavaScript محفوظة بأمان داخل كائن <code>Math</code>، فلا داعي للقلق من استبدالها.</p>
+<p>توقفك لغات كثيرة، أو تنبّهك على الأقل، عندما تعرّف ارتباطاً باسم مستخدم من قبل. وتفعل JavaScript ذلك مع الارتباطات التي أعلنتها بـ<code>let</code> أو <code>const</code> لكنها—على نحو معكوس—لا تفعله مع الارتباطات القياسية ولا مع الارتباطات المعلنة بـ<code>var</code> أو <code>function</code>.</p>
+<p>لنعد إلى كائن <code>Math</code>. إذا احتجت إلى حساب المثلثات، يمكن لـ<code>Math</code> أن يساعد. فهو يحتوي <code>cos</code> (جيب التمام) و<code>sin</code> (الجيب) و<code>tan</code> (الظل)، إضافة إلى دوالها العكسية <code>acos</code> و<code>asin</code> و<code>atan</code> على الترتيب. والعدد π (باي)—أو على الأقل أقرب تقريب له يتسع في عدد JavaScript—متاح باسم <code>Math.PI</code>. وهناك تقليد برمجي قديم بكتابة أسماء القيم الثابتة بحروف كبيرة كلها.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">randomPointOnCircle</span>(<span class="hljs-params">radius</span>) {
+  <span class="hljs-keyword">let</span> angle = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">2</span> * <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span>;
+  <span class="hljs-keyword">return</span> {<span class="hljs-attr">x</span>: radius * <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">cos</span>(angle),
+          <span class="hljs-attr">y</span>: radius * <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sin</span>(angle)};
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">randomPointOnCircle</span>(<span class="hljs-number">2</span>));
+<span class="hljs-comment">// → {x: 0.3667, y: 1.966}</span>
+</code></pre>
+<p>إن لم تكن على دراية بالجيب وجيب التمام، فلا تقلق. سأشرحهما عند استخدامهما في <a href="/chapter/the_document_object_model#sin_cos">الفصل 14</a>.</p>
+<p>استخدم المثال السابق <code>Math.random</code>. وهي دالة تُرجع عدداً شبه عشوائي جديداً بين 0 (شاملاً) و1 (غير شامل) في كل مرة تستدعيها:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>());
+<span class="hljs-comment">// → 0.36993729369714856</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>());
+<span class="hljs-comment">// → 0.727367032552138</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>());
+<span class="hljs-comment">// → 0.40180766698904335</span>
+</code></pre>
+<p>رغم أن الحواسيب آلات حتمية—فهي تتفاعل دائماً بالطريقة نفسها إذا أُعطيت المدخل نفسه—فمن الممكن جعلها تنتج أعداداً تبدو عشوائية. وللقيام بذلك، تحتفظ الآلة بقيمة مخفية، وكلما طلبت عدداً عشوائياً جديداً، تجري حسابات معقدة على هذه القيمة المخفية لإنشاء قيمة جديدة. فتخزّن قيمة جديدة وتُرجع عدداً مشتقاً منها. وبهذه الطريقة تستطيع إنتاج أعداد جديدة دائماً يصعب التنبؤ بها على نحو <em>يبدو</em> عشوائياً.</p>
+<p>وإذا أردنا عدداً صحيحاً عشوائياً بدلاً من عدد كسري، يمكننا استخدام <code>Math.floor</code> (التي تقرّب إلى أقرب عدد صحيح للأسفل) على نتيجة <code>Math.random</code>:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">10</span>));
+<span class="hljs-comment">// → 2</span>
+</code></pre>
+<p>ضرب العدد العشوائي في 10 يعطينا عدداً أكبر من أو يساوي 0 وأصغر من 10. ولأن <code>Math.floor</code> تقرّب للأسفل، فسينتج هذا التعبير، باحتمال متساوٍ، أي عدد من 0 حتى 9.</p>
+<p>وهناك أيضاً الدالة <code>Math.ceil</code> (وتعني &quot;السقف&quot;، وتقرّب إلى عدد صحيح للأعلى)، و<code>Math.round</code> (التي تقرّب إلى أقرب عدد صحيح)، و<code>Math.abs</code>، التي تأخذ القيمة المطلقة لعدد، أي أنها تجعل القيم السالبة موجبة وتبقي الموجبة كما هي.</p>
+<h2 id="التفكيك">التفكيك</h2>
+<p>لنعد إلى دالة <code>phi</code> لحظة.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">phi</span>(<span class="hljs-params">table</span>) {
+  <span class="hljs-keyword">return</span> (table[<span class="hljs-number">3</span>] * table[<span class="hljs-number">0</span>] - table[<span class="hljs-number">2</span>] * table[<span class="hljs-number">1</span>]) /
+    <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sqrt</span>((table[<span class="hljs-number">2</span>] + table[<span class="hljs-number">3</span>]) *
+              (table[<span class="hljs-number">0</span>] + table[<span class="hljs-number">1</span>]) *
+              (table[<span class="hljs-number">1</span>] + table[<span class="hljs-number">3</span>]) *
+              (table[<span class="hljs-number">0</span>] + table[<span class="hljs-number">2</span>]));
+}
+</code></pre>
+<p>أحد أسباب صعوبة قراءة هذه الدالة أن لدينا ارتباطاً يشير إلى مصفوفتنا، لكننا نفضّل كثيراً أن تكون لدينا ارتباطات <em>لعناصر</em> المصفوفة—أي <code>let n00 = table[0]</code> وهكذا. لحسن الحظ، هناك طريقة موجزة لفعل ذلك في JavaScript:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">phi</span>(<span class="hljs-params">[n00, n01, n10, n11]</span>) {
+  <span class="hljs-keyword">return</span> (n11 * n00 - n10 * n01) /
+    <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sqrt</span>((n10 + n11) * (n00 + n01) *
+              (n01 + n11) * (n00 + n10));
+}
+</code></pre>
+<p>وهذا يعمل أيضاً مع الارتباطات المنشأة بـ<code>let</code> أو<code>var</code> أو<code>const</code>. وإذا كنت تعرف أن القيمة التي تربطها مصفوفة، يمكنك استخدام الأقواس المربعة &quot;للنظر داخل&quot; القيمة، فتربط محتوياتها.</p>
+<p>وتعمل حيلة مشابهة مع الكائنات، باستخدام الأقواس المعقوفة بدلاً من المربعة.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> {name} = {<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Faraji&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">23</span>};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(name);
+<span class="hljs-comment">// → Faraji</span>
+</code></pre>
+<p>لاحظ أنك إذا حاولت تفكيك <code>null</code> أو<code>undefined</code> فستحصل على خطأ، تماماً كما لو حاولت الوصول مباشرة إلى خاصية في تلك القيم.</p>
+<h2 id="الوصول-الاختياري-إلى-الخصائص">الوصول الاختياري إلى الخصائص</h2>
+<p>عندما لا تكون متأكداً مما إذا كانت قيمة معينة تنتج كائناً، لكنك ما زلت تريد قراءة خاصية منه إن كان كائناً، يمكنك استخدام صيغة بديلة من صيغة النقطة: <code>object?.property</code>.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">city</span>(<span class="hljs-params">object</span>) {
+  <span class="hljs-keyword">return</span> object.<span class="hljs-property">address</span>?.<span class="hljs-property">city</span>;
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">city</span>({<span class="hljs-attr">address</span>: {<span class="hljs-attr">city</span>: <span class="hljs-string">&quot;Toronto&quot;</span>}}));
+<span class="hljs-comment">// → Toronto</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">city</span>({<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Vera&quot;</span>}));
+<span class="hljs-comment">// → undefined</span>
+</code></pre>
+<p>التعبير <code>a?.b</code> يعني الشيء نفسه الذي يعنيه <code>a.b</code> عندما لا تكون <code>a</code> تساوي null أو undefined. أما إذا كانت كذلك، فإنه يُقيَّم إلى <code>undefined</code>. وهذا قد يكون مريحاً عندما لا تكون متأكداً، كما في المثال، من وجود خاصية معينة، أو عندما يكون متغير ما قد يحمل القيمة undefined.</p>
+<p>ويمكن استخدام صيغة مشابهة مع الوصول بالأقواس المربعة، وحتى مع استدعاءات الدوال، بوضع <code>?.</code> أمام الأقواس الهلالية أو المربعة:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;string&quot;</span>.<span class="hljs-property">notAMethod</span>?.());
+<span class="hljs-comment">// → undefined</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>({}.<span class="hljs-property">arrayProp</span>?.[<span class="hljs-number">0</span>]);
+<span class="hljs-comment">// → undefined</span>
+</code></pre>
+<h2 id="json">JSON</h2>
+<p>لأن الخصائص تمسك قيمها بدلاً من أن تحتويها، تُخزَّن الكائنات والمصفوفات في ذاكرة الحاسوب كمتتاليات من البتات تحمل <em>عناوين</em> محتوياتها—أي مواضعها في الذاكرة. والمصفوفة التي بداخلها مصفوفة أخرى تتكون من منطقة ذاكرة واحدة (على الأقل) للمصفوفة الداخلية وأخرى للمصفوفة الخارجية، تحتوي (بين أمور أخرى) عدداً يمثل عنوان المصفوفة الداخلية.</p>
+<p>إذا أردت حفظ البيانات في ملف لوقت لاحق أو إرسالها إلى حاسوب آخر عبر الشبكة، فعليك أن تحوّل بطريقة ما هذه التشابكات من عناوين الذاكرة إلى وصف يمكن تخزينه أو إرساله. يمكنك <em>بالفعل</em> إرسال ذاكرة حاسوبك كلها مع عنوان القيمة التي تهمك، على ما أفترض، لكن ذلك لا يبدو أفضل نهج.</p>
+<p>ما يمكننا فعله هو <em>تسلسل</em> البيانات (serialize). وهذا يعني تحويلها إلى وصف مسطح. ومن صيغ التسلسل الشائعة صيغة تسمى <em>JSON</em> (وتُنطق &quot;جيسون&quot;)، وهي اختصار JavaScript Object Notation. وتُستخدم على نطاق واسع صيغة لتخزين البيانات والتواصل على الويب، حتى مع لغات أخرى غير JavaScript.</p>
+<p>تبدو JSON مشابهة لطريقة JavaScript في كتابة المصفوفات والكائنات، مع بعض القيود. فيجب إحاطة جميع أسماء الخصائص بعلامات اقتباس مزدوجة، ولا يُسمح إلا بتعبيرات بيانات بسيطة—لا استدعاءات دوال ولا ارتباطات ولا أي شيء يتضمن حسابات فعلية. ولا يُسمح بالتعليقات في JSON.</p>
+<p>قد تبدو مدوّنة سجل كهذه عند تمثيلها كبيانات JSON:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;squirrel&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;events&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;work&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;touched tree&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;pizza&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;running&quot;</span><span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>توفّر لنا JavaScript الدالتين <code>JSON.stringify</code> و<code>JSON.parse</code> لتحويل البيانات من هذه الصيغة وإليها. تأخذ الأولى قيمة JavaScript وتُرجع نصاً مرمّزاً بصيغة JSON. وتأخذ الثانية نصاً كهذا وتحوّله إلى القيمة التي يرمز إليها:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> string = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({<span class="hljs-attr">squirrel</span>: <span class="hljs-literal">false</span>,
+                             <span class="hljs-attr">events</span>: [<span class="hljs-string">&quot;weekend&quot;</span>]});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(string);
+<span class="hljs-comment">// → {&quot;squirrel&quot;:false,&quot;events&quot;:[&quot;weekend&quot;]}</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(string).<span class="hljs-property">events</span>);
+<span class="hljs-comment">// → [&quot;weekend&quot;]</span>
+</code></pre>
+<h2 id="الملخص">الملخص</h2>
+<p>توفر الكائنات والمصفوفات طرقاً لتجميع عدة قيم في قيمة واحدة. وهذا يتيح لنا وضع مجموعة من الأشياء المترابطة في كيس والجري بالكيس بدلاً من لفّ أذرعنا حول كل الأشياء الفردية ومحاولة الإمساك بكل منها على حدة.</p>
+<p>تمتلك معظم القيم في JavaScript خصائص، والاستثناءان هما <code>null</code> و<code>undefined</code>. ويُصل إلى الخصائص باستخدام <code>value.prop</code> أو<code>value[&quot;prop&quot;]</code>. وتميل الكائنات إلى استخدام أسماء لخصائصها وتخزين مجموعة ثابتة منها إلى حد ما. أما المصفوفات فتحتوي عادة على كميات متغيرة من قيم متطابقة مفهومياً وتستخدم أعداداً (بدءاً من 0) كأسماء لخصائصها.</p>
+<p>وهناك <em>بالفعل</em> بعض الخصائص المسماة في المصفوفات، مثل <code>length</code> وعدد من الطرق. والطرق دوال تسكن في خصائص وتعمل (عادة) على القيمة التي تكون خاصية فيها.</p>
+<p>ويمكنك المرور على المصفوفات باستخدام نوع خاص من حلقات <code>for</code>: <code>for (let element of array)</code>.</p>
+<h2 id="التمارين">التمارين</h2>
+<h3 id="مجموع-نطاق">مجموع نطاق</h3>
+<p>أشارت <a href="/chapter/introduction">مقدمة</a> هذا الكتاب إلى ما يلي كطريقة جميلة لحساب مجموع نطاق من الأعداد:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sum</span>(<span class="hljs-title function_">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">10</span>)));
+</code></pre>
+<p>اكتب دالة <code>range</code> تأخذ معطيين، <code>start</code> و<code>end</code>، وتُرجع مصفوفة تحتوي جميع الأعداد من <code>start</code> حتى <code>end</code> ضمناً.</p>
+<p>ثم اكتب دالة <code>sum</code> تأخذ مصفوفة من الأعداد وتُرجع مجموع هذه الأعداد. شغّل برنامج المثال وانظر هل يُرجع فعلاً 55.</p>
+<p>وكمهمة إضافية، عدّل دالة <code>range</code> لتأخذ معطىً ثالثاً اختيارياً يشير إلى قيمة &quot;الخطوة&quot; المستخدمة عند بناء المصفوفة. وإذا لم تُعطَ خطوة، فيجب أن تتزايد العناصر بمقدار واحد، بما يوافق السلوك القديم. ويجب أن يُرجع الاستدعاء <code>range(1, 10, 2)</code> القيمة <code>[1, 3, 5, 7, 9]</code>. وتأكد من أن هذا يعمل أيضاً مع قيم الخطوة السالبة بحيث يُنتج <code>range(5, 2, -1)</code> القيمة <code>[5, 4, 3, 2]</code>.</p>
+<pre><code class="language-js"><span class="hljs-comment">// اكتب شيفرتك هنا.</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">10</span>));
+<span class="hljs-comment">// → [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">range</span>(<span class="hljs-number">5</span>, <span class="hljs-number">2</span>, -<span class="hljs-number">1</span>));
+<span class="hljs-comment">// → [5, 4, 3, 2]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sum</span>(<span class="hljs-title function_">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">10</span>)));
+<span class="hljs-comment">// → 55</span>
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>أسهل طريقة لبناء مصفوفة هي تهيئة ارتباط إلى <code>[]</code> (مصفوفة جديدة فارغة) أولاً ثم استدعاء الطريقة <code>push</code> عليه مراراً لإضافة قيمة. ولا تنسَ إرجاع المصفوفة في نهاية الدالة.</p>
+<p>ولأن حدّ النهاية مشمول، ستحتاج إلى استخدام المعامل <code>&lt;=</code> بدلاً من <code>&lt;</code> لفحص نهاية حلقتك.</p>
+<p>ويمكن أن يكون وسيط الخطوة وسيطاً اختيارياً قيمته الافتراضية (باستخدام المعامل <code>=</code>) هي 1.</p>
+<p>والأفضل على الأرجح لجعل <code>range</code> تفهم قيم الخطوة السالبة هو كتابة حلقتين منفصلتين—واحدة للعدّ التصاعدي وأخرى للعدّ التنازلي—لأن المقارنة التي تفحص انتهاء الحلقة يجب أن تكون <code>&gt;=</code> بدلاً من <code>&lt;=</code> عند العدّ تنازلياً.</p>
+<p>وقد يكون من المجدي أيضاً استخدام خطوة افتراضية مختلفة، وهي -1، عندما تكون نهاية النطاق أصغر من بدايته. وبهذه الطريقة يُرجع <code>range(5, 2)</code> شيئاً ذا معنى بدلاً من أن يعلق في حلقة لا نهائية. ومن الممكن الإشارة إلى وسطاء سابقين في القيمة الافتراضية لوسيط ما.</p>
+</details>
+<h3 id="عكس-مصفوفة">عكس مصفوفة</h3>
+<p>تمتلك المصفوفات طريقة <code>reverse</code> تغيّر المصفوفة بعكس الترتيب الذي تظهر به عناصرها. في هذا التمرين، اكتب دالتين: <code>reverseArray</code> و<code>reverseArrayInPlace</code>. أما الأولى، <code>reverseArray</code>، فيجب أن تأخذ مصفوفة معطىً لها وتُنتج مصفوفة <em>جديدة</em> تحتوي العناصر نفسها بالترتيب المعاكس. وأما الثانية، <code>reverseArrayInPlace</code>، فيجب أن تفعل ما تفعله الطريقة <code>reverse</code>: أي <em>تعديل</em> المصفوفة المعطاة لها بعكس عناصرها. ولا يجوز لأي منهما استخدام الطريقة القياسية <code>reverse</code>.</p>
+<p>وبالعودة إلى الملاحظات عن التأثيرات الجانبية والدوال النقية في <a href="/chapter/functions#pure">الفصل السابق</a>، أي البديلين تتوقع أن يكون مفيداً في مواقف أكثر؟ وأيهما يعمل بشكل أسرع؟</p>
+<pre><code class="language-js"><span class="hljs-comment">// اكتب شيفرتك هنا.</span>
+
+<span class="hljs-keyword">let</span> myArray = [<span class="hljs-string">&quot;A&quot;</span>, <span class="hljs-string">&quot;B&quot;</span>, <span class="hljs-string">&quot;C&quot;</span>];
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">reverseArray</span>(myArray));
+<span class="hljs-comment">// → [&quot;C&quot;, &quot;B&quot;, &quot;A&quot;];</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(myArray);
+<span class="hljs-comment">// → [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;];</span>
+<span class="hljs-keyword">let</span> arrayValue = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+<span class="hljs-title function_">reverseArrayInPlace</span>(arrayValue);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(arrayValue);
+<span class="hljs-comment">// → [5, 4, 3, 2, 1]</span>
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>هناك طريقتان واضحتان لتنفيذ <code>reverseArray</code>. الأولى هي ببساطة المرور على مصفوفة الإدخال من الأمام إلى الخلف واستخدام الطريقة <code>unshift</code> على المصفوفة الجديدة لإدراج كل عنصر في بدايتها. والثانية هي المرور على مصفوفة الإدخال من الخلف إلى الأمام واستخدام الطريقة <code>push</code>. والمرور على مصفوفة بالاتجاه المعاكس يتطلب تعريف حلقة <code>for</code> (مرهقاً بعض الشيء)، مثل <code>(let i = array.length - 1; i &gt;= 0; i--)</code>.</p>
+<p>أما عكس المصفوفة في مكانها فهو أصعب. فعليك الحذر ألا تكتب فوق عناصر ستحتاجها لاحقاً. واستخدام <code>reverseArray</code> أو نسخ المصفوفة كلها بأي طريقة أخرى (<code>array.slice()</code> طريقة جيدة لنسخ مصفوفة) يعمل لكنه غش.</p>
+<p>الحيلة هي <em>تبديل</em> العنصر الأول والأخير، ثم الثاني وقبل الأخير، وهكذا. ويمكنك فعل ذلك بالمرور على نصف طول المصفوفة (استخدم <code>Math.floor</code> للتقريب للأسفل—فلا حاجة إلى لمس العنصر الأوسط في مصفوفة عدد عناصرها فردي) وتبديل العنصر في الموضع <code>i</code> بالعنصر في الموضع <code>array.length - 1 - i</code>. ويمكنك استخدام ارتباط محلي للإمساك بأحد العنصرين مؤقتاً، ثم الكتابة فوقه بصورته المنعكسة، ثم وضع القيمة الموجودة في الارتباط المحلي في المكان الذي كانت فيه الصورة المنعكسة.</p>
+</details>
+<h3 id="قائمة">قائمة</h3>
+<p>بوصفها كتلاً عامة من القيم، يمكن استخدام الكائنات لبناء جميع أنواع بنى البيانات. ومن بنى البيانات الشائعة <em>القائمة</em> (list) (ولا تخلطها بالمصفوفات). والقائمة مجموعة متداخلة من الكائنات، يمسك أول كائن مرجعاً إلى الثاني، ويمسك الثاني مرجعاً إلى الثالث، وهكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> list = {
+  <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">rest</span>: {
+    <span class="hljs-attr">value</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">rest</span>: {
+      <span class="hljs-attr">value</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">rest</span>: <span class="hljs-literal">null</span>
+    }
+  }
+};
+</code></pre>
+<p>وتشكّل الكائنات الناتجة سلسلة، كما يوضح المخطط التالي:</p>
+<p><img src="/images/book/linked-list.svg" alt="مخطط يوضح بنية الذاكرة لقائمة مترابطة. هناك ثلاث خلايا، تحمل كل واحدة منها حقل قيمة يحتوي عدداً، وحقل 'rest' فيه سهم إلى بقية القائمة. يشير سهم الخلية الأولى إلى الخلية الثانية، وسهم الخلية الثانية إلى الخلية الأخيرة، ويحمل حقل 'rest' في الخلية الأخيرة القيمة null."></p>
+<p>ومن محاسن القوائم أنها تستطيع مشاركة أجزاء من بنيتها. فمثلاً، إذا أنشأت قيمتين جديدتين <code>{value: 0, rest: list}</code> و<code>{value: -1, rest: list}</code> (حيث تشير <code>list</code> إلى الارتباط المعرّف سابقاً)، فكلتاهما قائمة مستقلة، لكنهما تتشاركان البنية التي تكوّن عناصرها الثلاثة الأخيرة. والقائمة الأصلية لا تزال أيضاً قائمة صحيحة من ثلاثة عناصر.</p>
+<p>اكتب دالة <code>arrayToList</code> تبني بنية قائمة كهذه المعروضة عند إعطائها <code>[1, 2, 3]</code> معطىً. واكتب أيضاً دالة <code>listToArray</code> تُنتج مصفوفة من قائمة. وأضف الدالتين المساعدتين <code>prepend</code>، التي تأخذ عنصراً وقائمة وتُنشئ قائمة جديدة تضيف العنصر إلى مقدمة قائمة الإدخال، و<code>nth</code>، التي تأخذ قائمة وعدداً وتُرجع العنصر في الموضع المعطى في القائمة (حيث يشير الصفر إلى العنصر الأول) أو <code>undefined</code> عندما لا يوجد عنصر كهذا.</p>
+<p>وإن لم تكن قد فعلت ذلك بعد، فاكتب أيضاً نسخة تعاودية من <code>nth</code>.</p>
+<pre><code class="language-js"><span class="hljs-comment">// اكتب شيفرتك هنا.</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">arrayToList</span>([<span class="hljs-number">10</span>, <span class="hljs-number">20</span>]));
+<span class="hljs-comment">// → {value: 10, rest: {value: 20, rest: null}}</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">listToArray</span>(<span class="hljs-title function_">arrayToList</span>([<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>])));
+<span class="hljs-comment">// → [10, 20, 30]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">prepend</span>(<span class="hljs-number">10</span>, <span class="hljs-title function_">prepend</span>(<span class="hljs-number">20</span>, <span class="hljs-literal">null</span>)));
+<span class="hljs-comment">// → {value: 10, rest: {value: 20, rest: null}}</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">nth</span>(<span class="hljs-title function_">arrayToList</span>([<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>]), <span class="hljs-number">1</span>));
+<span class="hljs-comment">// → 20</span>
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>بناء القائمة أسهل عند القيام به من الخلف إلى الأمام. لذا يمكن لـ<code>arrayToList</code> أن تمرّ على المصفوفة بالاتجاه المعاكس (انظر التمرين السابق) وتضيف، لكل عنصر، كائناً إلى القائمة. ويمكنك استخدام ارتباط محلي للإمساك بالجزء المبني من القائمة حتى الآن، واستخدام إسناد مثل <code>list = {value: X, rest: list}</code> لإضافة عنصر.</p>
+<p>وللمرور على قائمة (في <code>listToArray</code> و<code>nth</code>)، يمكن استخدام تعريف حلقة <code>for</code> كهذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> node = list; node; node = node.<span class="hljs-property">rest</span>) {}
+</code></pre>
+<p>هل ترى كيف يعمل ذلك؟ في كل تكرار من الحلقة تشير <code>node</code> إلى القائمة الفرعية الحالية، ويمكن للجسم قراءة خاصيتها <code>value</code> للحصول على العنصر الحالي. وفي نهاية كل تكرار تنتقل <code>node</code> إلى القائمة الفرعية التالية. وعندما تكون تلك القيمة <code>null</code>، نكون قد وصلنا إلى نهاية القائمة، وتنتهي الحلقة.</p>
+<p>وستنظر النسخة التعاودية من <code>nth</code>، بالمثل، إلى جزء أصغر فأصغر من &quot;ذيل&quot; القائمة، وتعدّ الفهرس تنازلياً في الوقت نفسه حتى يصل إلى الصفر، وعندها يمكنها إرجاع الخاصية <code>value</code> في العقدة التي تنظر إليها. وللحصول على العنصر رقم صفر في قائمة، تأخذ ببساطة الخاصية <code>value</code> في عقدتها الأولى. وللحصول على العنصر <em>N</em> + 1، تأخذ العنصر رقم <em>N</em> في القائمة الموجودة في الخاصية <code>rest</code> لهذه القائمة.</p>
+</details>
+<h3 id="مقارنة-عميقة">مقارنة عميقة</h3>
+<p>يقارن المعامل <code>==</code> الكائنات بالهوية، لكنك قد تفضّل أحياناً مقارنة قيم خصائصها الفعلية.</p>
+<p>اكتب دالة <code>deepEqual</code> تأخذ قيمتين وتُرجع <code>true</code> فقط إذا كانتا القيمة نفسها أو كانا كائنين لهما الخصائص نفسها، حيث تكون قيم الخصائص متساوية عند مقارنتها باستدعاء تعاودي لـ<code>deepEqual</code>.</p>
+<p>لمعرفة ما إذا كان يجب مقارنة القيم مباشرة (باستخدام المعامل <code>===</code> لذلك) أم مقارنة خصائصها، يمكنك استخدام المعامل <code>typeof</code>. فإذا أنتج <code>&quot;object&quot;</code> لكلا القيمتين، فيجب إجراء مقارنة عميقة. لكن عليك أن تراعي استثناءً غريباً واحداً: فبسبب حادثة تاريخية، يُنتج <code>typeof null</code> أيضاً <code>&quot;object&quot;</code>.</p>
+<p>وستكون الدالة <code>Object.keys</code> مفيدة عندما تحتاج إلى المرور على خصائص الكائنات لمقارنتها.</p>
+<pre><code class="language-js"><span class="hljs-comment">// اكتب شيفرتك هنا.</span>
+
+<span class="hljs-keyword">let</span> obj = {<span class="hljs-attr">here</span>: {<span class="hljs-attr">is</span>: <span class="hljs-string">&quot;an&quot;</span>}, <span class="hljs-attr">object</span>: <span class="hljs-number">2</span>};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">deepEqual</span>(obj, obj));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">deepEqual</span>(obj, {<span class="hljs-attr">here</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">object</span>: <span class="hljs-number">2</span>}));
+<span class="hljs-comment">// → false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">deepEqual</span>(obj, {<span class="hljs-attr">here</span>: {<span class="hljs-attr">is</span>: <span class="hljs-string">&quot;an&quot;</span>}, <span class="hljs-attr">object</span>: <span class="hljs-number">2</span>}));
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>سيبدو فحصك لما إذا كنت تتعامل مع كائن حقيقي شيئاً كهذا: <code>typeof x == &quot;object&quot; &amp;&amp; x != null</code>. واحرص على مقارنة الخصائص فقط عندما يكون <em>كلا</em> المعطيين كائنين. وفي جميع الحالات الأخرى يمكنك ببساطة إرجاع نتيجة تطبيق <code>===</code> فوراً.</p>
+<p>استخدم <code>Object.keys</code> للمرور على الخصائص. وعليك أن تفحص ما إذا كان للكائنين المجموعة نفسها من أسماء الخصائص وما إذا كانت تلك الخصائص ذات قيم متطابقة. وإحدى طرق ذلك هي التأكد من أن للكائنين العدد نفسه من الخصائص (أي أن طولَي قائمتي الخصائص متساويان). ثم، عند المرور على خصائص أحد الكائنين لمقارنتها، تأكد أولاً دائماً من أن الكائن الآخر يملك فعلاً خاصية بهذا الاسم. وإذا كان لهما العدد نفسه من الخصائص وكانت كل خصائص أحدهما موجودة في الآخر أيضاً، فلديهما المجموعة نفسها من أسماء الخصائص.</p>
+<p>وأفضل طريقة لإرجاع القيمة الصحيحة من الدالة هي إرجاع <code>false</code> فوراً عند العثور على عدم تطابق، وإرجاع <code>true</code> في نهاية الدالة.</p>
+</details>
+`,c={number:"04",slug:s,title:n,englishTitle:a,headings:l,html:e};export{c as default,a as englishTitle,l as headings,e as html,p as number,s as slug,n as title};

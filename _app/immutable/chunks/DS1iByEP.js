@@ -1,0 +1,192 @@
+const l="01",s="values_types_and_operators",e="القيم والأنواع والمعاملات",a="Values, Types, and Operators",n=[{depth:2,id:"القيم",text:"القيم"},{depth:2,id:"الأعداد",text:"الأعداد"},{depth:3,id:"الحساب",text:"الحساب"},{depth:3,id:"أعداد-خاصة",text:"أعداد خاصة"},{depth:2,id:"النصوص",text:"النصوص"},{depth:2,id:"المعاملات-الأحادية",text:"المعاملات الأحادية"},{depth:2,id:"القيم-المنطقية",text:"القيم المنطقية"},{depth:3,id:"المقارنة",text:"المقارنة"},{depth:3,id:"المعاملات-المنطقية",text:"المعاملات المنطقية"},{depth:2,id:"القيم-الفارغة",text:"القيم الفارغة"},{depth:2,id:"التحويل-التلقائي-للأنواع",text:"التحويل التلقائي للأنواع"},{depth:3,id:"التقييم-القصير-للمعاملات-المنطقية",text:"التقييم القصير للمعاملات المنطقية"},{depth:2,id:"الخلاصة",text:"الخلاصة"}],c=`<blockquote>
+<p>تحت سطح الآلة، يتحرك البرنامج. بلا جهد، يتوسع وينكمش. في انسجام عظيم، تتناثر الإلكترونات وتتجمع من جديد. ليست الأشكال على الشاشة سوى تموجات على الماء. أما الجوهر فيبقى في الأسفل، غير مرئي.</p>
+<p>— المعلم يوان-ما، كتاب البرمجة</p>
+</blockquote>
+<p><img src="/images/book/chapter_picture_1.jpg" alt="رسم توضيحي لبحر من النقاط الداكنة والمضيئة (بتات) فيه جزر"></p>
+<p>في عالم الحاسوب، لا يوجد سوى البيانات. يمكنك قراءة البيانات وتعديلها وإنشاء بيانات جديدة — لكن ما ليس بيانات لا يمكن ذكره. تُخزَّن كل هذه البيانات على شكل سلاسل طويلة من البتات، ومن ثم فهي متشابهة في جوهرها.</p>
+<p><em>البتات</em> (bits) هي أي نوع من الأشياء ذات القيمتين، وتوصف عادةً بالصفر والواحد. داخل الحاسوب، تتخذ أشكالاً مثل شحنة كهربائية عالية أو منخفضة، أو إشارة قوية أو ضعيفة، أو نقطة لامعة أو باهتة على سطح قرص مضغوط. يمكن اختزال أي قطعة من المعلومات المتقطعة إلى سلسلة من الأصفار والواحدات، ومن ثم تمثيلها بالبتات.</p>
+<p>على سبيل المثال، يمكننا التعبير عن العدد 13 بالبتات. يجري هذا بالطريقة نفسها التي يجري بها الأمر مع عدد عشري، لكن بدلاً من 10 أرقام مختلفة، لدينا 2 فقط، ويزداد وزن كل رقم بمعامل 2 من اليمين إلى اليسار. إليك البتات التي يتكوّن منها العدد 13، مع أوزان الأرقام موضحة أسفلها:</p>
+<pre><code>   0   0   0   0   1   1   0   1
+ 128  64  32  16   8   4   2   1
+</code></pre>
+<p>هذا هو العدد الثنائي 00001101. تمثل أرقامه غير الصفرية 8 و4 و1، ومجموعها 13.</p>
+<h2 id="القيم">القيم</h2>
+<p>تخيّل بحراً من البتات — محيطاً منها. يحتوي حاسوب حديث نموذجي على أكثر من 100 مليار بت في ذاكرته المتطايرة (ذاكرة العمل). أما التخزين غير المتطاير (القرص الصلب أو ما يعادله) فيميل إلى احتواء عدد أكبر من ذلك ببضع مراتب قدرية.</p>
+<p>لتتمكن من العمل مع هذه الكميات من البتات دون أن تضيع، نفصلها إلى كتل تمثل قطعاً من المعلومات. في بيئة JavaScript، تُسمى تلك الكتل <em>قيم</em> (values). ورغم أن كل القيم مصنوعة من بتات، فإنها تؤدي أدواراً مختلفة. ولكل قيمة نوع يحدد دورها. بعض القيم أعداد، وبعضها قطع من النص، وبعضها دوال، وهكذا.</p>
+<p>لإنشاء قيمة، ما عليك إلا أن تستدعي اسمها. هذا مريح. لا يتعين عليك جمع مواد البناء لقيمك أو الدفع مقابلها. تكتفي بطلب واحدة، و<em>وفجأة</em>، تكون لديك. بالطبع، لا تُخلق القيم حقاً من العدم. فلا بد من تخزين كل واحدة في مكان ما، وإذا أردت استخدام عدد هائل منها في الوقت نفسه، فقد تنفد ذاكرة الحاسوب. لحسن الحظ، هذه مشكلة فقط إذا كنت بحاجة إليها كلها في آن واحد. وبمجرد ألا تستخدم قيمة بعد الآن، فإنها تتلاشى، تاركةً بتاتها لإعادة تدويرها كمواد بناء للجيل التالي من القيم.</p>
+<p>يقدّم ما تبقى من هذا الفصل العناصر الذرية لبرامج JavaScript، أي أنواع القيم البسيطة والمعاملات التي يمكنها التأثير في مثل هذه القيم.</p>
+<h2 id="الأعداد">الأعداد</h2>
+<p>قيم النوع <em>number</em> هي، كما هو متوقع، قيم عددية. في برنامج JavaScript، تُكتب على النحو التالي:</p>
+<pre><code class="language-js"><span class="hljs-number">13</span>
+</code></pre>
+<p>استخدام ذلك في برنامج يؤدي إلى ظهور نمط البتات الخاص بالعدد 13 داخل ذاكرة الحاسوب.</p>
+<p>تستخدم JavaScript عدداً ثابتاً من البتات، هو 64 بت، لتخزين قيمة عددية واحدة. وعدد الأنماط التي يمكنك إنشاؤها بـ64 بت محدود، ما يحد من عدد الأعداد المختلفة التي يمكن تمثيلها. بـ<em>N</em> من الأرقام العشرية، يمكنك تمثيل 10N عدداً. وبالمثل، إذا أُتيح لك 64 رقماً ثنائياً، يمكنك تمثيل 264 عدداً مختلفاً، وهو نحو 18 كوينتليون (18 متبوعاً بـ18 صفراً). هذا كثير.</p>
+<p>كانت ذاكرة الحاسوب أصغر بكثير في الماضي، وكان الناس يميلون إلى استخدام مجموعات من 8 أو 16 بت لتمثيل أعدادهم. وكان من السهل أن <em>تفيض</em> (overflow) مثل هذه الأعداد الصغيرة عن الحد بطريق الخطأ — أي أن ينتهي بك الأمر إلى عدد لا يتسع في العدد المحدد من البتات. اليوم، حتى الحواسيب التي تتسع في جيبك لديها ذاكرة وفيرة، لذا لك مطلق الحرية في استخدام كتل من 64 بت، ولا تحتاج إلى القلق بشأن الفيض إلا عند التعامل مع أعداد فلكية حقاً.</p>
+<p>لكن ليست كل الأعداد الكاملة الأقل من 18 كوينتليون تتسع في عدد JavaScript. فتلك البتات تخزّن أيضاً الأعداد السالبة، لذا تشير بتة واحدة إلى إشارة العدد. والمسألة الأكبر هي تمثيل الأعداد غير الكاملة. للقيام بذلك، تُستخدم بعض البتات لتخزين موضع الفاصلة العشرية. والحد الأقصى الفعلي للعدد الكامل الذي يمكن تخزينه يقع أقرب إلى نطاق 9 كوادريليون (15 صفراً) — وهو ما يزال كبيراً بشكل مبهج.</p>
+<p>تُكتب الأعداد الكسرية باستخدام نقطة:</p>
+<pre><code class="language-js"><span class="hljs-number">9.81</span>
+</code></pre>
+<p>بالنسبة إلى الأعداد الكبيرة جداً أو الصغيرة جداً، يمكنك أيضاً استخدام الترميز العلمي بإضافة <em>e</em> (اختصاراً لـ<em>exponent</em>، أي الأس)، متبوعة بأس العدد.</p>
+<pre><code class="language-js"><span class="hljs-number">2.998e8</span>
+</code></pre>
+<p>هذا يساوي 2.998 × 108 = 299,800,000.</p>
+<p>الحسابات بالأعداد الكاملة (وتسمى أيضاً <em>الأعداد الصحيحة</em> — integers) الأصغر من 9 كوادريليون المذكور آنفاً مضمونة الدقة دائماً. لسوء الحظ، الحسابات بالأعداد الكسرية ليست كذلك عموماً. وكما لا يمكن التعبير عن π (باي) بدقة بعدد منتهٍ من الأرقام العشرية، تفقد أعداد كثيرة بعض دقتها عندما تتاح 64 بت فقط لتخزينها. هذا مؤسف، لكنه يسبب مشكلات عملية في حالات محددة فقط. المهم أن تدرك ذلك وأن تتعامل مع الأعداد الرقمية الكسرية كتقريبات، لا كقيم دقيقة.</p>
+<h3 id="الحساب">الحساب</h3>
+<p>الشيء الرئيسي الذي تفعله بالأعداد هو الحساب. تأخذ العمليات الحسابية مثل الجمع أو الضرب قيمتين عدديتين وتنتج عدداً جديداً منهما. وإليك شكلها في JavaScript:</p>
+<pre><code class="language-js"><span class="hljs-number">100</span> + <span class="hljs-number">4</span> * <span class="hljs-number">11</span>
+</code></pre>
+<p>يسمى الرمزان <code>+</code> و<code>*</code> <em>معاملين</em> (operators). الأول يعني الجمع والثاني يعني الضرب. ووضع معامل بين قيمتين يطبقه على تلك القيمتين وينتج قيمة جديدة.</p>
+<p>هل يعني هذا المثال «اجمع 4 و100، ثم اضرب الناتج في 11»، أم أن الضرب يجري قبل الجمع؟ كما ربما خمّنت، يحدث الضرب أولاً. وكما في الرياضيات، يمكنك تغيير ذلك بوضع الجمع بين قوسين.</p>
+<pre><code class="language-js">(<span class="hljs-number">100</span> + <span class="hljs-number">4</span>) * <span class="hljs-number">11</span>
+</code></pre>
+<p>للطرح يوجد المعامل <code>-</code>. ويمكن إجراء القسمة بالمعامل <code>/</code>.</p>
+<p>عندما تظهر معاملات معاً دون أقواس، يحدد ترتيب تطبيقها <em>أسبقية</em> (precedence) المعاملات. ويوضح المثال أن الضرب يأتي قبل الجمع. وللمعامل <code>/</code> الأسبقية نفسها التي للمعامل <code>*</code>. وبالمثل، للأمرين <code>+</code> و<code>-</code> الأسبقية نفسها. وعندما تظهر عدة معاملات بالأسبقية نفسها جنباً إلى جنب، كما في <code>1 - 2 + 1</code>، تُطبَّق من اليسار إلى اليمين: <code>(1 - 2) + 1</code>.</p>
+<p>لا تقلق كثيراً بشأن قواعد الأسبقية هذه. عند الشك، أضف أقواساً فحسب.</p>
+<p>ثمة معامل حسابي آخر، قد لا تتعرف عليه فوراً. يُستخدم الرمز <code>%</code> لتمثيل عملية <em>الباقي</em> (remainder). <code>X % Y</code> هو باقي قسمة <code>X</code> على <code>Y</code>. على سبيل المثال، ينتج <code>314 % 100</code> القيمة <code>14</code>، ويعطي <code>144 % 12</code> القيمة <code>0</code>. وأسبقية معامل الباقي هي نفسها أسبقية الضرب والقسمة. وسترى أيضاً هذا المعامل كثيراً ما يُشار إليه باسم <em>مودولو</em> (modulo).</p>
+<h3 id="أعداد-خاصة">أعداد خاصة</h3>
+<p>ثمة ثلاث قيم خاصة في JavaScript تُعدّ أعداداً لكنها لا تتصرف مثل الأعداد العادية. الأولى اثنتان هما <code>Infinity</code> و<code>-Infinity</code>، وتمثلان اللانهاية الموجبة والسالبة. <code>Infinity - 1</code> تبقى <code>Infinity</code>، وهكذا. لكن لا تثق كثيراً في الحسابات القائمة على اللانهاية. فهي غير سليمة رياضياً، وستقودك سريعاً إلى العدد الخاص التالي: <code>NaN</code>.</p>
+<p>يرمز <code>NaN</code> إلى «ليس عدداً» (not a number)، رغم أنه <em>قيمة</em> من النوع number. وستحصل على هذه النتيجة عندما تحاول، مثلاً، حساب <code>0 / 0</code> (صفر مقسوماً على صفر)، أو <code>Infinity - Infinity</code>، أو أي عدد آخر من العمليات العددية التي لا تسفر عن نتيجة ذات معنى.</p>
+<h2 id="النصوص">النصوص</h2>
+<p>النوع الأساسي التالي من البيانات هو <em>النص</em> (string). تُستخدم النصوص لتمثيل النص المكتوب. وتُكتب بإحاطة محتواها بعلامات اقتباس.</p>
+<pre><code class="language-js"><span class="hljs-string">\`Down on the sea\`</span>
+<span class="hljs-string">&quot;Lie on the ocean&quot;</span>
+<span class="hljs-string">&#x27;Float on the ocean&#x27;</span>
+</code></pre>
+<p>يمكنك استخدام علامات اقتباس مفردة أو مزدوجة أو علامات backtick لوسم النصوص، شرط أن تتطابق علامتا الاقتباس في بداية النص ونهايته.</p>
+<p>يمكنك وضع أي شيء تقريباً بين علامات الاقتباس لتصنع منه JavaScript قيمة نصية. لكن قلة من المحارف أصعب من غيرها. يمكنك أن تتخيل كيف قد يكون وضع علامات اقتباس داخل علامات اقتباس أمراً صعباً، لأنها ستبدو وكأنها نهاية النص. ولا يمكن تضمين <em>الأسطر الجديدة</em> (newlines) — وهي المحارف التي تحصل عليها عند ضغط Enter — إلا عندما يكون النص محاطاً بعلامات backtick (\`\`\`).</p>
+<p>لجعل تضمين مثل هذه المحارف في نص ممكن، يُستخدم الترميز التالي: تشير الشرطة المائلة العكسية (<code>\\</code>) داخل نص محاط بعلامات اقتباس إلى أن للمحرف الذي يليها معنى خاصاً. ويسمى هذا <em>تهريب</em> (escaping) المحرف. وعلامة اقتباس تسبقها شرطة مائلة عكسية لن تنهي النص بل ستكون جزءاً منه. وعندما يأتي المحرف <code>n</code> بعد شرطة مائلة عكسية، يُفسَّر على أنه سطر جديد. وبالمثل، يعني <code>t</code> بعد شرطة مائلة عكسية محرف tab. خذ النص التالي:</p>
+<pre><code class="language-js"><span class="hljs-string">&quot;This is the first line\\nAnd this is the second&quot;</span>
+</code></pre>
+<p>هذا هو النص الفعلي في ذلك النص:</p>
+<pre><code>This is the first line
+And this is the second
+</code></pre>
+<p>ثمة، بالطبع، حالات تريد فيها أن تكون الشرطة المائلة العكسية في نص مجرد شرطة مائلة عكسية، لا رمزاً خاصاً. وإذا تتابعت شرطتان مائلتان عكسيتان، فإنهما تنطويان معاً، ولا تبقى سوى واحدة في القيمة النصية الناتجة. وهكذا يمكن التعبير عن النص «<em>يُكتب محرف السطر الجديد على الصورة <code>&quot;</code>\\n<code>&quot;</code>.</em>»:</p>
+<pre><code class="language-js"><span class="hljs-string">&quot;A newline character is written like \\&quot;\\\\n\\&quot;.&quot;</span>
+</code></pre>
+<p>النصوص أيضاً يجب نمذجتها كسلسلة من البتات لتوجد داخل الحاسوب. والطريقة التي تفعل بها JavaScript ذلك مبنية على معيار <em>Unicode</em>. يخصص هذا المعيار رقماً لكل محرف تقريباً قد تحتاج إليه يوماً، بما في ذلك محارف من اليونانية والعربية واليابانية والأرمينية وغيرها. وإذا كان لدينا رقم لكل محرف، يمكن وصف النص بسلسلة من الأرقام. وهذا ما تفعله JavaScript.</p>
+<p>لكن ثمة تعقيد: يستخدم تمثيل JavaScript 16 بت لكل عنصر نصي، ما يمكنه وصف ما يصل إلى 216 محرفاً مختلفاً. غير أن Unicode يعرّف محارف أكثر من ذلك — نحو ضعف هذا العدد في الوقت الحالي. لذا تشغل بعض المحارف، مثل كثير من الرموز التعبيرية (emoji)، «موضعي محرف» في نصوص JavaScript. وسنعود إلى هذا في <a href="/chapter/higher_order_functions#code_units">الفصل 5</a>.</p>
+<p>لا يمكن قسمة النصوص أو ضربها أو طرحها. لكن <em>يمكن</em> استخدام المعامل <code>+</code> عليها، لا للجمع بل <em>للدمج</em> (concatenate) — أي لصق نصين معاً. وسينتج السطر التالي النص <code>&quot;concatenate&quot;</code>:</p>
+<pre><code class="language-js"><span class="hljs-string">&quot;con&quot;</span> + <span class="hljs-string">&quot;cat&quot;</span> + <span class="hljs-string">&quot;e&quot;</span> + <span class="hljs-string">&quot;nate&quot;</span>
+</code></pre>
+<p>للقيم النصية عدد من الدوال المرتبطة بها (<em>طرق</em> — methods) يمكن استخدامها لإجراء عمليات أخرى عليها. سأقول المزيد عنها في <a href="/chapter/data_structures_objects_and_arrays#methods">الفصل 4</a>.</p>
+<p>النصوص المكتوبة بعلامات اقتباس مفردة أو مزدوجة تتصرف بشكل متشابه جداً — والفرق الوحيد يكمن في نوع علامة الاقتباس التي تحتاج إلى تهريبها بداخلها. أما النصوص المحاطة بعلامات backtick، وتسمى عادةً <em>قوالب نصية</em> (template literals)، فيمكنها القيام بحيل إضافية قليلة. فإلى جانب قدرتها على الامتداد عبر عدة أسطر، يمكنها أيضاً تضمين قيم أخرى.</p>
+<pre><code class="language-js"><span class="hljs-string">\`half of 100 is <span class="hljs-subst">\${<span class="hljs-number">100</span> / <span class="hljs-number">2</span>}</span>\`</span>
+</code></pre>
+<p>عندما تكتب شيئاً داخل <code>\${}</code> في قالب نصي، تُحسب نتيجته وتُحوَّل إلى نص ويُضمَّن في ذلك الموضع. وينتج هذا المثال النص <code>&quot;half of 100 is 50&quot;</code>.</p>
+<h2 id="المعاملات-الأحادية">المعاملات الأحادية</h2>
+<p>ليست كل المعاملات رموزاً. بعضها يُكتب كلمات. ومن الأمثلة على ذلك المعامل <code>typeof</code>، الذي ينتج قيمة نصية تسمّي نوع القيمة التي تعطيها له.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">typeof</span> <span class="hljs-number">4.5</span>)
+<span class="hljs-comment">// → number</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">typeof</span> <span class="hljs-string">&quot;x&quot;</span>)
+<span class="hljs-comment">// → string</span>
+</code></pre>
+<p>سنستخدم <code>console.log</code> في الشيفرة المثالية للإشارة إلى أننا نريد رؤية نتيجة تقييم شيء ما. (المزيد عن ذلك في <a href="/chapter/program_structure">الفصل التالي</a>.)</p>
+<p>كل المعاملات الأخرى المعروضة حتى الآن في هذا الفصل عملت على قيمتين، لكن <code>typeof</code> يأخذ قيمة واحدة فقط. تسمى المعاملات التي تستخدم قيمتين معاملات <em>ثنائية</em> (binary)، أما التي تأخذ قيمة واحدة فتسمى معاملات <em>أحادية</em> (unary). ويمكن استخدام معامل الطرح (<code>-</code>) كمعامل ثنائي وكمعامل أحادي معاً.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(- (<span class="hljs-number">10</span> - <span class="hljs-number">2</span>))
+<span class="hljs-comment">// → -8</span>
+</code></pre>
+<h2 id="القيم-المنطقية">القيم المنطقية</h2>
+<p>غالباً ما يكون من المفيد وجود قيمة تميّز بين احتمالين فقط، مثل «نعم» و«لا» أو «تشغيل» و«إيقاف». ولهذا الغرض، تمتلك JavaScript نوع <em>Boolean</em>، وله قيمتان فقط: true وfalse، تُكتبان بهاتين الكلمتين.</p>
+<h3 id="المقارنة">المقارنة</h3>
+<p>إليك طريقة لإنتاج قيم منطقية:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">3</span> &gt; <span class="hljs-number">2</span>)
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">3</span> &lt; <span class="hljs-number">2</span>)
+<span class="hljs-comment">// → false</span>
+</code></pre>
+<p>العلامتان <code>&gt;</code> و<code>&lt;</code> هما الرمزان التقليديان لـ«أكبر من» و«أصغر من» على الترتيب. وهما معاملان ثنائيان. ويؤدي تطبيقهما إلى قيمة منطقية تشير إلى ما إذا كان الشرط صحيحاً في هذه الحالة.</p>
+<p>ويمكن مقارنة النصوص بالطريقة نفسها.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Aardvark&quot;</span> &lt; <span class="hljs-string">&quot;Zoroaster&quot;</span>)
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>ترتيب النصوص أبجدي تقريباً، لكنه ليس تماماً ما تتوقعه في قاموس: فالحروف الكبيرة دائماً «أصغر» من الحروف الصغيرة، لذا <code>&quot;Z&quot; &lt; &quot;a&quot;</code>، كما أن المحارف غير الأبجدية (! و- وما شابه) مشمولة أيضاً في الترتيب. وعند مقارنة النصوص، تمر JavaScript على المحارف من اليسار إلى اليمين، مقارنةً رموز Unicode واحداً واحداً.</p>
+<p>وثمة معاملات مشابهة أخرى: <code>&gt;=</code> (أكبر من أو يساوي)، و<code>&lt;=</code> (أصغر من أو يساوي)، و<code>==</code> (يساوي)، و<code>!=</code> (لا يساوي).</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Garnet&quot;</span> != <span class="hljs-string">&quot;Ruby&quot;</span>)
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Pearl&quot;</span> == <span class="hljs-string">&quot;Amethyst&quot;</span>)
+<span class="hljs-comment">// → false</span>
+</code></pre>
+<p>لا توجد في JavaScript سوى قيمة واحدة لا تساوي نفسها، وهي <code>NaN</code> («ليس عدداً»).</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">NaN</span> == <span class="hljs-title class_">NaN</span>)
+<span class="hljs-comment">// → false</span>
+</code></pre>
+<p>من المفترض أن يشير <code>NaN</code> إلى نتيجة حساب لا معنى له، وبالتالي فهو لا يساوي نتيجة أي حساب لا معنى له <em>آخر</em>.</p>
+<h3 id="المعاملات-المنطقية">المعاملات المنطقية</h3>
+<p>ثمة أيضاً بعض العمليات التي يمكن تطبيقها على القيم المنطقية نفسها. وتدعم JavaScript ثلاثة معاملات منطقية: <em>و</em> (and)، و<em>أو</em> (or)، و<em>ليس</em> (not). ويمكن استخدامها «للتفكير» بالقيم المنطقية.</p>
+<p>يمثل المعامل <code>&amp;&amp;</code> <em>و</em> المنطقية. وهو معامل ثنائي، ونتيجته true فقط إذا كانت القيمتان المعطاتان له صحيحتين معاً.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">true</span> &amp;&amp; <span class="hljs-literal">false</span>)
+<span class="hljs-comment">// → false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">true</span> &amp;&amp; <span class="hljs-literal">true</span>)
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>ويشير المعامل <code>||</code> إلى <em>أو</em> المنطقية. وهو ينتج true إذا كانت إحدى القيمتين المعطاتين له صحيحة.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">false</span> || <span class="hljs-literal">true</span>)
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">false</span> || <span class="hljs-literal">false</span>)
+<span class="hljs-comment">// → false</span>
+</code></pre>
+<p>وتُكتب <em>ليس</em> بعلامة تعجب (<code>!</code>). وهي معامل أحادي يقلب القيمة المعطاة له — فـ<code>!true</code> ينتج <code>false</code> و<code>!false</code> يعطي <code>true</code>.</p>
+<p>عند خلط هذه المعاملات المنطقية مع المعاملات الحسابية وغيرها، ليس من الواضح دائماً متى تلزم الأقواس. عملياً، يمكنك عادةً الاكتفاء بمعرفة أنه من بين المعاملات التي رأيناها حتى الآن، تمتلك <code>||</code> أدنى أسبقية، ثم تأتي <code>&amp;&amp;</code>، ثم معاملات المقارنة (<code>&gt;</code> و<code>==</code> وما شابه)، ثم البقية. وقد اختير هذا الترتيب بحيث تقلّ الأقواس اللازمة إلى أدنى حد في تعبيرات نموذجية مثل التالي:</p>
+<pre><code class="language-js"><span class="hljs-number">1</span> + <span class="hljs-number">1</span> == <span class="hljs-number">2</span> &amp;&amp; <span class="hljs-number">10</span> * <span class="hljs-number">10</span> &gt; <span class="hljs-number">50</span>
+</code></pre>
+<p>آخر معامل منطقي سننظر إليه ليس أحادياً ولا ثنائياً، بل <em>ثلاثياً</em> (ternary)، إذ يعمل على ثلاث قيم. ويُكتب بعلامة استفهام ونقطتين، هكذا:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">true</span> ? <span class="hljs-number">1</span> : <span class="hljs-number">2</span>);
+<span class="hljs-comment">// → 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">false</span> ? <span class="hljs-number">1</span> : <span class="hljs-number">2</span>);
+<span class="hljs-comment">// → 2</span>
+</code></pre>
+<p>يسمى هذا المعامل <em>الشرطي</em> (conditional) (أو أحياناً مجرد <em>المعامل الثلاثي</em> لأنه المعامل الوحيد من هذا النوع في اللغة). ويستخدم المعامل القيمة الواقعة يسار علامة الاستفهام ليقرر أي القيمتين الأخريين «يختار». فإذا كتبت <code>a ? b : c</code>، ستكون النتيجة <code>b</code> عندما تكون <code>a</code> صحيحة، و<code>c</code> خلاف ذلك.</p>
+<h2 id="القيم-الفارغة">القيم الفارغة</h2>
+<p>ثمة قيمتان خاصتان، تُكتبان <code>null</code> و<code>undefined</code>، تُستخدمان للإشارة إلى غياب قيمة <em>ذات معنى</em>. وهما قيمتان بحد ذاتهما، لكنهما لا تحملان أي معلومات.</p>
+<p>وكثير من العمليات في اللغة التي لا تنتج قيمة ذات معنى تُرجع <code>undefined</code> لمجرد أنه لا بد لها من إرجاع <em>بعض</em> القيم.</p>
+<p>والفرق في المعنى بين <code>undefined</code> و<code>null</code> هو من قبيل المصادفة في تصميم JavaScript، وهو لا يهم في معظم الأوقات. وفي الحالات التي يتعين عليك فيها حقاً الاهتمام بهذه القيم، أنصحك بالتعامل معها على أنها قابلة للتبادل في الغالب.</p>
+<h2 id="التحويل-التلقائي-للأنواع">التحويل التلقائي للأنواع</h2>
+<p>في <a href="/chapter/introduction">المقدمة</a>، ذكرت أن JavaScript تبذل جهداً خاصاً لقبول أي برنامج تقريباً تعطيها إياه، حتى البرامج التي تفعل أشياء غريبة. ويتجلى هذا بشكل جميل في التعبيرات التالية:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">8</span> * <span class="hljs-literal">null</span>)
+<span class="hljs-comment">// → 0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;5&quot;</span> - <span class="hljs-number">1</span>)
+<span class="hljs-comment">// → 4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;5&quot;</span> + <span class="hljs-number">1</span>)
+<span class="hljs-comment">// → 51</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;five&quot;</span> * <span class="hljs-number">2</span>)
+<span class="hljs-comment">// → NaN</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">false</span> == <span class="hljs-number">0</span>)
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>عندما يُطبَّق معامل على نوع القيمة «الخاطئ»، تحوّل JavaScript تلك القيمة بهدوء إلى النوع الذي تحتاجه، وفق مجموعة من القواعد التي غالباً ما لا تكون ما تريده أو تتوقعه. ويسمى هذا <em>إكراه النوع</em> (type coercion). فـ<code>null</code> في التعبير الأول تصبح <code>0</code>، و<code>&quot;5&quot;</code> في التعبير الثاني تصبح <code>5</code> (من نص إلى عدد). لكن في التعبير الثالث، تحاول <code>+</code> دمج النصوص قبل الجمع العددي، لذا تُحوَّل <code>1</code> إلى <code>&quot;1&quot;</code> (من عدد إلى نص).</p>
+<p>وعندما يُحوَّل شيء لا يقابل عدداً بطريقة واضحة (مثل <code>&quot;five&quot;</code> أو <code>undefined</code>) إلى عدد، تحصل على القيمة <code>NaN</code>. وتظل العمليات الحسابية اللاحقة على <code>NaN</code> تنتج <code>NaN</code>، لذا إذا وجدت نفسك تحصل على إحداها في موضع غير متوقع، فابحث عن تحويلات أنواع عرضية.</p>
+<p>عند مقارنة قيم من النوع نفسه باستخدام المعامل <code>==</code>، تكون النتيجة سهلة التوقع: يجب أن تحصل على true عندما تكون القيمتان متماثلتين، باستثناء حالة <code>NaN</code>. لكن عندما تختلف الأنواع، تستخدم JavaScript مجموعة معقدة ومربكة من القواعد لتحديد ما يجب فعله. في معظم الحالات، تحاول فقط تحويل إحدى القيمتين إلى نوع القيمة الأخرى. غير أنه عندما يظهر <code>null</code> أو <code>undefined</code> على أي من جانبي المعامل، فإنه ينتج true فقط إذا كان الجانبان أحدهما <code>null</code> أو <code>undefined</code>.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">null</span> == <span class="hljs-literal">undefined</span>);
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">null</span> == <span class="hljs-number">0</span>);
+<span class="hljs-comment">// → false</span>
+</code></pre>
+<p>هذا السلوك مفيد غالباً. فعندما تريد اختبار ما إذا كانت قيمة تحمل قيمة حقيقية بدلاً من <code>null</code> أو <code>undefined</code>، يمكنك مقارنتها بـ<code>null</code> باستخدام المعامل <code>==</code> أو <code>!=</code>.</p>
+<p>ماذا لو أردت اختبار ما إذا كان شيء ما يشير إلى القيمة الدقيقة <code>false</code>؟ التعبيرات مثل <code>0 == false</code> و<code>&quot;&quot; == false</code> صحيحة أيضاً بسبب التحويل التلقائي للأنواع. وعندما <em>لا</em> تريد حدوث أي تحويلات للنوع، ثمة معاملان إضافيان: <code>===</code> و<code>!==</code>. الأول يختبر ما إذا كانت قيمة <em>مساوية تماماً</em> للأخرى، والثاني يختبر ما إذا كانت غير مساوية تماماً. لذا فإن <code>&quot;&quot; === false</code> هي false، كما هو متوقع.</p>
+<p>أنصح باستخدام معاملات المقارنة الثلاثية دفاعياً لمنع تحويلات الأنواع غير المتوقعة من الإيقاع بك. لكن عندما تكون واثقاً من أن النوعين على الجانبين سيكونان متماثلين، فلا مشكلة في استخدام المعاملات الأقصر.</p>
+<h3 id="التقييم-القصير-للمعاملات-المنطقية">التقييم القصير للمعاملات المنطقية</h3>
+<p>تعالج المعاملات المنطقية <code>&amp;&amp;</code> و<code>||</code> القيم ذات الأنواع المختلفة بطريقة غريبة. فهي تحوّل القيمة على جانبها الأيسر إلى النوع Boolean لتقرر ما يجب فعله، لكنها، حسب المعامل ونتيجة ذلك التحويل، تُرجع إما القيمة اليسرى <em>الأصلية</em> أو القيمة اليمنى.</p>
+<p>فالمعامل <code>||</code>، مثلاً، يُرجع القيمة الواقعة إلى يساره عندما يمكن تحويل تلك القيمة إلى true، ويُرجع القيمة الواقعة إلى يمينه خلاف ذلك. ولهذا الأثر المتوقع عندما تكون القيم منطقية، ويفعل شيئاً مماثلاً مع قيم من أنواع أخرى.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">null</span> || <span class="hljs-string">&quot;user&quot;</span>)
+<span class="hljs-comment">// → user</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Agnes&quot;</span> || <span class="hljs-string">&quot;user&quot;</span>)
+<span class="hljs-comment">// → Agnes</span>
+</code></pre>
+<p>يمكننا استخدام هذه الوظيفة كوسيلة للرجوع إلى قيمة افتراضية. فإذا كانت لديك قيمة قد تكون فارغة، يمكنك وضع <code>||</code> بعدها مع قيمة بديلة. وإذا أمكن تحويل القيمة الأولية إلى false، ستحصل على البديل بدلاً منها. وتنص قواعد تحويل النصوص والأعداد إلى قيم منطقية على أن <code>0</code> و<code>NaN</code> والنص الفارغ (<code>&quot;&quot;</code>) تُعدّ false، بينما تُعدّ كل القيم الأخرى true. وهذا يعني أن <code>0 || -1</code> ينتج <code>-1</code>، و<code>&quot;&quot; || &quot;!?&quot;</code> يعطي <code>&quot;!?&quot;</code>.</p>
+<p>ويشبه المعامل <code>??</code> المعامل <code>||</code> لكنه يُرجع القيمة على اليمين فقط إذا كانت القيمة على اليسار <code>null</code> أو <code>undefined</code>، لا إذا كانت قيمة أخرى يمكن تحويلها إلى false. وغالباً ما يكون هذا أفضل من سلوك <code>||</code>.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">0</span> || <span class="hljs-number">100</span>);
+<span class="hljs-comment">// → 100</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">0</span> ?? <span class="hljs-number">100</span>);
+<span class="hljs-comment">// → 0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">null</span> ?? <span class="hljs-number">100</span>);
+<span class="hljs-comment">// → 100</span>
+</code></pre>
+<p>ويعمل المعامل <code>&amp;&amp;</code> بالمثل لكن بالاتجاه المعاكس. فعندما تكون القيمة الواقعة إلى يساره شيئاً يُحوَّل إلى false، يُرجع تلك القيمة، وإلا يُرجع القيمة الواقعة إلى يمينه.</p>
+<p>وثمة خاصية مهمة أخرى لهذين المعاملين: وهي أن الجزء الواقع إلى يمينهما لا يُقيَّم إلا عند الحاجة. ففي حالة <code>true || X</code>، مهما كان <code>X</code> — حتى لو كان قطعة برنامج تفعل شيئاً <em>فظيعاً</em> — ستكون النتيجة true، ولن يُقيَّم <code>X</code> أبداً. وينطبق الأمر نفسه على <code>false &amp;&amp; X</code>، فهي false وستتجاهل <code>X</code>. ويسمى هذا <em>التقييم القصير</em> (short-circuit evaluation).</p>
+<p>ويعمل المعامل الشرطي بطريقة مشابهة. فمن القيمتين الثانية والثالثة، لا تُقيَّم إلا القيمة المختارة.</p>
+<h2 id="الخلاصة">الخلاصة</h2>
+<p>نظرنا في هذا الفصل إلى أربعة أنواع من قيم JavaScript: الأعداد والنصوص والقيم المنطقية والقيم غير المعرّفة. وتُنشأ مثل هذه القيم بكتابة اسمها (<code>true</code>، <code>null</code>) أو قيمتها (<code>13</code>، <code>&quot;abc&quot;</code>).</p>
+<p>ويمكنك دمج القيم وتحويلها بالمعاملات. رأينا معاملات ثنائية للحساب (<code>+</code> و<code>-</code> و<code>*</code> و<code>/</code> و<code>%</code>)، ودمج النصوص (<code>+</code>)، والمقارنة (<code>==</code> و<code>!=</code> و<code>===</code> و<code>!==</code> و<code>&lt;</code> و<code>&gt;</code> و<code>&lt;=</code> و<code>&gt;=</code>)، والمنطق (<code>&amp;&amp;</code> و<code>||</code> و<code>??</code>)، إضافة إلى عدة معاملات أحادية (<code>-</code> لنفي عدد، و<code>!</code> للنفي المنطقي، و<code>typeof</code> لمعرفة نوع قيمة) ومعامل ثلاثي (<code>?:</code>) لاختيار إحدى قيمتين بناءً على قيمة ثالثة.</p>
+<p>يمنحك هذا معلومات كافية لاستخدام JavaScript كآلة حاسبة جيبية، لكن ليس أكثر من ذلك بكثير. وسيبدأ <a href="/chapter/program_structure">الفصل التالي</a> في ربط هذه التعبيرات معاً في برامج أساسية.</p>
+`,o={number:"01",slug:s,title:e,englishTitle:a,headings:n,html:c};export{o as default,a as englishTitle,n as headings,c as html,l as number,s as slug,e as title};

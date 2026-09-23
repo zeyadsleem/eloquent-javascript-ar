@@ -1,0 +1,274 @@
+const e="07",s="project_a_robot",a="مشروع: روبوت",n="Project: A Robot",p=[{depth:2,id:"ميدوفيلد",text:"ميدوفيلد"},{depth:2,id:"المهمة",text:"المهمة"},{depth:2,id:"بيانات-دائمة",text:"بيانات دائمة"},{depth:2,id:"المحاكاة",text:"المحاكاة"},{depth:2,id:"مسار-شاحنة-البريد",text:"مسار شاحنة البريد"},{depth:2,id:"إيجاد-المسارات",text:"إيجاد المسارات"},{depth:2,id:"التمارين",text:"التمارين"},{depth:3,id:"قياس-أداء-روبوت",text:"قياس أداء روبوت"},{depth:3,id:"كفاءة-الروبوت",text:"كفاءة الروبوت"},{depth:3,id:"مجموعة-دائمة",text:"مجموعة دائمة"}],l=`<blockquote>
+<p>مسألة ما إذا كانت الآلات تستطيع التفكير [...] لا تزيد صلتها بالموضوع عن مسألة ما إذا كانت الغواصات تستطيع السباحة.</p>
+<p>— إدسخر دايكسترا، التهديدات التي تواجه علم الحوسبة</p>
+</blockquote>
+<p><img src="/images/book/chapter_picture_7.jpg" alt="رسم توضيحي لروبوت يحمل كومة من الطرود"></p>
+<p>في فصول «المشروع»، سأتوقف لحظة وجيزة عن إغراقك بالنظريات الجديدة، وسنعمل بدلًا من ذلك على برنامج معًا. النظرية ضرورية لتعلّم البرمجة، لكن قراءة البرامج الفعلية وفهمها لا تقل أهمية.</p>
+<p>مشروعنا في هذا الفصل هو بناء إنسان آلي (automaton)، برنامج صغير ينفّذ مهمة في عالم افتراضي. سيكون إنساننا الآلي روبوتًا لتوصيل البريد يلتقط الطرود ويسلّمها.</p>
+<h2 id="ميدوفيلد">ميدوفيلد</h2>
+<p>قرية ميدوفيلد ليست كبيرة جدًا. تتكوّن من 11 مكانًا يصل بينها 14 طريقًا. ويمكن وصفها بمصفوفة الطرق هذه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> roads = [
+  <span class="hljs-string">&quot;Alice&#x27;s House-Bob&#x27;s House&quot;</span>,   <span class="hljs-string">&quot;Alice&#x27;s House-Cabin&quot;</span>,
+  <span class="hljs-string">&quot;Alice&#x27;s House-Post Office&quot;</span>,   <span class="hljs-string">&quot;Bob&#x27;s House-Town Hall&quot;</span>,
+  <span class="hljs-string">&quot;Daria&#x27;s House-Ernie&#x27;s House&quot;</span>, <span class="hljs-string">&quot;Daria&#x27;s House-Town Hall&quot;</span>,
+  <span class="hljs-string">&quot;Ernie&#x27;s House-Grete&#x27;s House&quot;</span>, <span class="hljs-string">&quot;Grete&#x27;s House-Farm&quot;</span>,
+  <span class="hljs-string">&quot;Grete&#x27;s House-Shop&quot;</span>,          <span class="hljs-string">&quot;Marketplace-Farm&quot;</span>,
+  <span class="hljs-string">&quot;Marketplace-Post Office&quot;</span>,     <span class="hljs-string">&quot;Marketplace-Shop&quot;</span>,
+  <span class="hljs-string">&quot;Marketplace-Town Hall&quot;</span>,       <span class="hljs-string">&quot;Shop-Town Hall&quot;</span>
+];
+</code></pre>
+<p><img src="/images/book/village2x.png" alt="رسم بفن البكسل لقرية صغيرة فيها 11 موقعًا موسومة بحروف، وطرق تمتد بينها"></p>
+<p>تشكّل شبكة الطرق في القرية <em>رسمًا بيانيًا</em> (graph). والرسم البياني مجموعة من النقاط (أماكن القرية) تصل بينها خطوط (الطرق). سيكون هذا الرسم البياني هو العالم الذي يتحرّك فيه روبوتنا.</p>
+<p>التعامل مع مصفوفة النصوص ليس سهلًا. ما يهمّنا هو الوجهات التي يمكن الوصول إليها انطلاقًا من مكان معيّن. لنحوّل قائمة الطرق إلى بنية بيانات تخبرنا، لكل مكان، بما يمكن الوصول إليه منه.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">buildGraph</span>(<span class="hljs-params">edges</span>) {
+  <span class="hljs-keyword">let</span> graph = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">create</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">addEdge</span>(<span class="hljs-params"><span class="hljs-keyword">from</span>, to</span>) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">from</span> <span class="hljs-keyword">in</span> graph) {
+      graph[<span class="hljs-keyword">from</span>].<span class="hljs-title function_">push</span>(to);
+    } <span class="hljs-keyword">else</span> {
+      graph[<span class="hljs-keyword">from</span>] = [to];
+    }
+  }
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> [<span class="hljs-keyword">from</span>, to] <span class="hljs-keyword">of</span> edges.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">r</span> =&gt;</span> r.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot;-&quot;</span>))) {
+    <span class="hljs-title function_">addEdge</span>(<span class="hljs-keyword">from</span>, to);
+    <span class="hljs-title function_">addEdge</span>(to, <span class="hljs-keyword">from</span>);
+  }
+  <span class="hljs-keyword">return</span> graph;
+}
+
+<span class="hljs-keyword">const</span> roadGraph = <span class="hljs-title function_">buildGraph</span>(roads);
+</code></pre>
+<p>عند إعطاء مصفوفة من الحواف (edges)، ينشئ <code>buildGraph</code> كائن خريطة يخزّن، لكل عقدة، مصفوفة بالعقد المتصلة بها. ويستخدم طريقة <code>split</code> للانتقال من نصوص الطرق—التي لها الصيغة <code>&quot;Start-End&quot;</code>)—إلى مصفوفات من عنصرين تحتوي على البداية والنهاية كنصّين منفصلين.</p>
+<h2 id="المهمة">المهمة</h2>
+<p>سيتنقّل روبوتنا في أرجاء القرية. توجد طرود في أماكن مختلفة، وكل طرد موجَّه إلى مكان آخر. يلتقط الروبوت الطرود عندما يصادفها، ويسلّمها عندما يصل إلى وجهاتها.</p>
+<p>على الإنسان الآلي أن يقرّر، في كل لحظة، إلى أين يتّجه بعد ذلك. ويكون قد أنجز مهمته عندما تُسلَّم جميع الطرود.</p>
+<p>لتتمكّن من محاكاة هذه العملية، علينا تعريف عالم افتراضي يصفها. يخبرنا هذا النموذج بمكان الروبوت وأماكن الطرود. وعندما يقرّر الروبوت التحرّك إلى مكان ما، نحتاج إلى تحديث النموذج ليعكس الوضع الجديد.</p>
+<p>إذا كنت تفكّر بأسلوب البرمجة الكائنية التوجه (object-oriented programming)، فقد تكون رغبتك الأولى أن تبدأ بتعريف كائنات لعناصر العالم المختلفة: صنف للروبوت، وصنف للطرد، وربما صنف للأماكن. ويمكن لهذه بعد ذلك أن تحمل خصائص تصف حالتها الراهنة، مثل كومة الطرود في موقع ما، والتي يمكننا تغييرها عند تحديث العالم.</p>
+<p>هذا خطأ. أو على الأقل، هو كذلك عادةً. فكون شيء ما يبدو كائنًا لا يعني تلقائيًا أنه ينبغي أن يكون كائنًا في برنامجك. إن كتابة أصناف بشكل انعكاسي لكل مفهوم في تطبيقك كثيرًا ما تتركك أمام مجموعة من الكائنات المترابطة، لكل منها حالتها الداخلية المتغيّرة. ومثل هذه البرامج يصعب فهمها غالبًا، ومن ثم يسهل كسرها.</p>
+<p>لنجمع بدلًا من ذلك حالة القرية في مجموعة القيم الدنيا التي تعرّفها. هناك موقع الروبوت الحالي، ومجموعة الطرود غير المسلَّمة، ولكل منها موقع حالي وعنوان وجهة. هذا كل شيء.</p>
+<p>وبالمناسبة، لنجعل الأمر بحيث لا <em>نغيّر</em> هذه الحالة عندما يتحرّك الروبوت، بل نحسب حالة <em>جديدة</em> للوضع بعد الحركة.</p>
+<pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">VillageState</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">place, parcels</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">place</span> = place;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">parcels</span> = parcels;
+  }
+
+  <span class="hljs-title function_">move</span>(<span class="hljs-params">destination</span>) {
+    <span class="hljs-keyword">if</span> (!roadGraph[<span class="hljs-variable language_">this</span>.<span class="hljs-property">place</span>].<span class="hljs-title function_">includes</span>(destination)) {
+      <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">let</span> parcels = <span class="hljs-variable language_">this</span>.<span class="hljs-property">parcels</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> {
+        <span class="hljs-keyword">if</span> (p.<span class="hljs-property">place</span> != <span class="hljs-variable language_">this</span>.<span class="hljs-property">place</span>) <span class="hljs-keyword">return</span> p;
+        <span class="hljs-keyword">return</span> {<span class="hljs-attr">place</span>: destination, <span class="hljs-attr">address</span>: p.<span class="hljs-property">address</span>};
+      }).<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> p.<span class="hljs-property">place</span> != p.<span class="hljs-property">address</span>);
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">VillageState</span>(destination, parcels);
+    }
+  }
+}
+</code></pre>
+<p>طريقة <code>move</code> هي حيث يحدث الفعل. تتحقق أولًا مما إذا كان هناك طريق يمتدّ من المكان الحالي إلى الوجهة، وإن لم يوجد، تعيد الحالة القديمة، لأن هذه حركة غير صالحة.</p>
+<p>بعد ذلك، تنشئ الطريقة حالة جديدة تكون فيها الوجهة موقع الروبوت الجديد. وتحتاج أيضًا إلى إنشاء مجموعة جديدة من الطرود—فالطرود التي يحملها الروبوت (أي الموجودة في موقعه الحالي) يجب أن تنتقل معه إلى المكان الجديد. أما الطرود الموجّهة إلى المكان الجديد فينبغي تسليمها—أي يجب إزالتها من مجموعة الطرود غير المسلَّمة. يتولّى النداء إلى <code>map</code> أمر النقل، ويتولّى النداء إلى <code>filter</code> أمر التسليم.</p>
+<p>لا تُغيَّر كائنات الطرود عند نقلها، بل يُعاد إنشاؤها. تمنحنا طريقة <code>move</code> حالة قرية جديدة، لكنها تترك الحالة القديمة سليمة تمامًا.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> first = <span class="hljs-keyword">new</span> <span class="hljs-title class_">VillageState</span>(
+  <span class="hljs-string">&quot;Post Office&quot;</span>,
+  [{<span class="hljs-attr">place</span>: <span class="hljs-string">&quot;Post Office&quot;</span>, <span class="hljs-attr">address</span>: <span class="hljs-string">&quot;Alice&#x27;s House&quot;</span>}]
+);
+<span class="hljs-keyword">let</span> next = first.<span class="hljs-title function_">move</span>(<span class="hljs-string">&quot;Alice&#x27;s House&quot;</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(next.<span class="hljs-property">place</span>);
+<span class="hljs-comment">// → Alice&#x27;s House</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(next.<span class="hljs-property">parcels</span>);
+<span class="hljs-comment">// → []</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(first.<span class="hljs-property">place</span>);
+<span class="hljs-comment">// → Post Office</span>
+</code></pre>
+<p>تؤدي الحركة إلى تسليم الطرد، وهو ما ينعكس في الحالة التالية. لكن الحالة الأولى ما تزال تصف الوضع الذي يكون فيه الروبوت في مكتب البريد والطرد غير مسلَّم.</p>
+<h2 id="بيانات-دائمة">بيانات دائمة</h2>
+<p>تسمى بنى البيانات التي لا تتغيّر <em>غير قابلة للتغيير</em> (immutable) أو <em>دائمة</em> (persistent). وهي تتصرّف مثل النصوص والأعداد إلى حد كبير، إذ تبقى كما هي ولا تحتوي أشياء مختلفة في أزمنة مختلفة.</p>
+<p>في JavaScript، يمكن تغيير كل شيء تقريبًا، لذا يتطلب العمل بقيم يُفترض أنها دائمة بعض ضبط النفس. هناك دالة تسمى <code>Object.freeze</code> تغيّر كائنًا بحيث تُهمَل أي كتابة في خصائصه. يمكنك استخدامها للتأكد من عدم تغيّر كائناتك، إن أردت توخّي الحذر. لكن التجميد يتطلب من الحاسوب بذل جهد إضافي، كما أن تجاهل التحديثات قد يربك المرء بقدر ما يربكه تنفيذها على نحو خاطئ. ويفضّل عادةً أن أخبر الناس ببساطة أن كائنًا معيّنًا لا ينبغي العبث به، وآمل أن يتذكّروا ذلك.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> object = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">freeze</span>({<span class="hljs-attr">value</span>: <span class="hljs-number">5</span>});
+object.<span class="hljs-property">value</span> = <span class="hljs-number">10</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(object.<span class="hljs-property">value</span>);
+<span class="hljs-comment">// → 5</span>
+</code></pre>
+<p>لماذا أتكبّد عناء عدم تغيير الكائنات بينما اللغة من الواضح أنها تتوقّع مني ذلك؟ لأن ذلك يساعدني على فهم برامجي. الأمر يتعلق بإدارة التعقيد مرة أخرى. فعندما تكون الكائنات في نظامي أشياء ثابتة مستقرّة، يمكنني أن أنظر في العمليات عليها بمعزل عن غيرها—فالانتقال إلى منزل أليس من حالة بداية معيّنة ينتج دائمًا الحالة الجديدة نفسها. أما عندما تتغيّر الكائنات بمرور الوقت، فإن ذلك يضيف بُعدًا جديدًا كاملًا من التعقيد إلى هذا النوع من التفكير.</p>
+<p>في نظام صغير مثل الذي نبنيه في هذا الفصل، يمكننا تحمّل ذلك القدر الإضافي من التعقيد. لكن أهم حدّ يحكم نوع الأنظمة التي يمكننا بناؤها هو مقدار ما نستطيع فهمه. فأي شيء يجعل شيفرتك أسهل فهمًا يجعل من الممكن بناء نظام أكثر طموحًا.</p>
+<p>لسوء الحظ، ورغم أن فهم نظام مبني على بنى بيانات دائمة أسهل، فإن <em>تصميم</em> واحد منها، خصوصًا حين لا تساعدك لغة البرمجة، قد يكون أصعب قليلًا. سنبحث عن فرص لاستخدام بنى بيانات دائمة في هذا الكتاب، لكننا سنستخدم أيضًا بنى قابلة للتغيير.</p>
+<h2 id="المحاكاة">المحاكاة</h2>
+<p>ينظر روبوت التوصيل إلى العالم ويقرّر الاتجاه الذي يريد التحرّك فيه. لذا يمكننا القول إن الروبوت دالة تأخذ كائن <code>VillageState</code> وتعيد اسم مكان قريب.</p>
+<p>ولأننا نريد أن تكون الروبوتات قادرة على تذكّر الأشياء حتى تتمكّن من وضع الخطط وتنفيذها، فإننا نمرّر لها أيضًا ذاكرتها ونسمح لها بإرجاع ذاكرة جديدة. وبالتالي، فما يعيده الروبوت كائن يحتوي على الاتجاه الذي يريد التحرّك فيه وعلى قيمة ذاكرة ستُعطى له مرة أخرى في المرة التالية التي يُستدعى فيها.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">runRobot</span>(<span class="hljs-params">state, robot, memory</span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> turn = <span class="hljs-number">0</span>;; turn++) {
+    <span class="hljs-keyword">if</span> (state.<span class="hljs-property">parcels</span>.<span class="hljs-property">length</span> == <span class="hljs-number">0</span>) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`Done in <span class="hljs-subst">\${turn}</span> turns\`</span>);
+      <span class="hljs-keyword">break</span>;
+    }
+    <span class="hljs-keyword">let</span> action = <span class="hljs-title function_">robot</span>(state, memory);
+    state = state.<span class="hljs-title function_">move</span>(action.<span class="hljs-property">direction</span>);
+    memory = action.<span class="hljs-property">memory</span>;
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`Moved to <span class="hljs-subst">\${action.direction}</span>\`</span>);
+  }
+}
+</code></pre>
+<p>فكّر فيما يجب على الروبوت فعله كي «يحلّ» حالة معيّنة. عليه أن يلتقط كل الطرود بزيارة كل موقع فيه طرد، وأن يسلّمها بزيارة كل موقع موجَّه إليه طرد، لكن فقط بعد التقاط الطرد.</p>
+<p>ما أبله استراتيجية يمكن أن تنجح فعلًا؟ يمكن للروبوت أن يسير ببساطة في اتجاه عشوائي في كل دور. وهذا يعني، على الأرجح، أنه سيصادف في النهاية كل الطرود، ثم يصل في وقت ما إلى المكان الذي ينبغي تسليمها فيه.</p>
+<p>إليك كيف قد يبدو ذلك:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">randomPick</span>(<span class="hljs-params">array</span>) {
+  <span class="hljs-keyword">let</span> choice = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * array.<span class="hljs-property">length</span>);
+  <span class="hljs-keyword">return</span> array[choice];
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">randomRobot</span>(<span class="hljs-params">state</span>) {
+  <span class="hljs-keyword">return</span> {<span class="hljs-attr">direction</span>: <span class="hljs-title function_">randomPick</span>(roadGraph[state.<span class="hljs-property">place</span>])};
+}
+</code></pre>
+<p>تذكّر أن <code>Math.random()</code> يعيد عددًا بين 0 و1—لكنه يظل دائمًا أقل من 1. وضرب عدد كهذا في طول مصفوفة ثم تطبيق <code>Math.floor</code> عليه يعطينا فهرسًا عشوائيًا للمصفوفة.</p>
+<p>ولأن هذا الروبوت لا يحتاج إلى تذكّر أي شيء، فإنه يتجاهل معطاه الثاني (تذكّر أن دوال JavaScript يمكن استدعاؤها بمعطيات إضافية دون أثر سيئ) ويحذف خاصية <code>memory</code> من الكائن الذي يعيده.</p>
+<p>لتشغيل هذا الروبوت المتطوّر، سنحتاج أولًا إلى طريقة لإنشاء حالة جديدة مع بعض الطرود. والطريقة الساكنة (static method)—المكتوبة هنا بإضافة خاصية مباشرة إلى الباني—مكان جيد لوضع هذه الوظيفة.</p>
+<pre><code class="language-js"><span class="hljs-title class_">VillageState</span>.<span class="hljs-property">random</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">parcelCount = <span class="hljs-number">5</span></span>) {
+  <span class="hljs-keyword">let</span> parcels = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; parcelCount; i++) {
+    <span class="hljs-keyword">let</span> address = <span class="hljs-title function_">randomPick</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(roadGraph));
+    <span class="hljs-keyword">let</span> place;
+    <span class="hljs-keyword">do</span> {
+      place = <span class="hljs-title function_">randomPick</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(roadGraph));
+    } <span class="hljs-keyword">while</span> (place == address);
+    parcels.<span class="hljs-title function_">push</span>({place, address});
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">VillageState</span>(<span class="hljs-string">&quot;Post Office&quot;</span>, parcels);
+};
+</code></pre>
+<p>لا نريد أن يُرسَل أي طرد من المكان نفسه الموجَّه إليه. لهذا السبب، تواصل حلقة <code>do</code> اختيار أماكن جديدة كلما حصلت على مكان يساوي عنوان الوجهة.</p>
+<p>لنشغّل عالمًا افتراضيًا.</p>
+<pre><code class="language-js"><span class="hljs-title function_">runRobot</span>(<span class="hljs-title class_">VillageState</span>.<span class="hljs-title function_">random</span>(), randomRobot);
+<span class="hljs-comment">// → Moved to Marketplace</span>
+<span class="hljs-comment">// → Moved to Town Hall</span>
+<span class="hljs-comment">// → …</span>
+<span class="hljs-comment">// → Done in 63 turns</span>
+</code></pre>
+<p>يستغرق الروبوت أدوارًا كثيرة لتسليم الطرود لأنه لا يخطّط للمستقبل جيدًا. سنعالج ذلك قريبًا.</p>
+<p>لرؤية أكثر متعة للمحاكاة، يمكنك استخدام دالة <code>runRobotAnimation</code> المتاحة في <a href="https://eloquentjavascript.net/code/#7">بيئة البرمجة الخاصة بهذا الفصل</a>. فهي تشغّل المحاكاة، لكنها بدلًا من إخراج نص، تعرض لك الروبوت وهو يتحرّك في خريطة القرية.</p>
+<pre><code class="language-js"><span class="hljs-title function_">runRobotAnimation</span>(<span class="hljs-title class_">VillageState</span>.<span class="hljs-title function_">random</span>(), randomRobot);
+</code></pre>
+<p>ستبقى طريقة تنفيذ <code>runRobotAnimation</code> لغزًا في الوقت الحالي، لكن بعد أن تقرأ <a href="/chapter/the_document_object_model">الفصول اللاحقة</a> من هذا الكتاب، التي تناقش دمج JavaScript في متصفحات الويب، ستصبح قادرًا على تخمين كيفية عملها.</p>
+<h2 id="مسار-شاحنة-البريد">مسار شاحنة البريد</h2>
+<p>ينبغي أن نكون قادرين على تحقيق نتيجة أفضل بكثير من الروبوت العشوائي. ومن التحسينات السهلة أن نستلهم فكرة من طريقة عمل توصيل البريد في الواقع. فإذا وجدنا مسارًا يمرّ بكل أماكن القرية، أمكن للروبوت أن يسلك ذلك المسار مرتين، وعندها يكون إنجاز المهمة مضمونًا. إليك أحد هذه المسارات (بدءًا من مكتب البريد):</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> mailRoute = [
+  <span class="hljs-string">&quot;Alice&#x27;s House&quot;</span>, <span class="hljs-string">&quot;Cabin&quot;</span>, <span class="hljs-string">&quot;Alice&#x27;s House&quot;</span>, <span class="hljs-string">&quot;Bob&#x27;s House&quot;</span>,
+  <span class="hljs-string">&quot;Town Hall&quot;</span>, <span class="hljs-string">&quot;Daria&#x27;s House&quot;</span>, <span class="hljs-string">&quot;Ernie&#x27;s House&quot;</span>,
+  <span class="hljs-string">&quot;Grete&#x27;s House&quot;</span>, <span class="hljs-string">&quot;Shop&quot;</span>, <span class="hljs-string">&quot;Grete&#x27;s House&quot;</span>, <span class="hljs-string">&quot;Farm&quot;</span>,
+  <span class="hljs-string">&quot;Marketplace&quot;</span>, <span class="hljs-string">&quot;Post Office&quot;</span>
+];
+</code></pre>
+<p>لتنفيذ روبوت متّبع المسار، سنحتاج إلى استخدام ذاكرة الروبوت. يحتفظ الروبوت بما تبقّى من مساره في ذاكرته، ويحذف العنصر الأول في كل دور.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">routeRobot</span>(<span class="hljs-params">state, memory</span>) {
+  <span class="hljs-keyword">if</span> (memory.<span class="hljs-property">length</span> == <span class="hljs-number">0</span>) {
+    memory = mailRoute;
+  }
+  <span class="hljs-keyword">return</span> {<span class="hljs-attr">direction</span>: memory[<span class="hljs-number">0</span>], <span class="hljs-attr">memory</span>: memory.<span class="hljs-title function_">slice</span>(<span class="hljs-number">1</span>)};
+}
+</code></pre>
+<p>هذا الروبوت أسرع بكثير بالفعل. سيستغرق 26 دورًا كحد أقصى (ضعف المسار المكوّن من 13 خطوة)، لكنه عادةً يستغرق أقل من ذلك.</p>
+<pre><code class="language-js"><span class="hljs-title function_">runRobotAnimation</span>(<span class="hljs-title class_">VillageState</span>.<span class="hljs-title function_">random</span>(), routeRobot, []);
+</code></pre>
+<h2 id="إيجاد-المسارات">إيجاد المسارات</h2>
+<p>ومع ذلك، لن أسمّي اتباع مسار ثابت عن عمى سلوكًا ذكيًا حقًا. ويمكن للروبوت أن يعمل بكفاءة أكبر لو كيّف سلوكه مع العمل الفعلي المطلوب إنجازه.</p>
+<p>وليفعل ذلك، يجب أن يكون قادرًا على التحرّك عن قصد نحو طرد معيّن أو نحو الموقع الذي ينبغي تسليم طرد فيه. وهذا يتطلب نوعًا من دوال إيجاد المسارات، حتى عندما يكون الهدف أبعد من حركة واحدة.</p>
+<p>مشكلة إيجاد مسار عبر رسم بياني هي مشكلة <em>بحث</em> نمطية (search problem). يمكننا أن نقول ما إذا كان حلّ معيّن (مسار ما) صالحًا، لكننا لا نستطيع حساب الحل مباشرة كما نفعل مع 2 + 2. علينا بدلًا من ذلك مواصلة إنشاء حلول محتملة حتى نجد حلًا ينجح.</p>
+<p>عدد المسارات الممكنة عبر رسم بياني لا نهائي. لكننا عند البحث عن مسار من <em>A</em> إلى <em>B</em>، لا تهمّنا إلا المسارات التي تبدأ من <em>A</em>. ولا يهمّنا أيضًا المسارات التي تزور المكان نفسه مرتين—فهي بالتأكيد ليست المسار الأكثر كفاءة في أي مكان. وهذا يقلّص عدد المسارات التي على باحث المسارات أن ينظر فيها.</p>
+<p>في الواقع، ولأننا مهتمون أساسًا بـ<em>أقصر</em> مسار، نريد أن نحرص على النظر في المسارات القصيرة قبل الطويلة. ومن الأساليب الجيدة أن «ننمّي» المسارات انطلاقًا من نقطة البداية، مستكشفين كل مكان يمكن الوصول إليه ولم يُزَر بعد، حتى يصل مسار إلى الهدف. وبهذه الطريقة لن نستكشف إلا المسارات المثيرة للاهتمام، ونعلم أن أول مسار نجده هو أقصر مسار (أو أحد أقصر المسارات، إن وُجد أكثر من مسار واحد).</p>
+<p>إليك دالة تفعل ذلك:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">findRoute</span>(<span class="hljs-params">graph, <span class="hljs-keyword">from</span>, to</span>) {
+  <span class="hljs-keyword">let</span> work = [{<span class="hljs-attr">at</span>: <span class="hljs-keyword">from</span>, <span class="hljs-attr">route</span>: []}];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; work.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-keyword">let</span> {at, route} = work[i];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> place <span class="hljs-keyword">of</span> graph[at]) {
+      <span class="hljs-keyword">if</span> (place == to) <span class="hljs-keyword">return</span> route.<span class="hljs-title function_">concat</span>(place);
+      <span class="hljs-keyword">if</span> (!work.<span class="hljs-title function_">some</span>(<span class="hljs-function"><span class="hljs-params">w</span> =&gt;</span> w.<span class="hljs-property">at</span> == place)) {
+        work.<span class="hljs-title function_">push</span>({<span class="hljs-attr">at</span>: place, <span class="hljs-attr">route</span>: route.<span class="hljs-title function_">concat</span>(place)});
+      }
+    }
+  }
+}
+</code></pre>
+<p>يجب أن يجري الاستكشاف بالترتيب الصحيح—فالأماكن التي وُصل إليها أولًا يجب أن تُستكشف أولًا. ولا يمكننا استكشاف مكان فور الوصول إليه، لأن ذلك يعني أن الأماكن التي نصل إليها <em>من هناك</em> ستُستكشف هي أيضًا فورًا، وهكذا دواليك، مع أنه قد تكون هناك مسارات أخرى أقصر لم تُستكشف بعد.</p>
+<p>لذلك تحتفظ الدالة بـ<em>قائمة عمل</em> (work list). وهي مصفوفة بالأماكن التي ينبغي استكشافها تاليًا، مع المسار الذي أوصلنا إليها. وتبدأ بموضع البداية وحده ومسار فارغ.</p>
+<p>يعمل البحث بعد ذلك بأخذ العنصر التالي في القائمة واستكشافه، أي أنه ينظر في كل الطرق الخارجة من ذلك المكان. فإن كان أحدها هو الهدف، أمكن إرجاع مسار مكتمل. وإلا، فإن لم نكن قد نظرنا في هذا المكان من قبل، يُضاف عنصر جديد إلى القائمة. أما إن كنا قد نظرنا فيه سابقًا، فلأننا ننظر في المسارات القصيرة أولًا، نكون قد وجدنا إما مسارًا أطول إلى ذلك المكان أو مسارًا بنفس طول الموجود تمامًا، فلا حاجة إلى استكشافه.</p>
+<p>يمكنك تصوّر ذلك كشبكة من المسارات المعروفة تزحف خارجًا من موقع البداية، وتنمو بالتساوي في كل الاتجاهات (من دون أن تتشابك مع نفسها أبدًا). وبمجرد أن يصل أول خيط إلى موقع الهدف، يُتتبَّع ذلك الخيط رجوعًا إلى البداية، فنحصل على مسارنا.</p>
+<p>لا تتعامل شيفرتنا مع حالة نفاد عناصر العمل من قائمة العمل، لأننا نعلم أن رسمنا البياني <em>متصل</em> (connected)، أي أنه يمكن الوصول إلى كل موقع من جميع المواقع الأخرى. سنكون دائمًا قادرين على إيجاد مسار بين نقطتين، ولا يمكن أن يفشل البحث.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">goalOrientedRobot</span>(<span class="hljs-params">{place, parcels}, route</span>) {
+  <span class="hljs-keyword">if</span> (route.<span class="hljs-property">length</span> == <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">let</span> parcel = parcels[<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">if</span> (parcel.<span class="hljs-property">place</span> != place) {
+      route = <span class="hljs-title function_">findRoute</span>(roadGraph, place, parcel.<span class="hljs-property">place</span>);
+    } <span class="hljs-keyword">else</span> {
+      route = <span class="hljs-title function_">findRoute</span>(roadGraph, place, parcel.<span class="hljs-property">address</span>);
+    }
+  }
+  <span class="hljs-keyword">return</span> {<span class="hljs-attr">direction</span>: route[<span class="hljs-number">0</span>], <span class="hljs-attr">memory</span>: route.<span class="hljs-title function_">slice</span>(<span class="hljs-number">1</span>)};
+}
+</code></pre>
+<p>يستخدم هذا الروبوت قيمة ذاكرته كقائمة بالاتجاهات التي يتحرك فيها، تمامًا مثل روبوت متّبع المسار. وكلما فرغت تلك القائمة، كان عليه أن يحدّد ما سيفعله بعد ذلك. يأخذ أول طرد غير مسلَّم في المجموعة، فإن لم يكن ذلك الطرد قد التُقط بعد، رسم مسارًا نحوه. وإن كان الطرد <em>قد</em> التُقط، فهو ما يزال بحاجة إلى تسليم، فينشئ الروبوت بدلًا من ذلك مسارًا نحو عنوان التسليم.</p>
+<p>لنرَ كيف يبلو.</p>
+<pre><code class="language-js"><span class="hljs-title function_">runRobotAnimation</span>(<span class="hljs-title class_">VillageState</span>.<span class="hljs-title function_">random</span>(),
+                  goalOrientedRobot, []);
+</code></pre>
+<p>ينهي هذا الروبوت عادةً مهمة تسليم 5 طرود في نحو 16 دورًا. وهذا أفضل قليلًا من <code>routeRobot</code> لكنه ما يزال بالتأكيد غير مثالي. سنواصل تحسينه في التمارين.</p>
+<h2 id="التمارين">التمارين</h2>
+<h3 id="قياس-أداء-روبوت">قياس أداء روبوت</h3>
+<p>من الصعب المقارنة الموضوعية بين الروبوتات بمجرد تركها تحلّ بضعة سيناريوهات. فقد يصادف أن يحصل أحد الروبوتين على مهام أسهل أو من النوع الذي يجيده، بينما لا يحصل الآخر على ذلك.</p>
+<p>اكتب دالة <code>compareRobots</code> تأخذ روبوتين (وذاكرتهما الابتدائية). ينبغي أن تولّد 100 مهمة وتدع كلا الروبوتين يحلّ كل واحدة من هذه المهام. وعند الانتهاء، ينبغي أن تُخرج متوسط عدد الخطوات التي استغرقها كل روبوت لكل مهمة.</p>
+<p>ومن أجل العدالة، احرص على إعطاء كل مهمة لكلا الروبوتين، بدلًا من توليد مهام مختلفة لكل روبوت.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">compareRobots</span>(<span class="hljs-params">robot1, memory1, robot2, memory2</span>) {
+  <span class="hljs-comment">// اكتب شيفرتك هنا</span>
+}
+
+<span class="hljs-title function_">compareRobots</span>(routeRobot, [], goalOrientedRobot, []);
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>سيكون عليك كتابة نسخة مختلفة من دالة <code>runRobot</code>، تعيد عدد الخطوات التي استغرقها الروبوت لإنجاز المهمة، بدلًا من تسجيل الأحداث في الطرفية.</p>
+<p>يمكن لدالة القياس عندك بعد ذلك أن تولّد، في حلقة، حالات جديدة وتعدّ الخطوات التي يستغرقها كل روبوت. وعندما تجمع قياسات كافية، يمكنها استخدام <code>console.log</code> لإخراج المتوسط لكل روبوت، وهو إجمالي عدد الخطوات مقسومًا على عدد القياسات.</p>
+</details>
+<h3 id="كفاءة-الروبوت">كفاءة الروبوت</h3>
+<p>هل يمكنك كتابة روبوت ينهي مهمة التوصيل أسرع من <code>goalOrientedRobot</code>؟ إذا راقبت سلوك ذلك الروبوت، فما الأشياء البلهاء الواضحة التي يفعلها؟ وكيف يمكن تحسينها؟</p>
+<p>إذا كنت قد حللت التمرين السابق، فقد ترغب في استخدام دالة <code>compareRobots</code> للتحقق مما إذا كنت قد حسّنت الروبوت.</p>
+<pre><code class="language-js"><span class="hljs-comment">// اكتب شيفرتك هنا</span>
+
+<span class="hljs-title function_">runRobotAnimation</span>(<span class="hljs-title class_">VillageState</span>.<span class="hljs-title function_">random</span>(), yourRobot, memory);
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>القيود الرئيسي في <code>goalOrientedRobot</code> أنه ينظر في طرد واحد فقط في كل مرة. وسيسير كثيرًا ذهابًا وإيابًا عبر القرية لأن الطرد الذي ينظر فيه مصادفةً يقع في الجهة الأخرى من الخريطة، حتى لو كانت هناك طرود أخرى أقرب بكثير.</p>
+<p>أحد الحلول الممكنة أن تحسب المسارات لجميع الطرود ثم تسلك الأقصر منها. ويمكن الحصول على نتائج أفضل، إذا وُجدت عدة مسارات قصيرة، بتفضيل المسارات التي تذهب لالتقاط طرد بدلًا من تسليم طرد.</p>
+</details>
+<h3 id="مجموعة-دائمة">مجموعة دائمة</h3>
+<p>معظم بنى البيانات المتاحة في بيئة JavaScript القياسية ليست مناسبة كثيرًا للاستخدام الدائم. فالمصفوفات لها طريقتا <code>slice</code> و<code>concat</code>، اللتان تتيحان لنا إنشاء مصفوفات جديدة بسهولة دون الإضرار بالقديمة. لكن <code>Set</code> مثلًا ليس له طرق لإنشاء مجموعة جديدة بعنصر مضاف أو محذوف.</p>
+<p>اكتب صنفًا جديدًا <code>PGroup</code>، شبيهًا بصنف <code>Group</code> من <a href="/chapter/the_secret_life_of_objects#groups">الفصل 6</a>، يخزّن مجموعة من القيم. ومثل <code>Group</code>، له طرق <code>add</code> و<code>delete</code> و<code>has</code>. غير أن طريقة <code>add</code> فيه ينبغي أن تعيد <em>نسخة</em> جديدة من <code>PGroup</code> مع العضو المضاف، وتترك النسخة القديمة دون تغيير. وبالمثل، ينبغي أن تنشئ <code>delete</code> نسخة جديدة من دون عضو معيّن.</p>
+<p>ينبغي أن يعمل الصنف مع قيم من أي نوع، وليس مع النصوص فقط. وليس <em>من الضروري</em> أن يكون فعّالًا عند استخدامه مع أعداد كبيرة من القيم.</p>
+<p>لا ينبغي أن يكون الباني جزءًا من واجهة الصنف (وإن كنت بالتأكيد ستريد استخدامه داخليًا). بدلًا من ذلك، هناك نسخة فارغة، <code>PGroup.empty</code>، يمكن استخدامها كقيمة بداية.</p>
+<p>لماذا تحتاج إلى قيمة <code>PGroup.empty</code> واحدة فقط بدلًا من وجود دالة تنشئ خريطة فارغة جديدة في كل مرة؟</p>
+<pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">PGroup</span> {
+  <span class="hljs-comment">// اكتب شيفرتك هنا</span>
+}
+
+<span class="hljs-keyword">let</span> a = <span class="hljs-title class_">PGroup</span>.<span class="hljs-property">empty</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&quot;a&quot;</span>);
+<span class="hljs-keyword">let</span> ab = a.<span class="hljs-title function_">add</span>(<span class="hljs-string">&quot;b&quot;</span>);
+<span class="hljs-keyword">let</span> b = ab.<span class="hljs-title function_">delete</span>(<span class="hljs-string">&quot;a&quot;</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(b.<span class="hljs-title function_">has</span>(<span class="hljs-string">&quot;b&quot;</span>));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(a.<span class="hljs-title function_">has</span>(<span class="hljs-string">&quot;b&quot;</span>));
+<span class="hljs-comment">// → false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(b.<span class="hljs-title function_">has</span>(<span class="hljs-string">&quot;a&quot;</span>));
+<span class="hljs-comment">// → false</span>
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>لا تزال أسهل طريقة لتمثيل مجموعة قيم الأعضاء هي مصفوفة، لأن نسخ المصفوفات سهل.</p>
+<p>عند إضافة قيمة إلى المجموعة، يمكنك إنشاء مجموعة جديدة بنسخة من المصفوفة الأصلية مضافًا إليها القيمة (باستخدام <code>concat</code> مثلًا). وعند حذف قيمة، تستبعدها من المصفوفة باستخدام <code>filter</code>.</p>
+<p>يمكن لباني الصنف أن يأخذ مصفوفة كهذه كمعطى ويخزّنها كخاصية النسخة (الوحيدة). وهذه المصفوفة لا تُحدَّث أبدًا.</p>
+<p>لإضافة خاصية <code>empty</code> إلى الباني، يمكنك تعريفها كخاصية ساكنة.</p>
+<p>تحتاج إلى نسخة <code>empty</code> واحدة فقط لأن جميع المجموعات الفارغة متطابقة ولأن نسخ الصنف لا تتغيّر. ويمكنك إنشاء مجموعات مختلفة كثيرة انطلاقًا من تلك المجموعة الفارغة الواحدة دون التأثير عليها.</p>
+</details>
+`,t={number:"07",slug:s,title:a,englishTitle:n,headings:p,html:l};export{t as default,n as englishTitle,p as headings,l as html,e as number,s as slug,a as title};

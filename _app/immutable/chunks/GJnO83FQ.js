@@ -1,0 +1,415 @@
+const e="03",s="functions",n="الدوال",a="Functions",l=[{depth:2,id:"تعريف-دالة",text:"تعريف دالة"},{depth:2,id:"الارتباطات-والنطاقات",text:"الارتباطات والنطاقات"},{depth:2,id:"النطاق-المتداخل",text:"النطاق المتداخل"},{depth:2,id:"الدوال-كقيم",text:"الدوال كقيم"},{depth:2,id:"صيغة-التعريف",text:"صيغة التعريف"},{depth:2,id:"دوال-السهم",text:"دوال السهم"},{depth:2,id:"مكدس-الاستدعاء",text:"مكدّس الاستدعاء"},{depth:2,id:"المعطيات-الاختيارية",text:"المعطيات الاختيارية"},{depth:2,id:"الإغلاق",text:"الإغلاق"},{depth:2,id:"التعاود",text:"التعاود"},{depth:2,id:"نمو-الدوال",text:"نمو الدوال"},{depth:2,id:"الدوال-والتأثيرات-الجانبية",text:"الدوال والتأثيرات الجانبية"},{depth:2,id:"الملخص",text:"الملخص"},{depth:2,id:"التمارين",text:"التمارين"},{depth:3,id:"الحد-الأدنى",text:"الحد الأدنى"},{depth:3,id:"التعاود",text:"التعاود"},{depth:3,id:"عد-الفاصولياء",text:"عدّ الفاصولياء"}],p=`<blockquote>
+<p>يظن الناس أن علم الحاسوب فن العباقرة، لكن الواقع عكس ذلك تماماً؛ إنه مجرد كثير من الناس يفعلون أشياء يبني بعضها على بعض، كجدار من الحجارة الصغيرة.</p>
+<p>— دونالد كنوث</p>
+</blockquote>
+<p><img src="/images/book/chapter_picture_3.jpg" alt="رسم توضيحي لأوراق سرخس ذات شكل كسوري، ونحل في الخلفية"></p>
+<p>الدوال من أكثر الأدوات محورية في برمجة JavaScript. لفكرة تغليف قطعة من البرنامج في قيمة استخدامات كثيرة. فهي تمنحنا طريقة لبنية برامج أكبر، ولتقليل التكرار، ولربط الأسماء ببرامج فرعية، ولعزل هذه البرامج الفرعية بعضها عن بعض.</p>
+<p>أوضح تطبيق للدوال هو تعريف مفردات جديدة. إنشاء كلمات جديدة في النثر أسلوب رديء عادة، لكنه في البرمجة لا غنى عنه.</p>
+<p>يمتلك المتحدث البالغ النموذجي بالإنجليزية نحو 20,000 كلمة في مفرداته. وقليلة هي لغات البرمجة التي تأتي مزودة بـ 20,000 أمر مدمج. كما أن المفردات المتاحة فعلاً تميل إلى أن تكون أكثر دقة في تعريفها، وبالتالي أقل مرونة، من مفردات اللغة البشرية. لذلك <em>علينا</em> إدخال كلمات جديدة لتجنب الإطالة المفرطة.</p>
+<h2 id="تعريف-دالة">تعريف دالة</h2>
+<p>تعريف الدالة هو ارتباط عادي تكون قيمة الارتباط فيه دالة. مثلاً، تعرّف هذه الشيفرة <code>square</code> لتشير إلى دالة تُنتج مربع عدد معطى:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> square = <span class="hljs-keyword">function</span>(<span class="hljs-params">x</span>) {
+  <span class="hljs-keyword">return</span> x * x;
+};
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">square</span>(<span class="hljs-number">12</span>));
+<span class="hljs-comment">// → 144</span>
+</code></pre>
+<p>تُنشأ الدالة بتعبير يبدأ بالكلمة المفتاحية <code>function</code>. وللدوال مجموعة من <em>الوسطاء</em> (في هذه الحالة، <code>x</code> فقط) و<em>جسم</em> (body) يحتوي الجمل التي ستُنفَّذ عند استدعاء الدالة. ويجب دائماً تغليف جسم دالة أُنشئت بهذه الطريقة بأقواس معقوفة، حتى عندما يتكون من جملة واحدة فقط.</p>
+<p>يمكن أن يكون للدالة عدة وسطاء أو ألا يكون لها وسطاء على الإطلاق. في المثال التالي، لا يسرد <code>makeNoise</code> أي أسماء وسطاء، بينما يسرد <code>roundTo</code> (الذي يقرّب <code>n</code> إلى أقرب مضاعف للقيمة <code>step</code>) وسيطين:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> makeNoise = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Pling!&quot;</span>);
+};
+
+<span class="hljs-title function_">makeNoise</span>();
+<span class="hljs-comment">// → Pling!</span>
+
+<span class="hljs-keyword">const</span> roundTo = <span class="hljs-keyword">function</span>(<span class="hljs-params">n, step</span>) {
+  <span class="hljs-keyword">let</span> remainder = n % step;
+  <span class="hljs-keyword">return</span> n - remainder + (remainder &lt; step / <span class="hljs-number">2</span> ? <span class="hljs-number">0</span> : step);
+};
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">roundTo</span>(<span class="hljs-number">23</span>, <span class="hljs-number">10</span>));
+<span class="hljs-comment">// → 20</span>
+</code></pre>
+<p>بعض الدوال، مثل <code>roundTo</code> و<code>square</code>، تنتج قيمة، وبعضها لا يفعل، مثل <code>makeNoise</code>، الذي لا تكون نتيجته الوحيدة سوى تأثير جانبي. وتحدد جملة <code>return</code> القيمة التي تُرجعها الدالة. وعندما يصل التنفيذ إلى جملة كهذه، يقفز فوراً خارج الدالة الحالية ويمنح القيمة المُرجعة للشيفرة التي استدعت الدالة. والكلمة المفتاحية <code>return</code> دون تعبير بعدها تجعل الدالة تُرجع <code>undefined</code>. أما الدوال التي لا تحتوي على جملة <code>return</code> إطلاقاً، مثل <code>makeNoise</code>، فتُرجع <code>undefined</code> بالمثل.</p>
+<p>تتصرف وسطاء الدالة كالارتباطات العادية، لكن قيمهم الأولية يمنحها <em>المستدعي</em> (caller) للدالة، لا الشيفرة الموجودة في الدالة نفسها.</p>
+<h2 id="الارتباطات-والنطاقات">الارتباطات والنطاقات</h2>
+<p>لكل ارتباط <em>نطاق</em> (scope)، وهو الجزء من البرنامج الذي يكون فيه الارتباط مرئياً. وبالنسبة للارتباطات المعرّفة خارج أي دالة أو كتلة أو وحدة (انظر <a href="/chapter/modules">الفصل 10</a>)، فإن النطاق هو البرنامج كله—يمكنك الإشارة إلى ارتباطات كهذه حيثما شئت. وتسمى هذه الارتباطات <em>عامة</em> (global).</p>
+<p>الارتباطات المنشأة لوسطاء الدوال أو المعلنة داخل دالة لا يمكن الإشارة إليها إلا في تلك الدالة، لذا تُعرف بالارتباطات <em>المحلية</em> (local). وفي كل مرة تُستدعى فيها الدالة، تُنشأ نسخ جديدة من هذه الارتباطات. وهذا يوفر قدراً من العزل بين الدوال—فكل استدعاء دالة يعمل في عالمه الصغير الخاص (بيئته المحلية)، ويمكن غالباً فهمه دون معرفة الكثير عما يجري في البيئة العامة.</p>
+<p>الارتباطات المعلنة بـ <code>let</code> و<code>const</code> محلية في الواقع للـ<em>كتلة</em> التي عُلنت فيها، فإذا أنشأت واحداً منها داخل حلقة، فلا تستطيع الشيفرة قبل الحلقة وبعدها «رؤيته». في JavaScript ما قبل 2015، لم تكن سوى الدوال تنشئ نطاقات جديدة، لذا فإن الارتباطات بالطراز القديم، المنشأة بالكلمة المفتاحية <code>var</code>، تكون مرئية في الدالة كلها التي تظهر فيها—أو في النطاق العام كله، إن لم تكن داخل دالة.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> x = <span class="hljs-number">10</span>;   <span class="hljs-comment">// عام</span>
+<span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) {
+  <span class="hljs-keyword">let</span> y = <span class="hljs-number">20</span>; <span class="hljs-comment">// محلي في الكتلة</span>
+  <span class="hljs-keyword">var</span> z = <span class="hljs-number">30</span>; <span class="hljs-comment">// عام أيضاً</span>
+}
+</code></pre>
+<p>يمكن لكل نطاق أن «ينظر للخارج» نحو النطاق المحيط به، لذا يكون <code>x</code> مرئياً داخل الكتلة في المثال. والاستثناء هو عندما تحمل ارتباطات متعددة الاسم نفسه—في هذه الحالة، لا تستطيع الشيفرة رؤية سوى الأعمق منها. مثلاً، عندما تشير الشيفرة داخل دالة <code>halve</code> إلى <code>n</code>، فإنها ترى <code>n</code> <em>الخاصة بها</em>، لا <code>n</code> العامة.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> halve = <span class="hljs-keyword">function</span>(<span class="hljs-params">n</span>) {
+  <span class="hljs-keyword">return</span> n / <span class="hljs-number">2</span>;
+};
+
+<span class="hljs-keyword">let</span> n = <span class="hljs-number">10</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">halve</span>(<span class="hljs-number">100</span>));
+<span class="hljs-comment">// → 50</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(n);
+<span class="hljs-comment">// → 10</span>
+</code></pre>
+<h2 id="النطاق-المتداخل">النطاق المتداخل</h2>
+<p>لا تكتفي JavaScript بالتمييز بين الارتباطات العامة والمحلية. يمكن إنشاء الكتل والدوال داخل كتل ودوال أخرى، ما يُنتج درجات متعددة من المحلية.</p>
+<p>مثلاً، هذه الدالة—التي تطبع المكوّنات اللازمة لتحضير دفعة من الحمص—تحتوي على دالة أخرى بداخلها:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> hummus = <span class="hljs-keyword">function</span>(<span class="hljs-params">factor</span>) {
+  <span class="hljs-keyword">const</span> ingredient = <span class="hljs-keyword">function</span>(<span class="hljs-params">amount, unit, name</span>) {
+    <span class="hljs-keyword">let</span> ingredientAmount = amount * factor;
+    <span class="hljs-keyword">if</span> (ingredientAmount &gt; <span class="hljs-number">1</span>) {
+      unit += <span class="hljs-string">&quot;s&quot;</span>;
+    }
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`<span class="hljs-subst">\${ingredientAmount}</span> <span class="hljs-subst">\${unit}</span> <span class="hljs-subst">\${name}</span>\`</span>);
+  };
+  <span class="hljs-title function_">ingredient</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;can&quot;</span>, <span class="hljs-string">&quot;chickpeas&quot;</span>);
+  <span class="hljs-title function_">ingredient</span>(<span class="hljs-number">0.25</span>, <span class="hljs-string">&quot;cup&quot;</span>, <span class="hljs-string">&quot;tahini&quot;</span>);
+  <span class="hljs-title function_">ingredient</span>(<span class="hljs-number">0.25</span>, <span class="hljs-string">&quot;cup&quot;</span>, <span class="hljs-string">&quot;lemon juice&quot;</span>);
+  <span class="hljs-title function_">ingredient</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;clove&quot;</span>, <span class="hljs-string">&quot;garlic&quot;</span>);
+  <span class="hljs-title function_">ingredient</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;tablespoon&quot;</span>, <span class="hljs-string">&quot;olive oil&quot;</span>);
+  <span class="hljs-title function_">ingredient</span>(<span class="hljs-number">0.5</span>, <span class="hljs-string">&quot;teaspoon&quot;</span>, <span class="hljs-string">&quot;cumin&quot;</span>);
+};
+</code></pre>
+<p>تستطيع الشيفرة داخل دالة <code>ingredient</code> رؤية ارتباط <code>factor</code> من الدالة الخارجية، لكن ارتباطاتها المحلية، مثل <code>unit</code> أو <code>ingredientAmount</code>، غير مرئية في الدالة الخارجية.</p>
+<p>تتحدد مجموعة الارتباطات المرئية داخل كتلة بموضع تلك الكتلة في نص البرنامج. ويمكن لكل نطاق محلي أيضاً أن يرى جميع النطاقات المحلية التي تحتويه، ويمكن لجميع النطاقات رؤية النطاق العام. وتسمى هذه الطريقة في تحديد ظهور الارتباطات <em>النطاق المعجمي</em> (lexical scoping).</p>
+<h2 id="الدوال-كقيم">الدوال كقيم</h2>
+<p>يعمل ارتباط الدالة عادة ببساطة كاسم لقطعة محددة من البرنامج. ويُعرَّف ارتباط كهذا مرة واحدة ولا يتغير أبداً. وهذا يجعل من السهل الخلط بين الدالة واسمها.</p>
+<p>لكن الاثنين مختلفان. فقيمة الدالة تستطيع فعل كل ما تستطيع القيم الأخرى فعله—يمكنك استخدامها في تعبيرات عشوائية، لا مجرد استدعائها. ومن الممكن تخزين قيمة دالة في ارتباط جديد، وتمريرها كمعطى إلى دالة، وهكذا. وبالمثل، لا يزال الارتباط الذي يحمل دالة ارتباطاً عادياً، ويمكن، إن لم يكن ثابتاً، إسناد قيمة جديدة إليه، هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> launchMissiles = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  missileSystem.<span class="hljs-title function_">launch</span>(<span class="hljs-string">&quot;now&quot;</span>);
+};
+<span class="hljs-keyword">if</span> (safeMode) {
+  launchMissiles = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {<span class="hljs-comment">/* لا تفعل شيئاً */</span>};
+}
+</code></pre>
+<p>في <a href="/chapter/higher_order_functions">الفصل 5</a>، سنناقش الأشياء المثيرة التي يمكننا فعلها بتمرير قيم الدوال إلى دوال أخرى.</p>
+<h2 id="صيغة-التعريف">صيغة التعريف</h2>
+<p>هناك طريقة أقصر قليلاً لإنشاء ارتباط دالة. فعندما تُستخدم الكلمة المفتاحية <code>function</code> في بداية جملة، فإنها تعمل بشكل مختلف:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">square</span>(<span class="hljs-params">x</span>) {
+  <span class="hljs-keyword">return</span> x * x;
+}
+</code></pre>
+<p>هذا <em>تعريف</em> دالة (function declaration). تُعرّف الجملة الارتباط <code>square</code> وتوجهه إلى الدالة المعطاة. وهو أسهل كتابة بقليل ولا يتطلب فاصلة منقوطة بعد الدالة.</p>
+<p>هناك دقة واحدة في هذا الشكل من تعريف الدوال.</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;The future says:&quot;</span>, <span class="hljs-title function_">future</span>());
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">future</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;You&#x27;ll never have flying cars&quot;</span>;
+}
+</code></pre>
+<p>تعمل الشيفرة السابقة، رغم أن الدالة معرّفة <em>أسفل</em> الشيفرة التي تستخدمها. فتعريفات الدوال ليست جزءاً من التدفق العادي للتحكم من الأعلى إلى الأسفل. بل تُنقل مفهوماً إلى أعلى نطاقها، ويمكن استخدامها من كل الشيفرة في ذلك النطاق. وهذا مفيد أحياناً لأنه يمنحك حرية ترتيب الشيفرة بالطريقة التي تبدو أوضح، دون القلق من الاضطرار إلى تعريف كل الدوال قبل استخدامها.</p>
+<h2 id="دوال-السهم">دوال السهم</h2>
+<p>هناك صيغة ثالثة للدوال، تبدو مختلفة جداً عن الأخريين. فبدلاً من الكلمة المفتاحية <code>function</code>، تستخدم سهماً (<code>=&gt;</code>) مكوناً من علامة يساوي ومحرف أكبر من (لا تخلط بينه وبين معامل أكبر من أو يساوي، المكتوب <code>&gt;=</code>):</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">roundTo</span> = (<span class="hljs-params">n, step</span>) =&gt; {
+  <span class="hljs-keyword">let</span> remainder = n % step;
+  <span class="hljs-keyword">return</span> n - remainder + (remainder &lt; step / <span class="hljs-number">2</span> ? <span class="hljs-number">0</span> : step);
+};
+</code></pre>
+<p>يأتي السهم <em>بعد</em> قائمة الوسطاء ويتبعه جسم الدالة. وهو يعبّر عن شيء مثل «هذا المدخل (الوسطاء) يُنتج هذه النتيجة (الجسم)».</p>
+<p>عندما يكون هناك اسم وسيط واحد فقط، يمكنك حذف الأقواس حول قائمة الوسطاء. وإذا كان الجسم تعبيراً واحداً بدلاً من كتلة بين قوسين معقوفين، فسيُرجع ذلك التعبير من الدالة. لذا، هذان التعريفان لـ <code>square</code> يفعلان الشيء نفسه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">square1</span> = (<span class="hljs-params">x</span>) =&gt; { <span class="hljs-keyword">return</span> x * x; };
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">square2</span> = x =&gt; x * x;
+</code></pre>
+<p>عندما لا يكون لدالة السهم وسطاء على الإطلاق، تكون قائمة وسطائها مجرد زوج فارغ من الأقواس.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">horn</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Toot&quot;</span>);
+};
+</code></pre>
+<p>لا يوجد سبب عميق لوجود كل من دوال السهم وتعبيرات <code>function</code> في اللغة. فباستثناء تفصيل بسيط، سنناقشه في <a href="/chapter/the_secret_life_of_objects">الفصل 6</a>، فإنهما يفعلان الشيء نفسه. أُضيفت دوال السهم في 2015، معظمها لجعل كتابة تعبيرات الدوال الصغيرة ممكنة بطريقة أقل إسهاباً. وسنستخدمها كثيراً في <a href="/chapter/higher_order_functions">الفصل 5</a>.</p>
+<h2 id="مكدس-الاستدعاء">مكدّس الاستدعاء</h2>
+<p>الطريقة التي يتدفق بها التحكم عبر الدوال معقدة نوعاً ما. لنلقِ نظرة أقرب عليها. إليك برنامجاً بسيطاً يجري بعض استدعاءات الدوال:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">greet</span>(<span class="hljs-params">who</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello &quot;</span> + who);
+}
+<span class="hljs-title function_">greet</span>(<span class="hljs-string">&quot;Harry&quot;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Bye&quot;</span>);
+</code></pre>
+<p>تمريرة عبر هذا البرنامج تسير تقريباً هكذا: استدعاء <code>greet</code> يجعل التحكم يقفز إلى بداية تلك الدالة (السطر 2). وتستدعي الدالة <code>console.log</code>، التي تأخذ التحكم وتؤدي عملها ثم تعيد التحكم إلى السطر 2. وهناك تصل إلى نهاية دالة <code>greet</code>، فتعود إلى الموضع الذي استدعاها—السطر 4. والسطر التالي يستدعي <code>console.log</code> مجدداً. وبعد أن تعود، يصل البرنامج إلى نهايته.</p>
+<p>يمكننا إظهار تدفق التحكم بشكل تخطيطي هكذا:</p>
+<pre><code>not in function
+  in greet
+    in console.log
+  in greet
+not in function
+  in console.log
+not in function
+</code></pre>
+<p>ولأن الدالة يجب أن تقفز عائدة إلى الموضع الذي استدعاها عندما تُرجع، فلا بد أن يتذكر الحاسوب السياق الذي حدث فيه الاستدعاء. في إحدى الحالتين، يجب أن تعود <code>console.log</code> إلى دالة <code>greet</code> عندما تنتهي. وفي الحالة الأخرى، تعود إلى نهاية البرنامج.</p>
+<p>الموضع الذي يخزّن فيه الحاسوب هذا السياق هو <em>مكدّس الاستدعاء</em> (call stack). في كل مرة تُستدعى فيها دالة، يُخزَّن السياق الحالي فوق هذا المكدّس. وعندما تُرجع الدالة، تحذف السياق العلوي من المكدّس وتستخدم ذلك السياق لمواصلة التنفيذ.</p>
+<p>يتطلب تخزين هذا المكدّس مساحة في ذاكرة الحاسوب. وعندما ينمو المكدّس كثيراً، يفشل الحاسوب برسالة مثل «نفدت مساحة المكدّس» أو «تعاود مفرط». وتوضح الشيفرة التالية ذلك بطرح سؤال صعب جداً على الحاسوب يسبب تبادلاً لا نهائياً بين دالتين. أو بالأحرى، <em>سيكون</em> لا نهائياً لو كان لدى الحاسوب مكدّس لا نهائي. أما وهو على ما هو عليه، فستنفد مساحتنا، أو «نفجّر المكدّس».</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">chicken</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">egg</span>();
+}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">egg</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">chicken</span>();
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">chicken</span>() + <span class="hljs-string">&quot; came first.&quot;</span>);
+<span class="hljs-comment">// → ??</span>
+</code></pre>
+<h2 id="المعطيات-الاختيارية">المعطيات الاختيارية</h2>
+<p>الشيفرة التالية مسموحة وتُنفَّذ دون أي مشكلة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">square</span>(<span class="hljs-params">x</span>) { <span class="hljs-keyword">return</span> x * x; }
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">square</span>(<span class="hljs-number">4</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">&quot;hedgehog&quot;</span>));
+<span class="hljs-comment">// → 16</span>
+</code></pre>
+<p>عرّفنا <code>square</code> بوسيط واحد فقط. ومع ذلك، عندما نستدعيها بثلاثة معطيات، لا تشتكي اللغة. بل تتجاهل المعطيات الزائدة وتحسب مربع الأول.</p>
+<p>JavaScript متسامحة للغاية بشأن عدد المعطيات التي يمكنك تمريرها إلى دالة. فإذا مررت أكثر من اللازم، تُتجاهل الزائدة. وإذا مررت أقل من اللازم، تُسند إلى الوسطاء الناقصين القيمة <code>undefined</code>.</p>
+<p>الجانب السلبي من هذا هو أنه من الممكن—بل المرجح—أن تمرر بالخطأ عدداً خاطئاً من المعطيات إلى الدوال. ولن يخبرك أحد بذلك. أما الجانب الإيجابي فهو أنك تستطيع استخدام هذا السلوك للسماح باستدعاء دالة بعدد مختلف من المعطيات. مثلاً، تحاول دالة <code>minus</code> هذه تقليد معامل <code>-</code> بالعمل على معطى واحد أو معطيين:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">minus</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">if</span> (b === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> -a;
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> a - b;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">minus</span>(<span class="hljs-number">10</span>));
+<span class="hljs-comment">// → -10</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">minus</span>(<span class="hljs-number">10</span>, <span class="hljs-number">5</span>));
+<span class="hljs-comment">// → 5</span>
+</code></pre>
+<p>إذا كتبت معامل <code>=</code> بعد وسيط، يتبعه تعبير، فستحل قيمة ذلك التعبير محل المعطى عندما لا يُعطى. مثلاً، تجعل هذه النسخة من <code>roundTo</code> معطاها الثاني اختيارياً. وإذا لم تقدمه أو مررت القيمة <code>undefined</code>، فسيؤول إلى واحد:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">roundTo</span>(<span class="hljs-params">n, step = <span class="hljs-number">1</span></span>) {
+  <span class="hljs-keyword">let</span> remainder = n % step;
+  <span class="hljs-keyword">return</span> n - remainder + (remainder &lt; step / <span class="hljs-number">2</span> ? <span class="hljs-number">0</span> : step);
+};
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">roundTo</span>(<span class="hljs-number">4.5</span>));
+<span class="hljs-comment">// → 5</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">roundTo</span>(<span class="hljs-number">4.5</span>, <span class="hljs-number">2</span>));
+<span class="hljs-comment">// → 4</span>
+</code></pre>
+<p>سيقدّم <a href="/chapter/data_structures_objects_and_arrays#rest_parameters">الفصل التالي</a> طريقة يستطيع بها جسم الدالة الوصول إلى قائمة المعطيات كلها التي مُررت إليه. وهذا مفيد لأنه يسمح للدالة بقبول أي عدد من المعطيات. مثلاً، تفعل <code>console.log</code> هذا، فتطبع كل القيم المعطاة لها:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;C&quot;</span>, <span class="hljs-string">&quot;O&quot;</span>, <span class="hljs-number">2</span>);
+<span class="hljs-comment">// → C O 2</span>
+</code></pre>
+<h2 id="الإغلاق">الإغلاق</h2>
+<p>القدرة على التعامل مع الدوال كقيم، مقترنة بحقيقة أن الارتباطات المحلية يُعاد إنشاؤها في كل مرة تُستدعى فيها دالة، تطرح سؤالاً مثيراً للاهتمام: ماذا يحدث للارتباطات المحلية عندما لا يعود استدعاء الدالة الذي أنشأها نشطاً؟</p>
+<p>تعرض الشيفرة التالية مثالاً على ذلك. فهي تعرّف دالة، <code>wrapValue</code>، تُنشئ ارتباطاً محلياً. ثم تُرجع دالة تصل إلى هذا الارتباط المحلي وتُرجعه.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">wrapValue</span>(<span class="hljs-params">n</span>) {
+  <span class="hljs-keyword">let</span> local = n;
+  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> local;
+}
+
+<span class="hljs-keyword">let</span> wrap1 = <span class="hljs-title function_">wrapValue</span>(<span class="hljs-number">1</span>);
+<span class="hljs-keyword">let</span> wrap2 = <span class="hljs-title function_">wrapValue</span>(<span class="hljs-number">2</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">wrap1</span>());
+<span class="hljs-comment">// → 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">wrap2</span>());
+<span class="hljs-comment">// → 2</span>
+</code></pre>
+<p>هذا مسموح ويعمل كما تأمل—فلا يزال بالإمكان الوصول إلى كلتا نسختي الارتباط. وهذا الموقف برهان جيد على أن الارتباطات المحلية تُنشأ من جديد في كل استدعاء، وأن الاستدعاءات المختلفة لا يؤثر بعضها على ارتباطات بعضها المحلية.</p>
+<p>هذه الميزة—القدرة على الإشارة إلى نسخة محددة من ارتباط محلي في نطاق حاوٍ—تسمى <em>إغلاقاً</em> (closure). والدالة التي تشير إلى ارتباطات من نطاقات محلية حولها تسمى <em>دالة إغلاق</em>. ولا يحررك هذا السلوك من القلق بشأن أعمار الارتباطات فحسب، بل يجعل أيضاً استخدام قيم الدوال ممكناً ببعض الطرق الإبداعية.</p>
+<p>بتغيير بسيط، يمكننا تحويل المثال السابق إلى طريقة لإنشاء دوال تضرب في مقدار عشوائي.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">multiplier</span>(<span class="hljs-params">factor</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-params">number</span> =&gt;</span> number * factor;
+}
+
+<span class="hljs-keyword">let</span> twice = <span class="hljs-title function_">multiplier</span>(<span class="hljs-number">2</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">twice</span>(<span class="hljs-number">5</span>));
+<span class="hljs-comment">// → 10</span>
+</code></pre>
+<p>لا حاجة فعلاً إلى ارتباط <code>local</code> الصريح من مثال <code>wrapValue</code> لأن الوسيط نفسه ارتباط محلي.</p>
+<p>التفكير في برامج كهذه يتطلب بعض التدريب. والنموذج الذهني الجيد هو التفكير في قيم الدوال على أنها تحتوي على الشيفرة في جسمها وعلى البيئة التي أُنشئت فيها معاً. وعند الاستدعاء، يرى جسم الدالة البيئة التي أُنشئ فيها، لا البيئة التي استُدعي فيها.</p>
+<p>في المثال السابق، تُستدعى <code>multiplier</code> فتُنشئ بيئة يُربط فيها وسيطها <code>factor</code> بالقيمة 2. وقيمة الدالة التي تُرجعها، والمخزنة في <code>twice</code>، تتذكر هذه البيئة، فحين تُستدعى تضرب معطاها في 2.</p>
+<h2 id="التعاود">التعاود</h2>
+<p>لا بأس على الإطلاق أن تستدعي الدالة نفسها، ما دامت لا تفعل ذلك مرات كثيرة بما يفيض المكدّس. والدالة التي تستدعي نفسها تسمى <em>تعاودية</em> (recursive). ويتيح التعاود كتابة بعض الدوال بأسلوب مختلف. خذ مثلاً دالة <code>power</code> هذه، التي تفعل الشيء نفسه الذي يفعله معامل <code>**</code> (الرفع إلى قوة):</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">power</span>(<span class="hljs-params">base, exponent</span>) {
+  <span class="hljs-keyword">if</span> (exponent == <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> base * <span class="hljs-title function_">power</span>(base, exponent - <span class="hljs-number">1</span>);
+  }
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">power</span>(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>));
+<span class="hljs-comment">// → 8</span>
+</code></pre>
+<p>هذا قريب إلى حد ما من الطريقة التي يعرّف بها الرياضيون الرفع إلى قوة، ويمكن القول إنه يصف المفهوم بوضوح أكبر من الحلقة التي استخدمناها في <a href="/chapter/program_structure">الفصل 2</a>. وتستدعي الدالة نفسها مرات عدة بأسس أصغر وأصغر لتحقيق الضرب المتكرر.</p>
+<p>لكن لهذا التنفيذ مشكلة واحدة: في تنفيذات JavaScript النموذجية، يكون أبطأ بنحو ثلاث مرات من نسخة تستخدم حلقة <code>for</code>. فالجريان عبر حلقة بسيطة أرخص عموماً من استدعاء دالة مرات عدة.</p>
+<p>معضلة السرعة مقابل الأناقة معضلة مثيرة للاهتمام. يمكنك رؤيتها كنوع من الطيف المتصل بين الملاءمة للإنسان والملاءمة للآلة. ويمكن جعل أي برنامج تقريباً أسرع بجعله أكبر وأكثر تعقيداً. وعلى المبرمج أن يجد التوازن المناسب.</p>
+<p>في حالة دالة <code>power</code>، لا تزال نسخة غير أنيقة (بحلقة) بسيطة إلى حد ما وسهلة القراءة. ولا معنى كبيراً لاستبدالها بدالة تعاودية. لكن غالباً ما يتعامل البرنامج مع مفاهيم معقدة إلى حد أن التخلي عن بعض الكفاءة لجعل البرنامج أكثر مباشرة مفيد.</p>
+<p>قد يكون القلق بشأن الكفاءة تشتيتاً. فهو عامل آخر يعقّد تصميم البرنامج، وعندما تفعل شيئاً صعباً بالفعل، قد يكون هذا الأمر الإضافي الذي تقلق بشأنه مشلّاً.</p>
+<p>لذلك، عليك عموماً أن تبدأ بكتابة شيء صحيح وسهل الفهم. وإذا كنت قلقاً من أنه بطيء جداً—وهو ليس كذلك عادة، لأن معظم الشيفرة ببساطة لا تُنفَّذ مرات كافية لتستغرق وقتاً ذا شأن—فيمكنك القياس لاحقاً وتحسينه إن لزم.</p>
+<p>ليس التعاود دائماً مجرد بديل غير كفء للحلقات. فبعض المسائل حقاً أسهل حلاً بالتعاود منها بالحلقات. وفي الغالب تكون هذه مسائل تتطلب استكشاف أو معالجة عدة «فروع»، قد يتفرع كل منها بدوره إلى فروع أكثر.</p>
+<p>تأمل هذه الأحجية: بالبدء من العدد 1 والقيام مراراً إما بإضافة 5 أو بالضرب في 3، يمكن إنتاج مجموعة لا نهائية من الأعداد. كيف تكتب دالة، عند إعطائها عدداً، تحاول إيجاد متتالية من هذه الإضافات والضربات تنتج ذلك العدد؟ مثلاً، يمكن الوصول إلى العدد 13 بالضرب في 3 أولاً ثم إضافة 5 مرتين، بينما لا يمكن الوصول إلى العدد 15 إطلاقاً.</p>
+<p>إليك حلاً تعاودياً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">findSolution</span>(<span class="hljs-params">target</span>) {
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">find</span>(<span class="hljs-params">current, history</span>) {
+    <span class="hljs-keyword">if</span> (current == target) {
+      <span class="hljs-keyword">return</span> history;
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (current &gt; target) {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">find</span>(current + <span class="hljs-number">5</span>, <span class="hljs-string">\`(<span class="hljs-subst">\${history}</span> + 5)\`</span>) ??
+             <span class="hljs-title function_">find</span>(current * <span class="hljs-number">3</span>, <span class="hljs-string">\`(<span class="hljs-subst">\${history}</span> * 3)\`</span>);
+    }
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">find</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;1&quot;</span>);
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">findSolution</span>(<span class="hljs-number">24</span>));
+<span class="hljs-comment">// → (((1 * 3) + 5) * 3)</span>
+</code></pre>
+<p>لاحظ أن هذا البرنامج لا يجد بالضرورة <em>أقصر</em> متتالية من العمليات. فهو يكتفي عندما يجد أي متتالية.</p>
+<p>لا بأس إن لم ترَ كيف تعمل هذه الشيفرة فوراً. لنمضِ خلالها لأنها تشكل تمريناً رائعاً في التفكير التعاودي.</p>
+<p>الدالة الداخلية <code>find</code> هي التي تقوم بالتعاود الفعلي. تأخذ معطيين: العدد الحالي ونصاً يسجل كيف وصلنا إلى هذا العدد. وإذا وجدت حلاً، تُرجع نصاً يبيّن كيفية الوصول إلى الهدف. وإذا لم تستطع إيجاد حل بدءاً من هذا العدد، تُرجع <code>null</code>.</p>
+<p>ولفعل ذلك، تنفذ الدالة واحداً من ثلاثة إجراءات. إذا كان العدد الحالي هو العدد الهدف، فالتاريخ الحالي طريقة للوصول إلى ذلك الهدف، لذا يُرجع. وإذا كان العدد الحالي أكبر من الهدف، فلا معنى لمواصلة استكشاف هذا الفرع لأن الإضافة والضرب كلاهما سيزيدان العدد فقط، فتُرجع <code>null</code>. وأخيراً، إذا كنا لا نزال دون العدد الهدف، تجرب الدالة المسارين الممكنين اللذين يبدآن من العدد الحالي باستدعاء نفسها مرتين، مرة للإضافة ومرة للضرب. وإذا أرجَع الاستدعاء الأول شيئاً ليس <code>null</code>، يُرجع. وإلا، يُرجع الاستدعاء الثاني، بغض النظر عما إذا كان ينتج نصاً أم <code>null</code>.</p>
+<p>لفهم أفضل لكيفية إنتاج هذه الدالة للتأثير الذي نبحث عنه، لننظر إلى كل استدعاءات <code>find</code> التي تُجرى عند البحث عن حل للعدد 13:</p>
+<pre><code>find(1, &quot;1&quot;)
+  find(6, &quot;(1 + 5)&quot;)
+    find(11, &quot;((1 + 5) + 5)&quot;)
+      find(16, &quot;(((1 + 5) + 5) + 5)&quot;)
+        too big
+      find(33, &quot;(((1 + 5) + 5) * 3)&quot;)
+        too big
+    find(18, &quot;((1 + 5) * 3)&quot;)
+      too big
+  find(3, &quot;(1 * 3)&quot;)
+    find(8, &quot;((1 * 3) + 5)&quot;)
+      find(13, &quot;(((1 * 3) + 5) + 5)&quot;)
+        found!
+</code></pre>
+<p>تشير المسافات البادئة إلى عمق مكدّس الاستدعاء. في المرة الأولى التي تُستدعى فيها <code>find</code>، تبدأ الدالة باستدعاء نفسها لاستكشاف الحل الذي يبدأ بـ <code>(1 + 5)</code>. وسيتعاود ذلك الاستدعاء أكثر لاستكشاف <em>كل</em> حل مستمر ينتج عدداً أقل من أو يساوي العدد الهدف. ولأنه لا يجد حلاً يصيب الهدف، يُرجع <code>null</code> إلى الاستدعاء الأول. وهناك يجعل معامل <code>??</code> الاستدعاء الذي يستكشف <code>(1 * 3)</code> يحدث. ولهذا البحث حظ أوفر—فاستدعاؤه التعاودي الأول، عبر استدعاء تعاودي <em>آخر</em>، يصيب العدد الهدف. وتُرجع تلك الدالة الأعمق نصاً، ويمرر كل معامل <code>??</code> في الاستدعاءات الوسيطة ذلك النص، لتعود الحل في النهاية.</p>
+<h2 id="نمو-الدوال">نمو الدوال</h2>
+<p>هناك طريقتان طبيعيتان إلى حد ما لإدخال الدوال إلى البرامج.</p>
+<p>تحدث الأولى عندما تجد نفسك تكتب شيفرة مشابهة مرات عدة. تفضّل ألا تفعل ذلك، لأن كثرة الشيفرة تعني مساحة أكبر للعلل كي تختبئ ومواد أكثر ليقرأها من يحاول فهم البرنامج. لذا تأخذ الوظيفة المتكررة، وتجد لها اسماً جيداً، وتضعها في دالة.</p>
+<p>أما الطريقة الثانية فهي أن تجد أنك تحتاج وظيفة لم تكتبها بعد وتبدو جديرة بدالة خاصة بها. فتبدأ بتسمية الدالة، ثم تكتب جسمها. وقد تبدأ حتى بكتابة شيفرة تستخدم الدالة قبل أن تعرّف الدالة نفسها فعلاً.</p>
+<p>مدى صعوبة إيجاد اسم جيد لدالة مؤشر جيد على مدى وضوح المفهوم الذي تحاول تغليفه. لنمضِ عبر مثال.</p>
+<p>نريد كتابة برنامج يطبع عددين: عدد الأبقار وعدد الدجاج في مزرعة، مع الكلمتين <code>Cows</code> و<code>Chickens</code> بعدهما وأصفار مبطّنة قبل العددين بحيث يكونان دائماً من ثلاثة أرقام:</p>
+<pre><code>007 Cows
+011 Chickens
+</code></pre>
+<p>يتطلب هذا دالة بمعطيين—عدد الأبقار وعدد الدجاج. لنبدأ بالبرمجة.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">printFarmInventory</span>(<span class="hljs-params">cows, chickens</span>) {
+  <span class="hljs-keyword">let</span> cowString = <span class="hljs-title class_">String</span>(cows);
+  <span class="hljs-keyword">while</span> (cowString.<span class="hljs-property">length</span> &lt; <span class="hljs-number">3</span>) {
+    cowString = <span class="hljs-string">&quot;0&quot;</span> + cowString;
+  }
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`<span class="hljs-subst">\${cowString}</span> Cows\`</span>);
+  <span class="hljs-keyword">let</span> chickenString = <span class="hljs-title class_">String</span>(chickens);
+  <span class="hljs-keyword">while</span> (chickenString.<span class="hljs-property">length</span> &lt; <span class="hljs-number">3</span>) {
+    chickenString = <span class="hljs-string">&quot;0&quot;</span> + chickenString;
+  }
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`<span class="hljs-subst">\${chickenString}</span> Chickens\`</span>);
+}
+<span class="hljs-title function_">printFarmInventory</span>(<span class="hljs-number">7</span>, <span class="hljs-number">11</span>);
+</code></pre>
+<p>كتابة <code>.length</code> بعد تعبير نصي تعطينا طول ذلك النص. وهكذا تستمر حلقات <code>while</code> في إضافة أصفار أمام نصوص الأعداد حتى تصبح بطول ثلاثة محارف على الأقل.</p>
+<p>أُنجزت المهمة! لكن بينما نحن على وشك إرسال الشيفرة إلى المزارعة (مع فاتورة باهظة)، تتصل وتخبرنا أنها بدأت أيضاً بتربية الخنازير، وتطلب منا من فضلك أن نوسّع البرنامج ليطبع الخنازير أيضاً؟</p>
+<p>بالتأكيد نستطيع. لكن بينما نحن في طور نسخ ولصق تلك الأسطر الأربعة مرة أخرى، نتوقف ونعيد التفكير. لا بد من طريقة أفضل. إليك محاولة أولى:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">printZeroPaddedWithLabel</span>(<span class="hljs-params">number, label</span>) {
+  <span class="hljs-keyword">let</span> numberString = <span class="hljs-title class_">String</span>(number);
+  <span class="hljs-keyword">while</span> (numberString.<span class="hljs-property">length</span> &lt; <span class="hljs-number">3</span>) {
+    numberString = <span class="hljs-string">&quot;0&quot;</span> + numberString;
+  }
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`<span class="hljs-subst">\${numberString}</span> <span class="hljs-subst">\${label}</span>\`</span>);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">printFarmInventory</span>(<span class="hljs-params">cows, chickens, pigs</span>) {
+  <span class="hljs-title function_">printZeroPaddedWithLabel</span>(cows, <span class="hljs-string">&quot;Cows&quot;</span>);
+  <span class="hljs-title function_">printZeroPaddedWithLabel</span>(chickens, <span class="hljs-string">&quot;Chickens&quot;</span>);
+  <span class="hljs-title function_">printZeroPaddedWithLabel</span>(pigs, <span class="hljs-string">&quot;Pigs&quot;</span>);
+}
+
+<span class="hljs-title function_">printFarmInventory</span>(<span class="hljs-number">7</span>, <span class="hljs-number">11</span>, <span class="hljs-number">3</span>);
+</code></pre>
+<p>إنها تعمل! لكن ذلك الاسم، <code>printZeroPaddedWithLabel</code>، غير مريح قليلاً. فهو يجمع ثلاثة أشياء—الطباعة، وتبطين الأصفار، وإضافة تسمية—في دالة واحدة.</p>
+<p>بدلاً من انتزاع الجزء المتكرر من برنامجنا جملةً، لنحاول انتقاء <em>مفهوم</em> واحد:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">zeroPad</span>(<span class="hljs-params">number, width</span>) {
+  <span class="hljs-keyword">let</span> string = <span class="hljs-title class_">String</span>(number);
+  <span class="hljs-keyword">while</span> (string.<span class="hljs-property">length</span> &lt; width) {
+    string = <span class="hljs-string">&quot;0&quot;</span> + string;
+  }
+  <span class="hljs-keyword">return</span> string;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">printFarmInventory</span>(<span class="hljs-params">cows, chickens, pigs</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`<span class="hljs-subst">\${zeroPad(cows, <span class="hljs-number">3</span>)}</span> Cows\`</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`<span class="hljs-subst">\${zeroPad(chickens, <span class="hljs-number">3</span>)}</span> Chickens\`</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`<span class="hljs-subst">\${zeroPad(pigs, <span class="hljs-number">3</span>)}</span> Pigs\`</span>);
+}
+
+<span class="hljs-title function_">printFarmInventory</span>(<span class="hljs-number">7</span>, <span class="hljs-number">16</span>, <span class="hljs-number">3</span>);
+</code></pre>
+<p>دالة باسم جميل وواضح مثل <code>zeroPad</code> تسهّل على من يقرأ الشيفرة معرفة ما تفعله. كما أن دالة كهذه مفيدة في مواقف أكثر من هذا البرنامج المحدد. مثلاً، يمكنك استخدامها للمساعدة في طباعة جداول أعداد منسّقة جيداً.</p>
+<p>ما مدى الذكاء والتنوع الذي <em>ينبغي</em> أن تكون عليه دالتنا؟ يمكننا كتابة أي شيء، من دالة بسيطة للغاية لا تستطيع سوى تبطين عدد ليصبح بعرض ثلاثة محارف إلى نظام معقد معمّم لتنسيق الأعداد يتعامل مع الأعداد الكسرية والسالبة ومحاذاة النقاط العشرية والتبطين بمحارف مختلفة، وهكذا.</p>
+<p>من المبادئ المفيدة أن تمتنع عن إضافة الذكاء ما لم تكن متأكداً تماماً من أنك ستحتاجه. قد يكون مغرياً كتابة «أطر عمل» عامة لكل جزء من الوظائف تصادفه. قاوم تلك الرغبة. فلن تنجز أي عمل حقيقي—ستكون مشغولاً جداً بكتابة شيفرة لا تستخدمها أبداً.</p>
+<h2 id="الدوال-والتأثيرات-الجانبية">الدوال والتأثيرات الجانبية</h2>
+<p>يمكن تقسيم الدوال تقريباً إلى تلك التي تُستدعى من أجل تأثيراتها الجانبية وتلك التي تُستدعى من أجل قيمتها المُرجعة (رغم أنه من الممكن أيضاً أن يكون لها تأثيرات جانبية وتُرجع قيمة في الوقت نفسه).</p>
+<p>دالة المساعدة الأولى في مثال المزرعة، <code>printZeroPaddedWithLabel</code>، تُستدعى من أجل تأثيرها الجانبي: فهي تطبع سطراً. أما النسخة الثانية، <code>zeroPad</code>، فتُستدعى من أجل قيمتها المُرجعة. وليس من قبيل المصادفة أن الثانية مفيدة في مواقف أكثر من الأولى. فالدوال التي تنشئ قيماً أسهل في الدمج بطرق جديدة من الدوال التي تؤدي تأثيرات جانبية مباشرة.</p>
+<p>الدالة <em>النقية</em> (pure) نوع محدد من الدوال المنتجة للقيم، لا يكون لها تأثيرات جانبية فحسب، بل لا تعتمد أيضاً على تأثيرات جانبية من شيفرة أخرى—فهي مثلاً لا تقرأ ارتباطات عامة قد تتغير قيمتها. وللدالة النقية خاصية محببة: أنها عند استدعائها بالمعطيات نفسها تنتج دائماً القيمة نفسها (ولا تفعل أي شيء آخر). ويمكن استبدال استدعاء دالة كهذه بقيمتها المُرجعة دون تغيير معنى الشيفرة. وعندما لا تكون متأكداً من أن دالة نقية تعمل بشكل صحيح، يمكنك اختبارها بمجرد استدعائها، وتعرف أنه إذا عملت في ذلك السياق فستعمل في أي سياق. أما الدوال غير النقية فتميل إلى الحاجة إلى مزيد من السقالات لاختبارها.</p>
+<p>ومع ذلك، لا داعي للشعور بالسوء عند كتابة دوال غير نقية. فالتأثيرات الجانبية مفيدة غالباً. فلا توجد طريقة لكتابة نسخة نقية من <code>console.log</code> مثلاً، و<code>console.log</code> جيد أن يكون موجوداً. كما أن بعض العمليات أسهل في التعبير عنها بكفاءة عندما نستخدم التأثيرات الجانبية.</p>
+<h2 id="الملخص">الملخص</h2>
+<p>علّمك هذا الفصل كيف تكتب دوالك الخاصة. الكلمة المفتاحية <code>function</code>، عند استخدامها كتعبير، يمكنها إنشاء قيمة دالة. وعند استخدامها كجملة، يمكن استخدامها لتعريف ارتباط ومنحه دالة كقيمة له. ودوال السهم طريقة أخرى لإنشاء الدوال.</p>
+<pre><code class="language-js"><span class="hljs-comment">// عرّف f لتحمل قيمة دالة</span>
+<span class="hljs-keyword">const</span> f = <span class="hljs-keyword">function</span>(<span class="hljs-params">a</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(a + <span class="hljs-number">2</span>);
+};
+
+<span class="hljs-comment">// عرّف g كدالة</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">g</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">return</span> a * b * <span class="hljs-number">3.5</span>;
+}
+
+<span class="hljs-comment">// قيمة دالة أقل إسهاباً</span>
+<span class="hljs-keyword">let</span> <span class="hljs-title function_">h</span> = a =&gt; a % <span class="hljs-number">3</span>;
+</code></pre>
+<p>جزء أساسي من فهم الدوال هو فهم النطاقات. فكل كتلة تنشئ نطاقاً جديداً. والوسطاء والارتباطات المعلنة في نطاق معين محلية وغير مرئية من الخارج. أما الارتباطات المعلنة بـ <code>var</code> فتتصرف بشكل مختلف—إذ ينتهي بها الأمر في أقرب نطاق دالة أو في النطاق العام.</p>
+<p>تقسيم المهام التي يؤديها برنامجك إلى دوال مختلفة مفيد. فلن تضطر إلى تكرار نفسك كثيراً، ويمكن للدوال أن تساعد في تنظيم البرنامج بتجميع الشيفرة في قطع تؤدي أشياء محددة.</p>
+<h2 id="التمارين">التمارين</h2>
+<h3 id="الحد-الأدنى">الحد الأدنى</h3>
+<p>قدّم <a href="/chapter/program_structure#return_values">الفصل السابق</a> الدالة القياسية <code>Math.min</code> التي تُرجع أصغر معطياتها. يمكننا الآن كتابة دالة كهذه بأنفسنا. عرّف الدالة <code>min</code> التي تأخذ معطيين وتُرجع أصغرهما.</p>
+<pre><code class="language-js"><span class="hljs-comment">// اكتب شيفرتك هنا.</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">min</span>(<span class="hljs-number">0</span>, <span class="hljs-number">10</span>));
+<span class="hljs-comment">// → 0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">min</span>(<span class="hljs-number">0</span>, -<span class="hljs-number">10</span>));
+<span class="hljs-comment">// → -10</span>
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>إذا واجهت مشكلة في وضع الأقواس المعقوفة والأقواس العادية في الموضع الصحيح للحصول على تعريف دالة صالح، فابدأ بنسخ أحد الأمثلة في هذا الفصل وتعديله.</p>
+<p>قد تحتوي الدالة على جمل <code>return</code> متعددة.</p>
+</details>
+<h3 id="التعاود">التعاود</h3>
+<p>رأينا أنه يمكننا استخدام <code>%</code> (معامل الباقي) لاختبار ما إذا كان عدد زوجياً أم فردياً باستخدام <code>% 2</code> لمعرفة ما إذا كان يقبل القسمة على اثنين. إليك طريقة أخرى لتعريف ما إذا كان عدد صحيح موجب زوجياً أم فردياً:</p>
+<ul>
+<li>الصفر زوجي.</li>
+<li>الواحد فردي.</li>
+<li>لأي عدد آخر <em>N</em>، تكون زوجيته هي نفسها زوجية <em>N</em> - 2.</li>
+</ul>
+<p>عرّف دالة تعاودية <code>isEven</code> تقابل هذا الوصف. ينبغي أن تقبل الدالة وسيطاً واحداً (عدداً صحيحاً موجباً) وتُرجع قيمة منطقية.</p>
+<p>اختبرها على 50 و75. ولاحظ كيف تتصرف مع -1. لماذا؟ هل يمكنك التفكير في طريقة لإصلاح ذلك؟</p>
+<pre><code class="language-js"><span class="hljs-comment">// اكتب شيفرتك هنا.</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isEven</span>(<span class="hljs-number">50</span>));
+<span class="hljs-comment">// → true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isEven</span>(<span class="hljs-number">75</span>));
+<span class="hljs-comment">// → false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isEven</span>(-<span class="hljs-number">1</span>));
+<span class="hljs-comment">// → ??</span>
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>ستبدو دالتك على الأرجح شبيهة إلى حد ما بالدالة الداخلية <code>find</code> في <a href="/chapter/functions#recursive_puzzle">مثال</a> <code>findSolution</code> التعاودي في هذا الفصل، بسلسلة <code>if</code>/<code>else if</code>/<code>else</code> تختبر أي الحالات الثلاث تنطبق. والـ <code>else</code> الأخير، المقابل للحالة الثالثة، يقوم بالاستدعاء التعاودي. وينبغي أن يحتوي كل فرع على جملة <code>return</code> أو أن يرتب بأي طريقة أخرى إرجاع قيمة محددة.</p>
+<p>عند إعطائها عدداً سالباً، ستتعاود الدالة مرة تلو الأخرى، وتمرر لنفسها عدداً سالباً أكثر وأكثر، فتبتعد أكثر وأكثر عن إرجاع نتيجة. وستنفد مساحة المكدّس في النهاية ويتوقف التنفيذ.</p>
+</details>
+<h3 id="عد-الفاصولياء">عدّ الفاصولياء</h3>
+<p>يمكنك الحصول على المحرف <em>N</em>، أو الحرف، من نص بكتابة <code>[N]</code> بعده (مثلاً، <code>string[2]</code>). وستكون القيمة الناتجة نصاً يحتوي على محرف واحد فقط (مثلاً، <code>&quot;b&quot;</code>). وللمحرف الأول الموضع 0، ما يجعل الأخير موجوداً عند الموضع <code>string.length - 1</code>. بعبارة أخرى، نص من محرفين طوله 2، ولمحرفيه الموضعان 0 و1.</p>
+<p>اكتب دالة تسمى <code>countBs</code> تأخذ نصاً كمعطاها الوحيد وتُرجع عدداً يشير إلى عدد محارف B الكبيرة الموجودة في النص.</p>
+<p>بعد ذلك، اكتب دالة تسمى <code>countChar</code> تتصرف مثل <code>countBs</code>، إلا أنها تأخذ معطاً ثانياً يشير إلى المحرف الذي سيُعد (بدلاً من عد محارف B الكبيرة فقط). وأعد كتابة <code>countBs</code> لتستفيد من هذه الدالة الجديدة.</p>
+<pre><code class="language-js"><span class="hljs-comment">// اكتب شيفرتك هنا.</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">countBs</span>(<span class="hljs-string">&quot;BOB&quot;</span>));
+<span class="hljs-comment">// → 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">countChar</span>(<span class="hljs-string">&quot;kakkerlak&quot;</span>, <span class="hljs-string">&quot;k&quot;</span>));
+<span class="hljs-comment">// → 4</span>
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>ستحتاج دالتك إلى حلقة تنظر إلى كل محرف في النص. يمكنها تشغيل فهرس من صفر إلى واحد أقل من طوله (<code>&lt; string.length</code>). وإذا كان المحرف في الموضع الحالي هو نفسه الذي تبحث عنه الدالة، تضيف 1 إلى متغير عدّاد. وبعد انتهاء الحلقة، يمكن إرجاع العدّاد.</p>
+<p>احرص على جعل كل الارتباطات المستخدمة في الدالة <em>محلية</em> للدالة بتعريفها بشكل صحيح بالكلمة المفتاحية <code>let</code> أو <code>const</code>.</p>
+</details>
+`,c={number:"03",slug:s,title:n,englishTitle:a,headings:l,html:p};export{c as default,a as englishTitle,l as headings,p as html,e as number,s as slug,n as title};

@@ -1,0 +1,355 @@
+const e="08",s="bugs_and_errors",n="العلل والأخطاء",a="Bugs and Errors",l=[{depth:2,id:"اللغة",text:"اللغة"},{depth:2,id:"الوضع-الصارم",text:"الوضع الصارم"},{depth:2,id:"الأنواع",text:"الأنواع"},{depth:2,id:"الاختبار",text:"الاختبار"},{depth:2,id:"تصحيح-الأخطاء",text:"تصحيح الأخطاء"},{depth:2,id:"انتشار-الأخطاء",text:"انتشار الأخطاء"},{depth:2,id:"الاستثناءات",text:"الاستثناءات"},{depth:2,id:"التنظيف-بعد-الاستثناءات",text:"التنظيف بعد الاستثناءات"},{depth:2,id:"الالتقاط-الانتقائي",text:"الالتقاط الانتقائي"},{depth:2,id:"التأكيدات",text:"التأكيدات"},{depth:2,id:"الملخص",text:"الملخص"},{depth:2,id:"التمارين",text:"التمارين"},{depth:3,id:"إعادة-المحاولة",text:"إعادة المحاولة"},{depth:3,id:"الصندوق-المقفل",text:"الصندوق المقفل"}],p=`<blockquote>
+<p>تصحيح الأخطاء أصعب بمرتين من كتابة الشيفرة في المقام الأول. لذلك، إن كتبت الشيفرة بأكبر قدر ممكن من البراعة، فأنت بحكم التعريف لست ذكياً بما يكفي لتصحيحها.</p>
+<p>— برايان كيرنيغان وبي. جاي. بلاوغر، عناصر أسلوب البرمجة</p>
+</blockquote>
+<p><img src="/images/book/chapter_picture_8.jpg" alt="رسم توضيحي يُظهر حشرات متنوعة وأم أربعة وأربعين"></p>
+<p>العيوب في برامج الحاسوب تُسمى عادة <em>العلل</em> (bugs). ومن المريح للمبرمجين أن يتخيلوها أشياء صغيرة زحفت إلى عملهم بمحض المصادفة. لكننا في الواقع، بالطبع، من وضعها هناك بأنفسنا.</p>
+<p>إذا كان البرنامج فكراً متبلوراً، فيمكننا تصنيف العلل تصنيفاً تقريبياً إلى تلك الناتجة عن فكر مشوّش وتلك الناتجة عن أخطاء أُدخلت أثناء تحويل الفكر إلى شيفرة. والنوع الأول أصعب عموماً في تشخيصه وإصلاحه من الثاني.</p>
+<h2 id="اللغة">اللغة</h2>
+<p>كان يمكن للحاسوب أن ينبّهنا تلقائياً إلى أخطاء كثيرة لو كان يعرف ما نحاول فعله معرفة كافية. لكن تراخي JavaScript هنا عائق. فمفهومها للارتباطات والخصائص غامض بما يكفي لأنها نادراً ما تلتقط الأخطاء المطبعية قبل تشغيل البرنامج فعلياً. وحتى حينها، تسمح لك بفعل أشياء بلا معنى بوضوح دون اعتراض، مثل حساب <code>true * &quot;monkey&quot;</code>.</p>
+<p>هناك أمور تشتكي JavaScript منها فعلاً. فكتابة برنامج لا يتبع قواعد اللغة ستجعل الحاسوب يشتكي فوراً. وأمور أخرى، مثل استدعاء شيء ليس دالة أو البحث عن خاصية في قيمة undefined، ستؤدي إلى الإبلاغ عن خطأ عندما يحاول البرنامج تنفيذ الفعل.</p>
+<p>لكن في كثير من الأحيان، لن يُنتج حسابك اللامعنى سوى <code>NaN</code> (ليس عدداً) أو قيمة undefined، بينما يواصل البرنامج سعيداً، مقتنعاً بأنه يفعل شيئاً ذا معنى. ولن تظهر العلّة إلا لاحقاً، بعد أن تكون القيمة الزائفة قد انتقلت عبر عدة دوال. وقد لا تُثير خطأً إطلاقاً، بل تُسبب بصمت أن يكون مخرَج البرنامج خاطئاً. وقد يكون العثور على مصدر مشكلات كهذه صعباً.</p>
+<p>عملية العثور على الأخطاء — العلل — في البرامج تسمى <em>تصحيح الأخطاء</em> (debugging).</p>
+<h2 id="الوضع-الصارم">الوضع الصارم</h2>
+<p>يمكن جعل JavaScript أكثر صرامة <em>قليلاً</em> بتفعيل <em>الوضع الصارم</em> (strict mode). ويمكن فعل ذلك بوضع النص <code>&quot;use strict&quot;</code> في أعلى ملف أو جسم دالة. إليك مثالاً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">canYouSpotTheProblem</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-string">&quot;use strict&quot;</span>;
+  <span class="hljs-keyword">for</span> (counter = <span class="hljs-number">0</span>; counter &lt; <span class="hljs-number">10</span>; counter++) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Happy happy&quot;</span>);
+  }
+}
+
+<span class="hljs-title function_">canYouSpotTheProblem</span>();
+<span class="hljs-comment">// → ReferenceError: counter is not defined</span>
+</code></pre>
+<p>الشيفرة داخل الأصناف والوحدات (وسنناقشها في <a href="/chapter/modules">الفصل 10</a>) صارمة تلقائياً. ولا يزال السلوك القديم غير الصارم موجوداً فقط لأن بعض الشيفرة القديمة قد تعتمد عليه، ويعمل مصممو اللغة بجد لتجنب كسر أي برامج قائمة.</p>
+<p>عادةً، عندما تنسى وضع <code>let</code> أمام ارتباطك، كما في <code>counter</code> في المثال، تُنشئ JavaScript بهدوء ارتباطاً عاماً وتستخدمه. أما في الوضع الصارم، فيُبلَّغ عن خطأ بدلاً من ذلك. وهذا مفيد جداً. ويجدر التنبيه مع ذلك إلى أن هذا لا يعمل عندما يكون الارتباط المعني موجوداً بالفعل في مكان ما في النطاق. في تلك الحالة، ستظل الحلقة تكتب فوق قيمة الارتباط بهدوء.</p>
+<p>تغيير آخر في الوضع الصارم هو أن ارتباط <code>this</code> يحمل القيمة <code>undefined</code> في الدوال غير المستدعاة كطرائق. فعند إجراء استدعاء كهذا خارج الوضع الصارم، يشير <code>this</code> إلى كائن النطاق العام، وهو كائن خصائصه هي الارتباطات العامة. لذا إن استدعيت طريقة أو بانية استدعاءً خاطئاً في الوضع الصارم، ستُنتج JavaScript خطأً بمجرد أن تحاول قراءة شيء من <code>this</code>، بدلاً من الكتابة بسعادة إلى النطاق العام.</p>
+<p>على سبيل المثال، انظر إلى الشيفرة التالية، التي تستدعي دالة بانية بدون كلمة <code>new</code> بحيث <em>لا</em> يشير <code>this</code> فيها إلى كائن مُنشأ حديثاً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Person</span>(<span class="hljs-params">name</span>) { <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name; }
+<span class="hljs-keyword">let</span> ferdinand = <span class="hljs-title class_">Person</span>(<span class="hljs-string">&quot;Ferdinand&quot;</span>); <span class="hljs-comment">// عفوًا</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(name);
+<span class="hljs-comment">// → Ferdinand</span>
+</code></pre>
+<p>نجح الاستدعاء الزائف لـ <code>Person</code>، لكنه أرجع قيمة undefined وأنشأ الارتباط العام <code>name</code>. أما في الوضع الصارم، فالنتيجة مختلفة.</p>
+<pre><code class="language-js"><span class="hljs-meta">&quot;use strict&quot;</span>;
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Person</span>(<span class="hljs-params">name</span>) { <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name; }
+<span class="hljs-keyword">let</span> ferdinand = <span class="hljs-title class_">Person</span>(<span class="hljs-string">&quot;Ferdinand&quot;</span>); <span class="hljs-comment">// نسينا new</span>
+<span class="hljs-comment">// → TypeError: Cannot set property &#x27;name&#x27; of undefined</span>
+</code></pre>
+<p>فنُخبَر فوراً بأن هناك شيئاً خاطئاً. وهذا مفيد.</p>
+<p>لحسن الحظ، ستشتكي البواني المنشأة بترميز <code>class</code> دائماً إن استُدعيت بدون <code>new</code>، مما يجعل هذه مشكلة أصغر حتى في الوضع غير الصارم.</p>
+<p>يفعل الوضع الصارم بضعة أشياء أخرى. فهو يمنع إعطاء دالة عدة وسائط بالاسم نفسه، ويزيل بعض سمات اللغة الإشكالية تماماً (مثل جملة <code>with</code>، وهي خاطئة إلى حد أنها لا تُناقش أكثر في هذا الكتاب).</p>
+<p>باختصار، وضع <code>&quot;use strict&quot;</code> في أعلى برنامجك نادراً ما يضر وقد يساعدك على اكتشاف مشكلة.</p>
+<h2 id="الأنواع">الأنواع</h2>
+<p>بعض اللغات تريد معرفة أنواع جميع ارتباطاتك وتعبيراتك قبل تشغيل البرنامج حتى. وستخبرك فوراً عندما يُستخدم نوع بطريقة غير متسقة. أما JavaScript فلا تراعي الأنواع إلا عند تشغيل البرنامج فعلياً، وحتى هناك كثيراً ما تحاول تحويل القيم ضمنياً إلى النوع الذي تتوقعه، لذا فهي ليست بعون كبير.</p>
+<p>ومع ذلك، توفر الأنواع إطاراً مفيداً للحديث عن البرامج. فكثير من الأخطاء يأتي من الالتباس حول نوع القيمة التي تدخل إلى دالة أو تخرج منها. وإن كانت هذه المعلومات مكتوبة لديك، فاحتمال التباسك أقل.</p>
+<p>يمكنك إضافة تعليق كالتالي قبل دالة <code>findRoute</code> من الفصل السابق لوصف نوعها:</p>
+<pre><code class="language-js"><span class="hljs-comment">// (graph: Object, from: string, to: string) =&gt; string[]</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">findRoute</span>(<span class="hljs-params">graph, <span class="hljs-keyword">from</span>, to</span>) {
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>هناك عدد من الاصطلاحات المختلفة لتعليق برامج JavaScript بالأنواع.</p>
+<p>من خصائص الأنواع أنها تحتاج إلى إدخال تعقيدها الخاص لتكون قادرة على وصف شيفرة كافية لتكون مفيدة. ما رأيك في نوع دالة <code>randomPick</code> التي تُرجع عنصراً عشوائياً من مصفوفة؟ ستحتاج إلى إدخال <em>متغير نوع</em>، <em>T</em>، يمكن أن ينوب عن أي نوع، حتى تعطي <code>randomPick</code> نوعاً مثل <code>(T[]) → T</code> (دالة من مصفوفة من <em>T</em> إلى <em>T</em>).</p>
+<p>عندما تكون أنواع البرنامج معروفة، يصبح من الممكن للحاسوب أن <em>يتحقق</em> منها نيابة عنك، فيشير إلى الأخطاء قبل تشغيل البرنامج. وهناك عدة لهجات من JavaScript تضيف أنواعاً إلى اللغة وتتحقق منها. وأشهرها يُسمى <a href="https://www.typescriptlang.org/">TypeScript</a>. وإن كنت مهتماً بإضافة مزيد من الصرامة إلى برامجك، فأوصيك بتجربته.</p>
+<p>في هذا الكتاب، سنواصل استخدام شيفرة JavaScript خام خطرة بلا أنواع.</p>
+<h2 id="الاختبار">الاختبار</h2>
+<p>إن كانت اللغة لن تفعل الكثير لمساعدتنا على العثور على الأخطاء، فسيتعين علينا العثور عليها بالطريقة الصعبة: بتشغيل البرنامج ورؤية ما إذا كان يفعل الشيء الصحيح.</p>
+<p>وفعل ذلك يدوياً، مرة بعد مرة، فكرة سيئة حقاً. فليس الأمر مزعجاً فحسب، بل يميل أيضاً إلى عدم الفعالية، لأن اختبار كل شيء اختباراً شاملاً في كل مرة تجري فيها تغييراً يستغرق وقتاً طويلاً.</p>
+<p>الحواسيب جيدة في المهام المتكررة، والاختبار مهمة متكررة مثالية. والاختبار الآلي هو عملية كتابة برنامج يختبر برنامجاً آخر. وكتابة الاختبارات عمل أكثر قليلاً من الاختبار اليدوي، لكن بعد أن تفعلها، تكسب نوعاً من القوة الخارقة: لا يستغرق التحقق من أن برنامجك ما يزال يتصرف بشكل سليم في جميع الحالات التي كتبت لها اختبارات سوى ثوانٍ. وعندما تكسر شيئاً، ستلاحظه فوراً بدلاً من أن تصادفه عشوائياً في وقت لاحق.</p>
+<p>تأخذ الاختبارات عادة شكل برامج صغيرة مُسمّاة تتحقق من جانب ما من شيفرتك. على سبيل المثال، قد تبدو مجموعة اختبارات للطريقة <code>toUpperCase</code> (قياسية، وعلى الأرجح اختبرها شخص آخر بالفعل) هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">test</span>(<span class="hljs-params">label, body</span>) {
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title function_">body</span>()) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`Failed: <span class="hljs-subst">\${label}</span>\`</span>);
+}
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;convert Latin text to uppercase&quot;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;hello&quot;</span>.<span class="hljs-title function_">toUpperCase</span>() == <span class="hljs-string">&quot;HELLO&quot;</span>;
+});
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;convert Greek text to uppercase&quot;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Χαίρετε&quot;</span>.<span class="hljs-title function_">toUpperCase</span>() == <span class="hljs-string">&quot;ΧΑΊΡΕΤΕ&quot;</span>;
+});
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;don&#x27;t convert case-less characters&quot;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;مرحبا&quot;</span>.<span class="hljs-title function_">toUpperCase</span>() == <span class="hljs-string">&quot;مرحبا&quot;</span>;
+});
+</code></pre>
+<p>كتابة اختبارات كهذه تنزع إلى إنتاج شيفرة مكررة ومتعثرة نوعاً ما. لحسن الحظ، توجد قطع برمجية تساعدك على بناء مجموعات من الاختبارات (<em>أجنحة الاختبار</em>) وتشغيلها، بتوفير لغة (على شكل دوال وطرائق) مناسبة للتعبير عن الاختبارات، وبإخراج معلومات مفيدة عند فشل اختبار. وتُسمى هذه عادة <em>مشغّلات الاختبارات</em> (test runners).</p>
+<p>بعض الشيفرة أسهل في اختبارها من غيرها. وبشكل عام، كلما زاد عدد الكائنات الخارجية التي تتفاعل معها الشيفرة، صعب إعداد السياق اللازم لاختبارها. وأسلوب البرمجة المعروض في <a href="/chapter/project_a_robot">الفصل السابق</a>، والذي يستخدم قيماً ثابتة قائمة بذاتها بدلاً من تغيير الكائنات، يميل إلى أن يكون سهل الاختبار.</p>
+<h2 id="تصحيح-الأخطاء">تصحيح الأخطاء</h2>
+<p>بمجرد أن تلاحظ أن هناك شيئاً خاطئاً في برنامجك لأنه يسلك سلوكاً سيئاً أو ينتج أخطاءً، تكون الخطوة التالية هي معرفة <em>ما</em> المشكلة.</p>
+<p>أحياناً يكون الأمر واضحاً. فستشير رسالة الخطأ إلى سطر معين في برنامجك، وإن نظرت إلى وصف الخطأ وإلى سطر الشيفرة ذلك، فكثيراً ما ترى المشكلة.</p>
+<p>لكن ليس دائماً. فأحياناً يكون السطر الذي أثار المشكلة مجرد أول موضع تُستخدم فيه قيمة هشّة أُنتجت في مكان آخر بطريقة غير صالحة. وإن كنت قد حللت تمارين الفصول السابقة، فمن المحتمل أنك مررت بمواقف كهذه بالفعل.</p>
+<p>يحاول البرنامج المثال التالي تحويل عدد صحيح إلى نص في أساس معطى (عشري، ثنائي، وهكذا) باختيار آخر رقم بشكل متكرر ثم قسمة العدد للتخلص من هذا الرقم. لكن المخرَج الغريب الذي ينتجه حالياً يوحي بأن فيه علّة.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">numberToString</span>(<span class="hljs-params">n, base = <span class="hljs-number">10</span></span>) {
+  <span class="hljs-keyword">let</span> result = <span class="hljs-string">&quot;&quot;</span>, sign = <span class="hljs-string">&quot;&quot;</span>;
+  <span class="hljs-keyword">if</span> (n &lt; <span class="hljs-number">0</span>) {
+    sign = <span class="hljs-string">&quot;-&quot;</span>;
+    n = -n;
+  }
+  <span class="hljs-keyword">do</span> {
+    result = <span class="hljs-title class_">String</span>(n % base) + result;
+    n /= base;
+  } <span class="hljs-keyword">while</span> (n &gt; <span class="hljs-number">0</span>);
+  <span class="hljs-keyword">return</span> sign + result;
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">numberToString</span>(<span class="hljs-number">13</span>, <span class="hljs-number">10</span>));
+<span class="hljs-comment">// → 1.5e-3231.3e-3221.3e-3211.3e-3201.3e-3191.3e-3181.3…</span>
+</code></pre>
+<p>حتى لو رأيت المشكلة بالفعل، فتظاهر للحظة أنك لم ترها. نعلم أن برنامجنا معطوب، ونريد معرفة السبب.</p>
+<p>هنا يجب أن تقاوم الرغبة في البدء بإجراء تغييرات عشوائية على الشيفرة لترى إن كان ذلك يحسّنها. بدلاً من ذلك، <em>فكّر</em>. حلّل ما يحدث وابنِ نظرية عن سبب حدوثه المحتمل. ثم اجمع ملاحظات إضافية لاختبار هذه النظرية — أو، إن لم تكن لديك نظرية بعد، اجمع ملاحظات إضافية تساعدك على بناء واحدة.</p>
+<p>ووضع بضع نداءات <code>console.log</code> مدروسة في البرنامج طريقة جيدة للحصول على معلومات إضافية عما يفعله البرنامج. في هذه الحالة، نريد أن تأخذ <code>n</code> القيم <code>13</code> ثم <code>1</code> ثم <code>0</code>. لنكتب قيمتها عند بداية الحلقة.</p>
+<pre><code>13
+1.3
+0.13
+0.013
+…
+1.5e-323
+</code></pre>
+<p><em>صحيح</em>. قسمة 13 على 10 لا تنتج عدداً صحيحاً. فبدلاً من <code>n /= base</code>، ما نريده فعلاً هو <code>n = Math.floor(n / base)</code> بحيث يُنقل العدد «إزاحة» سليمة إلى اليمين.</p>
+<p>وبديل استخدام <code>console.log</code> للتلصص على سلوك البرنامج هو استخدام قدرات <em>المصحّح</em> (debugger) في متصفحك. فتأتي المتصفحات بقدرة على تعيين <em>نقطة توقف</em> (breakpoint) عند سطر معين من شيفرتك. وعندما يصل تنفيذ البرنامج إلى سطر فيه نقطة توقف، يُوقَف مؤقتاً، ويمكنك فحص قيم الارتباطات عند تلك النقطة. لن أخوض في التفاصيل، لأن المصححات تختلف من متصفح لآخر، لكن ابحث في أدوات مطوّري متصفحك أو ابحث في الويب عن تعليمات.</p>
+<p>وطريقة أخرى لتعيين نقطة توقف هي تضمين جملة <code>debugger</code> (تتكون ببساطة من تلك الكلمة المفتاحية) في برنامجك. وإن كانت أدوات مطوّري متصفحك نشطة، فسيتوقف البرنامج مؤقتاً كلما وصل إلى جملة كهذه.</p>
+<h2 id="انتشار-الأخطاء">انتشار الأخطاء</h2>
+<p>لسوء الحظ، لا يستطيع المبرمج منع كل المشكلات. فإذا كان برنامجك يتواصل مع العالم الخارجي بأي شكل، فمن الممكن أن تتلقى مدخلاً مشوّهاً، أو أن تُثقل بالعمل، أو أن تفشل الشبكة.</p>
+<p>إن كنت تبرمج لنفسك فقط، فيمكنك تحمّل تجاهل مشكلات كهذه حتى تحدث. لكن إن بنيت شيئاً سيستخدمه أي شخص آخر، فأنت تريد عادة أن يفعل البرنامج ما هو أفضل من مجرد الانهيار. وأحياناً يكون الفعل الصحيح هو تقبّل المدخل السيئ والمتابعة. وفي حالات أخرى، يكون من الأفضل إخبار المستخدم بما حدث خطأ ثم الاستسلام. وفي كلتا الحالتين، على البرنامج أن يفعل شيئاً بنشاط استجابةً للمشكلة.</p>
+<p>لنقل إن لديك دالة <code>promptNumber</code> تسأل المستخدم عن عدد وتُرجعه. ماذا ينبغي أن تُرجع إذا أدخل المستخدم «برتقالة»؟</p>
+<p>أحد الخيارات أن تجعلها تُرجع قيمة خاصة. والخيارات الشائعة لهذه القيم هي <code>null</code> أو <code>undefined</code> أو <code>-1</code>.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">promptNumber</span>(<span class="hljs-params">question</span>) {
+  <span class="hljs-keyword">let</span> result = <span class="hljs-title class_">Number</span>(<span class="hljs-title function_">prompt</span>(question));
+  <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Number</span>.<span class="hljs-built_in">isNaN</span>(result)) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">promptNumber</span>(<span class="hljs-string">&quot;How many trees do you see?&quot;</span>));
+</code></pre>
+<p>الآن على أي شيفرة تستدعي <code>promptNumber</code> أن تتحقق مما إذا كان قد قُرئ عدد فعلي، وإن لم يكن، أن تتعافى بطريقة ما — ربما بالسؤال مرة أخرى أو بملء قيمة افتراضية. أو يمكنها أن تُرجع بدورها قيمة خاصة إلى <em>مستدعيها</em> للإشارة إلى أنها فشلت في فعل ما طُلب منها.</p>
+<p>في مواقف كثيرة، غالباً عندما تكون الأخطاء شائعة ويجدر بالمستدعي أن يأخذها في الحسبان صراحةً، يكون إرجاع قيمة خاصة طريقة جيدة للإشارة إلى خطأ. لكن لهذا مساوئه. أولاً، ماذا لو كانت الدالة قادرة أصلاً على إرجاع كل نوع ممكن من القيم؟ في دالة كهذه، سيتعين عليك فعل شيء كتغليف النتيجة في كائن لتتمكن من التمييز بين النجاح والفشل، كما تفعل طريقة <code>next</code> في واجهة المُكرِّر.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">lastElement</span>(<span class="hljs-params">array</span>) {
+  <span class="hljs-keyword">if</span> (array.<span class="hljs-property">length</span> == <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">return</span> {<span class="hljs-attr">failed</span>: <span class="hljs-literal">true</span>};
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> {<span class="hljs-attr">value</span>: array[array.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>]};
+  }
+}
+</code></pre>
+<p>المشكلة الثانية في إرجاع القيم الخاصة هي أنها قد تؤدي إلى شيفرة متعثرة. فإذا استدعت قطعة من الشيفرة <code>promptNumber</code> عشر مرات، فعليها التحقق عشر مرات مما إذا كانت <code>null</code> قد أُرجعت. وإن كانت استجابتها لوجدان <code>null</code> هي مجرد إرجاع <code>null</code> بنفسها، فسيتعين على مستدعي الدالة بدورهم التحقق منها، وهكذا.</p>
+<h2 id="الاستثناءات">الاستثناءات</h2>
+<p>عندما لا تستطيع دالة المضي قدماً بشكل طبيعي، فما <em>نود</em> فعله غالباً هو التوقف عما نفعله والانتقال فوراً إلى مكان يعرف كيف يتعامل مع المشكلة. هذا ما يفعله <em>التعامل مع الاستثناءات</em>.</p>
+<p>الاستثناءات آلية تجعل من الممكن للشيفرة التي تصادف مشكلة أن <em>ترفع</em> (أو <em>تقذف</em>) استثناءً. والاستثناء يمكن أن يكون أي قيمة. ورفع استثناء يشبه إلى حد ما إرجاعاً معززاً من دالة: فهو يقفز خارج الدالة الحالية وخارج مستدعيها أيضاً، وصولاً إلى أول استدعاء بدأ التنفيذ الحالي. ويُسمى هذا <em>فكّ المكدس</em> (unwinding the stack). ربما تذكر مكدس نداءات الدوال المذكور في <a href="/chapter/functions#stack">الفصل 3</a>. فالاستثناء ينحدر عبر هذا المكدس، طارحاً كل سياقات الاستدعاء التي يصادفها.</p>
+<p>لو كانت الاستثناءات تنحدر دائماً إلى قاع المكدس مباشرة، لما كانت ذات فائدة كبيرة. فستوفر فقط طريقة جديدة لتفجير برنامجك. وقوتها تكمن في أنك تستطيع نصب «عوائق» على طول المكدس <em>لالتقاط</em> الاستثناء أثناء انحداره. وبمجرد أن تلتقط استثناءً، يمكنك فعل شيء به لمعالجة المشكلة ثم متابعة تشغيل البرنامج.</p>
+<p>إليك مثالاً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">promptDirection</span>(<span class="hljs-params">question</span>) {
+  <span class="hljs-keyword">let</span> result = <span class="hljs-title function_">prompt</span>(question);
+  <span class="hljs-keyword">if</span> (result.<span class="hljs-title function_">toLowerCase</span>() == <span class="hljs-string">&quot;left&quot;</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;L&quot;</span>;
+  <span class="hljs-keyword">if</span> (result.<span class="hljs-title function_">toLowerCase</span>() == <span class="hljs-string">&quot;right&quot;</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;R&quot;</span>;
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&quot;Invalid direction: &quot;</span> + result);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">look</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-title function_">promptDirection</span>(<span class="hljs-string">&quot;Which way?&quot;</span>) == <span class="hljs-string">&quot;L&quot;</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;a house&quot;</span>;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;two angry bears&quot;</span>;
+  }
+}
+
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;You see&quot;</span>, <span class="hljs-title function_">look</span>());
+} <span class="hljs-keyword">catch</span> (error) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Something went wrong: &quot;</span> + error);
+}
+</code></pre>
+<p>تُستخدم الكلمة المفتاحية <code>throw</code> لرفع استثناء. أما التقاطه فيتم بتغليف قطعة من الشيفرة في كتلة <code>try</code>، تليها الكلمة المفتاحية <code>catch</code>. وعندما تُسبب الشيفرة الموجودة في كتلة <code>try</code> رفع استثناء، تُقيَّم كتلة <code>catch</code>، مع ارتباط الاسم الموجود بين قوسين بقيمة الاستثناء. وبعد أن تنتهي كتلة <code>catch</code> — أو إن انتهت كتلة <code>try</code> دون مشكلات — يمضي البرنامج أسفل جملة <code>try/catch</code> بأكملها.</p>
+<p>في هذه الحالة، استخدمنا البانية <code>Error</code> لإنشاء قيمة استثنائنا. هذه بانية JavaScript قياسية تُنشئ كائناً له خاصية <code>message</code>. وتجمع نسخ <code>Error</code> أيضاً معلومات عن مكدس الاستدعاءات الذي كان موجوداً عند إنشاء الاستثناء، وهو ما يسمى <em>تتبّع المكدس</em> (stack trace). وتُخزَّن هذه المعلومات في خاصية <code>stack</code>، ويمكن أن تكون مفيدة عند محاولة تصحيح مشكلة: فهي تخبرنا بالدالة التي وقعت فيها المشكلة وبالدوال التي أجرت الاستدعاء الفاشل.</p>
+<p>لاحظ أن دالة <code>look</code> تتجاهل تماماً احتمال أن يخطئ <code>promptDirection</code>. وهذه هي الميزة الكبيرة للاستثناءات: فشيفرة التعامل مع الأخطاء ضرورية فقط عند النقطة التي يقع فيها الخطأ وعند النقطة التي يُعالج فيها. أما الدوال الواقعة بينهما فيمكنها نسيان الأمر كله.</p>
+<p>حسناً، تقريباً...</p>
+<h2 id="التنظيف-بعد-الاستثناءات">التنظيف بعد الاستثناءات</h2>
+<p>أثر الاستثناء نوع آخر من تدفق التحكم. فكل فعل قد يُسبب استثناءً، وهو إلى حد كبير كل نداء دالة وكل وصول إلى خاصية، قد يجعل التحكم يغادر شيفرتك فجأة.</p>
+<p>وهذا يعني أنه عندما تكون للشيفرة عدة تأثيرات جانبية، فحتى لو بدا تدفق تحكمها «العادي» وكأنها ستحدث كلها دائماً، فقد يمنع استثناء بعضها من الحدوث.</p>
+<p>إليك بعض الشيفرة المصرفية السيئة حقاً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> accounts = {
+  <span class="hljs-attr">a</span>: <span class="hljs-number">100</span>,
+  <span class="hljs-attr">b</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">c</span>: <span class="hljs-number">20</span>
+};
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getAccount</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">let</span> accountName = <span class="hljs-title function_">prompt</span>(<span class="hljs-string">&quot;Enter an account name&quot;</span>);
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">hasOwn</span>(accounts, accountName)) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">\`No such account: <span class="hljs-subst">\${accountName}</span>\`</span>);
+  }
+  <span class="hljs-keyword">return</span> accountName;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">transfer</span>(<span class="hljs-params"><span class="hljs-keyword">from</span>, amount</span>) {
+  <span class="hljs-keyword">if</span> (accounts[<span class="hljs-keyword">from</span>] &lt; amount) <span class="hljs-keyword">return</span>;
+  accounts[<span class="hljs-keyword">from</span>] -= amount;
+  accounts[<span class="hljs-title function_">getAccount</span>()] += amount;
+}
+</code></pre>
+<p>تنقل دالة <code>transfer</code> مبلغاً من حساب معطى إلى آخر، طالبةً اسم الحساب الآخر في أثناء ذلك. وإذا أُعطي اسم حساب غير صالح، يقذف <code>getAccount</code> استثناءً.</p>
+<p>لكن <code>transfer</code> <em>أولاً</em> تزيل المال من الحساب و<em>ثم</em> تستدعي <code>getAccount</code> قبل أن تضيفه إلى حساب آخر. وإن قُوطعت باستثناء عند تلك النقطة، فستجعل المال يختفي فحسب.</p>
+<p>كان يمكن كتابة تلك الشيفرة بذكاء أكبر قليلاً، مثلاً باستدعاء <code>getAccount</code> قبل البدء بتحريك المال. لكن مشكلات كهذه تحدث غالباً بطرق أكثر خفاءً. فحتى الدوال التي لا تبدو وكأنها ستقذف استثناءً قد تفعل ذلك في ظروف استثنائية أو عندما تحتوي على خطأ من المبرمج.</p>
+<p>وإحدى طرق معالجة هذا هي استخدام تأثيرات جانبية أقل. ومرة أخرى، يساعد أسلوب برمجي يحسب قيماً جديدة بدلاً من تغيير بيانات موجودة. فإذا توقفت قطعة من الشيفرة عن العمل في منتصف إنشاء قيمة جديدة، فلن تكون أي بنى بيانات موجودة قد تضررت، مما يسهّل التعافي.</p>
+<p>ولأن ذلك ليس عملياً دائماً، فجمل <code>try</code> لها ميزة أخرى: يمكن أن تتبعها كتلة <code>finally</code> إما بدلاً من كتلة <code>catch</code> أو إضافة إليها. وكتلة <code>finally</code> تقول «مهما <em>حدث</em>، نفّذ هذه الشيفرة بعد محاولة تنفيذ الشيفرة في كتلة <code>try</code>».</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">transfer</span>(<span class="hljs-params"><span class="hljs-keyword">from</span>, amount</span>) {
+  <span class="hljs-keyword">if</span> (accounts[<span class="hljs-keyword">from</span>] &lt; amount) <span class="hljs-keyword">return</span>;
+  <span class="hljs-keyword">let</span> progress = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">try</span> {
+    accounts[<span class="hljs-keyword">from</span>] -= amount;
+    progress = <span class="hljs-number">1</span>;
+    accounts[<span class="hljs-title function_">getAccount</span>()] += amount;
+    progress = <span class="hljs-number">2</span>;
+  } <span class="hljs-keyword">finally</span> {
+    <span class="hljs-keyword">if</span> (progress == <span class="hljs-number">1</span>) {
+      accounts[<span class="hljs-keyword">from</span>] += amount;
+    }
+  }
+}
+</code></pre>
+<p>تتبّع هذه النسخة من الدالة تقدّمها، وإن لاحظت عند المغادرة أنها أُوقفت عند نقطة كانت قد أنشأت فيها حالة برنامج غير متسقة، فإنها تصلح الضرر الذي أحدثته.</p>
+<p>لاحظ أنه على الرغم من أن شيفرة <code>finally</code> تُنفَّذ عند قذف استثناء في كتلة <code>try</code>، فإنها لا تتدخل في الاستثناء. فبعد تنفيذ كتلة <code>finally</code>، يواصل المكدس تفكيكه.</p>
+<p>كتابة برامج تعمل بموثوقية حتى عندما تظهر الاستثناءات في مواضع غير متوقعة أمر صعب. وكثير من الناس لا يكلفون أنفسهم عناء ذلك ببساطة، ولأن الاستثناءات تُخصص عادة لظروف استثنائية، فقد تحدث المشكلة نادراً إلى حد أنها لا تُلاحظ أبداً. وهل ذلك أمر جيد أم سيئ حقاً يتوقف على مقدار الضرر الذي ستُحدثه البرمجية عند فشلها.</p>
+<h2 id="الالتقاط-الانتقائي">الالتقاط الانتقائي</h2>
+<p>عندما يصل استثناء إلى قاع المكدس دون أن يُلتقط، تتولى البيئة التعامل معه. وما يعنيه هذا يختلف بين البيئات. ففي المتصفحات، يُكتب عادة وصف للخطأ في وحدة تحكم JavaScript (يمكن الوصول إليها عبر قائمة الأدوات أو المطوّر في المتصفح). أما Node.js، بيئة JavaScript بلا متصفح التي سنناقشها في <a href="/chapter/node_js">الفصل 20</a>، فهي أكثر حرصاً بشأن تلف البيانات. فهي تُجهض العملية كلها عند وقوع استثناء غير معالَج.</p>
+<p>بالنسبة لأخطاء المبرمج، فترك الخطأ يمر غالباً هو أفضل ما يمكنك فعله. فالاستثناء غير المعالَج طريقة معقولة للإشارة إلى برنامج معطوب، وستوفر لك وحدة تحكم JavaScript، في المتصفحات الحديثة، بعض المعلومات عن نداءات الدوال التي كانت على المكدس عند وقوع المشكلة.</p>
+<p>أما المشكلات التي <em>يُتوقع</em> حدوثها أثناء الاستخدام الروتيني، فالانهيار باستثناء غير معالَج استراتيجية فظيعة.</p>
+<p>كما ستؤدي الاستخدامات غير الصالحة للغة، مثل الإشارة إلى ارتباط غير موجود، أو البحث عن خاصية في <code>null</code>، أو استدعاء شيء ليس دالة، إلى رفع استثناءات. وهذه الاستثناءات يمكن التقاطها أيضاً.</p>
+<p>عندما يُدخل جسم <code>catch</code>، فكل ما نعرفه أن <em>شيئاً</em> ما في جسم <code>try</code> سبب استثناءً. لكننا لا نعرف <em>ما</em> الذي فعل ذلك ولا <em>أي</em> استثناء سبب.</p>
+<p>لا توفر JavaScript (في سهو صارخ نوعاً ما) دعماً مباشراً لالتقاط الاستثناءات انتقائياً: فإما أن تلتقطها كلها أو لا تلتقط أياً منها. وهذا يجعل من المغري <em>افتراض</em> أن الاستثناء الذي تحصل عليه هو الذي كنت تفكر فيه عندما كتبت كتلة <code>catch</code>.</p>
+<p>لكنه قد لا يكون كذلك. فقد يكون افتراض آخر قد انتُهك، أو تكون قد أدخلت علّة تُسبب استثناءً. إليك مثالاً <em>يحاول</em> مواصلة استدعاء <code>promptDirection</code> حتى يحصل على إجابة صالحة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (;;) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">let</span> dir = <span class="hljs-title function_">promtDirection</span>(<span class="hljs-string">&quot;Where?&quot;</span>); <span class="hljs-comment">// ← خطأ مطبعي!</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;You chose &quot;</span>, dir);
+    <span class="hljs-keyword">break</span>;
+  } <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Not a valid direction. Try again.&quot;</span>);
+  }
+}
+</code></pre>
+<p>بنية <code>for (;;)</code> طريقة لإنشاء حلقة لا تنتهي من تلقاء نفسها عن قصد. ولا نخرج من الحلقة إلا عند إعطاء اتجاه صالح. لسوء الحظ، أخطأنا في كتابة <code>promptDirection</code>، مما سيؤدي إلى خطأ «متغير غير معرَّف». ولأن كتلة <code>catch</code> تتجاهل تماماً قيمة استثنائها (<code>e</code>)، بافتراض أنها تعرف ما المشكلة، فإنها تعامل خطأ الارتباط خطأً على أنه يشير إلى مدخل سيئ. ولا يُسبب هذا حلقة لا نهائية فحسب، بل «يدفن» أيضاً رسالة الخطأ المفيدة عن الارتباط المكتوب خطأً.</p>
+<p>وكقاعدة عامة، لا تلتقط الاستثناءات التقاطاً شاملاً إلا لغرض «توجيهها» إلى مكان ما — مثلاً عبر الشبكة لإخبار نظام آخر بأن برنامجنا انهار. وحتى حينها، فكّر بعناية في الكيفية التي قد تخفي بها معلومات.</p>
+<p>نريد التقاط نوع <em>محدد</em> من الاستثناءات. ويمكننا فعل ذلك بالتحقق في كتلة <code>catch</code> مما إذا كان الاستثناء الذي حصلنا عليه هو الذي يهمنا، وإن لم يكن، إعادة قذفه. لكن كيف نتعرف على استثناء؟</p>
+<p>يمكننا مقارنة خاصية <code>message</code> فيه برسالة الخطأ التي نتوقعها. لكن هذه طريقة مهزوزة لكتابة الشيفرة — إذ سنستخدم معلومات مخصصة لاستهلاك البشر (الرسالة) لاتخاذ قرار برمجي. وبمجرد أن يغيّر أحدهم الرسالة (أو يترجمها)، ستتوقف الشيفرة عن العمل.</p>
+<p>بدلاً من ذلك، لنعرّف نوعاً جديداً من الأخطاء ونستخدم <code>instanceof</code> للتعرف عليه.</p>
+<pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">InputError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Error</span> {}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">promptDirection</span>(<span class="hljs-params">question</span>) {
+  <span class="hljs-keyword">let</span> result = <span class="hljs-title function_">prompt</span>(question);
+  <span class="hljs-keyword">if</span> (result.<span class="hljs-title function_">toLowerCase</span>() == <span class="hljs-string">&quot;left&quot;</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;L&quot;</span>;
+  <span class="hljs-keyword">if</span> (result.<span class="hljs-title function_">toLowerCase</span>() == <span class="hljs-string">&quot;right&quot;</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;R&quot;</span>;
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">InputError</span>(<span class="hljs-string">&quot;Invalid direction: &quot;</span> + result);
+}
+</code></pre>
+<p>الصنف الجديد للأخطاء يمتد من <code>Error</code>. وهو لا يعرّف بانيته الخاصة، مما يعني أنه يرث بانية <code>Error</code>، التي تتوقع رسالة نصية كمعطى. بل إنه لا يعرّف أي شيء على الإطلاق — فالصنف فارغ. وتتصرف كائنات <code>InputError</code> مثل كائنات <code>Error</code>، إلا أن لها صنفاً مختلفاً نتعرف عليها به.</p>
+<p>الآن يمكن للحلقة أن تلتقط هذه بعناية أكبر.</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (;;) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">let</span> dir = <span class="hljs-title function_">promptDirection</span>(<span class="hljs-string">&quot;Where?&quot;</span>);
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;You chose &quot;</span>, dir);
+    <span class="hljs-keyword">break</span>;
+  } <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-keyword">if</span> (e <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">InputError</span>) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Not a valid direction. Try again.&quot;</span>);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">throw</span> e;
+    }
+  }
+}
+</code></pre>
+<p>سيلتقط هذا نسخ <code>InputError</code> فقط ويترك الاستثناءات غير المتصلة تمر. وإن أعدت الخطأ المطبعي، فسيُبلَّغ عن خطأ الارتباط غير المعرَّف بشكل سليم.</p>
+<h2 id="التأكيدات">التأكيدات</h2>
+<p><em>التأكيدات</em> (assertions) فحوصات داخل برنامج تتحقق من أن شيئاً ما على الحال التي ينبغي أن يكون عليها. ولا تُستخدم للتعامل مع حالات قد تظهر في التشغيل الطبيعي بل للعثور على أخطاء المبرمج.</p>
+<p>فمثلاً، إذا وُصفت <code>firstElement</code> بأنها دالة لا ينبغي أبداً استدعاؤها على مصفوفات فارغة، فقد نكتبها هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">firstElement</span>(<span class="hljs-params">array</span>) {
+  <span class="hljs-keyword">if</span> (array.<span class="hljs-property">length</span> == <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&quot;firstElement called with []&quot;</span>);
+  }
+  <span class="hljs-keyword">return</span> array[<span class="hljs-number">0</span>];
+}
+</code></pre>
+<p>الآن، بدلاً من إرجاع undefined بصمت (وهو ما تحصل عليه عند قراءة خاصية مصفوفة غير موجودة)، ستفجّر هذه برنامجك بصخب بمجرد أن تسيء استخدامها. وهذا يجعل من الأرجح ألا تمر هذه الأخطاء دون ملاحظة، ويسهّل العثور على سببها عند وقوعها.</p>
+<p>لا أوصي بمحاولة كتابة تأكيدات لكل نوع ممكن من المدخلات السيئة. فذلك عمل كثير وسيؤدي إلى شيفرة كثيرة الضجيج. ستحب أن تحتفظ بها للأخطاء السهلة الوقوع (أو التي تجد نفسك ترتكبها).</p>
+<h2 id="الملخص">الملخص</h2>
+<p>جزء مهم من البرمجة هو العثور على العلل وتشخيصها وإصلاحها. ويمكن أن تصبح المشكلات أسهل في الملاحظة إن كان لديك جناح اختبارات آلي أو أضفت تأكيدات إلى برامجك.</p>
+<p>المشكلات الناتجة عن عوامل خارجة عن سيطرة البرنامج ينبغي عادة التخطيط لها بنشاط. وأحياناً، عندما يمكن التعامل مع المشكلة محلياً، تكون القيم المُرجَعة الخاصة طريقة جيدة لتتبّعها. وإلا، فقد تكون الاستثناءات أفضل.</p>
+<p>قذف استثناء يؤدي إلى فكّ مكدس الاستدعاءات حتى كتلة <code>try/catch</code> المحيطة التالية أو حتى قاع المكدس. وستُعطى قيمة الاستثناء إلى كتلة <code>catch</code> التي تلتقطه، والتي ينبغي أن تتحقق من أنه فعلاً النوع المتوقع من الاستثناء ثم تفعل شيئاً به. وللمساعدة في معالجة تدفق التحكم غير المتوقع الذي تسببه الاستثناءات، يمكن استخدام كتل <code>finally</code> لضمان أن قطعة من الشيفرة <em>تعمل دائماً</em> عند انتهاء كتلة.</p>
+<h2 id="التمارين">التمارين</h2>
+<h3 id="إعادة-المحاولة">إعادة المحاولة</h3>
+<p>لنقل إن لديك دالة <code>primitiveMultiply</code> تضرب عددين في 20 بالمئة من الحالات، وتقذف في الـ 80 بالمئة الأخرى استثناءً من النوع <code>MultiplicatorUnitFailure</code>. اكتب دالة تغلّف هذه الدالة الركيكة وتواصل المحاولة فحسب حتى ينجح نداء، ثم تُرجع النتيجة بعده.</p>
+<p>تأكد من أنك تتعامل فقط مع الاستثناءات التي تحاول التعامل معها.</p>
+<pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MultiplicatorUnitFailure</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Error</span> {}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">primitiveMultiply</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() &lt; <span class="hljs-number">0.2</span>) {
+    <span class="hljs-keyword">return</span> a * b;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MultiplicatorUnitFailure</span>(<span class="hljs-string">&quot;Klunk&quot;</span>);
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">reliableMultiply</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-comment">// ضع شيفرتك هنا.</span>
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">reliableMultiply</span>(<span class="hljs-number">8</span>, <span class="hljs-number">8</span>));
+<span class="hljs-comment">// → 64</span>
+</code></pre>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>ينبغي بالتأكيد أن يحدث نداء <code>primitiveMultiply</code> في كتلة <code>try</code>. وينبغي لكتلة <code>catch</code> المقابلة أن تعيد قذف الاستثناء عندما لا يكون نسخة من <code>MultiplicatorUnitFailure</code>، وأن تضمن إعادة المحاولة عندما يكون كذلك.</p>
+<p>ولإجراء إعادة المحاولة، يمكنك إما استخدام حلقة لا تتوقف إلا عند نجاح نداء — كما في <a href="/chapter/bugs_and_errors#look">مثال <code>look</code></a> سابقاً في هذا الفصل — أو استخدام التعاود على أمل ألا تحصل على سلسلة إخفاقات طويلة بما يكفي لتتجاوز المكدس (وهو رهان آمن جداً).</p>
+</details>
+<h3 id="الصندوق-المقفل">الصندوق المقفل</h3>
+<p>انظر إلى الكائن التالي (المفتعل نوعاً ما):</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> box = <span class="hljs-keyword">new</span> <span class="hljs-keyword">class</span> {
+  locked = <span class="hljs-literal">true</span>;
+  #content = [];
+
+  <span class="hljs-title function_">unlock</span>(<span class="hljs-params"></span>) { <span class="hljs-variable language_">this</span>.<span class="hljs-property">locked</span> = <span class="hljs-literal">false</span>; }
+  <span class="hljs-title function_">lock</span>(<span class="hljs-params"></span>) { <span class="hljs-variable language_">this</span>.<span class="hljs-property">locked</span> = <span class="hljs-literal">true</span>;  }
+  <span class="hljs-keyword">get</span> <span class="hljs-title function_">content</span>() {
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">locked</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&quot;Locked!&quot;</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.#content;
+  }
+};
+</code></pre>
+<p>إنه صندوق بقفل. وهناك مصفوفة داخل الصندوق، لكن لا يمكنك الوصول إليها إلا عندما يكون الصندوق مفتوحاً.</p>
+<p>اكتب دالة تسمى <code>withBoxUnlocked</code> تأخذ قيمة دالة كمعطى، وتفتح الصندوق، وتشغّل الدالة، ثم تضمن إقفال الصندوق مرة أخرى قبل الإرجاع، بغض النظر عما إذا كانت الدالة المعطاة قد أرجعت بشكل طبيعي أو قذفت استثناءً.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> box = <span class="hljs-keyword">new</span> <span class="hljs-keyword">class</span> {
+  locked = <span class="hljs-literal">true</span>;
+  #content = [];
+
+  <span class="hljs-title function_">unlock</span>(<span class="hljs-params"></span>) { <span class="hljs-variable language_">this</span>.<span class="hljs-property">locked</span> = <span class="hljs-literal">false</span>; }
+  <span class="hljs-title function_">lock</span>(<span class="hljs-params"></span>) { <span class="hljs-variable language_">this</span>.<span class="hljs-property">locked</span> = <span class="hljs-literal">true</span>;  }
+  <span class="hljs-keyword">get</span> <span class="hljs-title function_">content</span>() {
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">locked</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&quot;Locked!&quot;</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.#content;
+  }
+};
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">withBoxUnlocked</span>(<span class="hljs-params">body</span>) {
+  <span class="hljs-comment">// ضع شيفرتك هنا.</span>
+}
+
+<span class="hljs-title function_">withBoxUnlocked</span>(<span class="hljs-function">() =&gt;</span> {
+  box.<span class="hljs-property">content</span>.<span class="hljs-title function_">push</span>(<span class="hljs-string">&quot;gold piece&quot;</span>);
+});
+
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-title function_">withBoxUnlocked</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&quot;Pirates on the horizon! Abort!&quot;</span>);
+  });
+} <span class="hljs-keyword">catch</span> (e) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Error raised: &quot;</span> + e);
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(box.<span class="hljs-property">locked</span>);
+<span class="hljs-comment">// → true</span>
+</code></pre>
+<p>ولنقاط إضافية، تأكد من أنه إذا استدعيت <code>withBoxUnlocked</code> بينما الصندوق مفتوح بالفعل، فسيبقى الصندوق مفتوحاً.</p>
+<details class="solution">
+<summary>إظهار التلميح</summary>
+<p>يستدعي هذا التمرين كتلة <code>finally</code>. ينبغي أن تفتح دالتك الصندوق أولاً ثم تستدعي الدالة المعطاة من داخل جسم <code>try</code>. وينبغي لكتلة <code>finally</code> بعده أن تقفل الصندوق مرة أخرى.</p>
+<p>وللتأكد من أننا لا نقفل الصندوق عندما لم يكن مقفلاً بالفعل، افحص قفله عند بداية الدالة وافتحه وأقفله فقط عندما يبدأ مقفلاً.</p>
+</details>
+`,c={number:"08",slug:s,title:n,englishTitle:a,headings:l,html:p};export{c as default,a as englishTitle,l as headings,p as html,e as number,s as slug,n as title};
