@@ -1,5 +1,7 @@
 # Eloquent JavaScript — النسخة العربية
 
+الموقع المنشور: <https://zeyadsleem.github.io/eloquent-javascript-ar/>
+
 ترجمة عربية كاملة لكتاب **Eloquent JavaScript** (الطبعة الرابعة، 2024) للمؤلف
 Marijn Haverbeke، مبنية من الصفر باستخدام **SvelteKit** مع دعم كامل للعربية
 واتجاه RTL.
